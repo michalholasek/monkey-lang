@@ -1,0 +1,32 @@
+{
+  "name": "monkey-lang",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "author": "Michal Holasek <isindzr@gmail.com>",
+  "license": "MIT",
+  "engines":{
+    "node": ">=6.9.5",
+    "npm": ">=3.10.10"
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "js"],
+    "transform": {
+      "^.+\\.ts$": "<rootDir>/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*)\\.ts$"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run make",
+    "make": "npm run clean && tsc",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "18.1.1",
+    "jest": "18.1.0",
+    "rimraf": "2.6.0",
+    "tslint": "4.4.2",
+    "typescript": "2.1.6"
+  }
+}

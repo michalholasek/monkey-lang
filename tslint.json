@@ -1,0 +1,30 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "class-name": true,
+    "interface-name": [true, "never-prefix"],
+    "no-switch-case-fall-through": true,
+    "quotemark": [true, "single"],
+    "semicolon": [true, "always"],
+    "trailing-comma":[true, {
+      "multiline": "never",
+      "singleline": "never"
+    }],
+    "typedef-whitespace": [true, {
+      "call-signature": "onespace",
+      "index-signature": "onespace",
+      "parameter": "onespace",
+      "property-declaration": "onespace",
+      "variable-declaration": "onespace"
+    }, {
+      "call-signature": "onespace",
+      "index-signature": "onespace",
+      "parameter": "onespace",
+      "property-declaration": "onespace",
+      "variable-declaration": "onespace"
+    }],
+    "whitespace": [true,
+      "check-module"
+    ]
+  }  
+}
