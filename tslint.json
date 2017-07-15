@@ -4,8 +4,12 @@
     "class-name": true,
     "interface-name": [true, "never-prefix"],
     "no-switch-case-fall-through": true,
+    "prefer-const": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always"],
+    "space-before-function-paren": [true, {
+      "anonymous": "never"
+    }],
     "trailing-comma":[true, {
       "multiline": "never",
       "singleline": "never"
