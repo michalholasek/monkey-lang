@@ -4,12 +4,15 @@
   "main": "dist/index.js",
   "author": "Michal Holasek <isindzr@gmail.com>",
   "license": "MIT",
-  "engines":{
-    "node": ">=6.9.5",
-    "npm": ">=3.10.10"
+  "engines": {
+    "node": ">=8.1.4",
+    "npm": ">=5.0.3"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
     "transform": {
       "^.+\\.ts$": "<rootDir>/preprocessor.js"
     },
@@ -23,10 +26,10 @@
     "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "@types/jest": "18.1.1",
-    "jest": "18.1.0",
+    "@types/jest": "20.0.2",
+    "jest": "20.0.4",
     "rimraf": "2.6.0",
-    "tslint": "4.4.2",
-    "typescript": "2.1.6"
+    "tslint": "5.5.0",
+    "typescript": "2.4.1"
   }
 }
