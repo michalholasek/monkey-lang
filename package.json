@@ -21,6 +21,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run make",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "make": "npm run clean && tsc",
     "test": "jest",
     "test:watch": "jest --watch"
