@@ -5,8 +5,8 @@
   "author": "Michal Holasek <isindzr@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=8.1.4",
-    "npm": ">=5.0.3"
+    "node": ">=8.3.0",
+    "npm": ">=5.3.0"
   },
   "jest": {
     "moduleFileExtensions": [
