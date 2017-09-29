@@ -20,9 +20,9 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run make",
+    "build": "npm run clean && tsc",
+    "build:watch": "tsc --watch",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "make": "npm run clean && tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   },
