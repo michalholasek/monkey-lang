@@ -1,3 +1,4 @@
+import KEYWORDS from './keywords';
 import { Token, TokenKind } from '../types/token';
 
 function createToken(literal : string) : Token {
@@ -32,19 +33,60 @@ function createToken(literal : string) : Token {
       token.kind = TokenKind.EOF;
       break;
     default:
-      token.kind = TokenKind.Illegal;
+      if (isValidLiteral(literal)) {
+        token.kind = determineValidLiteralTokenKind(literal);
+      } else if (isNumber(literal)) {
+        token.kind = TokenKind.Int;
+      } else {
+        token.kind = TokenKind.Illegal;
+      }
   }
 
   return token;
+}
+
+function determineValidLiteralTokenKind(literal : string) : TokenKind {
+  if (KEYWORDS[literal]) return KEYWORDS[literal];
+  return TokenKind.Identifier;
+}
+
+function isLetter(literal : string) : boolean {
+  return /[a-z_]/i.test(literal);
+}
+
+function isNumber(literal : string) : boolean {
+  return /[0-9]/g.test(literal);
+}
+
+
+function isValidLiteral(literal : string) : boolean {
+  return /[a-z_]/gi.test(literal);
+}
+
+function isWhiteSpace(literal : string) : boolean {
+  return /\s/g.test(literal);
 }
 
 export default function (input : string) : Token[] {
   const characters : string[] = input.split('');
   let index : number = 0;
   let tokens : Token[] = [];
+  let buffer : string[] = [];
+  let currentCharacter : string;
 
   while (index < characters.length) {
-    tokens.push(createToken(characters[index]));
+    currentCharacter = characters[index];
+    if (isLetter(currentCharacter) || isNumber(currentCharacter)) {
+      buffer.push(currentCharacter);
+    } else {
+      if (buffer.length) {
+        tokens.push(createToken(buffer.join('')));
+        buffer = [];
+      }
+      if (!isWhiteSpace(currentCharacter)) {
+        tokens.push(createToken(currentCharacter));
+      }
+    }
     index++;
   }
 
