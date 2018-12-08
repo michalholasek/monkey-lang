@@ -2,7 +2,7 @@
   "name": "monkey-lang",
   "version": "0.0.1",
   "main": "dist/index.js",
-  "author": "Michal Holasek <isindzr@gmail.com>",
+  "author": "Michal Holasek <holasek.michal@hotmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=10.14.1",
