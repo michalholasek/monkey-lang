@@ -1,4 +1,4 @@
-import lexer from '../lexer';
+import lexer from '../index';
 
 import { Token, TokenKind } from '../../types/token';
 
