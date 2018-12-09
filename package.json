@@ -26,7 +26,8 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@types/node": "10.12.12",
     "@types/jest": "23.3.10",
     "jest": "23.6.0",
     "rimraf": "2.6.2",
