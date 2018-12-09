@@ -3,7 +3,6 @@ import lexer from '../lexer';
 import { Token, TokenKind } from '../../types/token';
 
 describe('Lexer', () => {
-
   it('should tokenize given input correctly (1)', () => {
     const actual : Token[] = lexer('=+(){},;');
 
@@ -106,6 +105,29 @@ describe('Lexer', () => {
       { kind: TokenKind.If, literal: 'if' },
       { kind: TokenKind.Else, literal: 'else' },
       { kind: TokenKind.Return, literal: 'return' },
+      { kind: TokenKind.EOF, literal: '' }
+    ];
+
+    expected.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
+  it('should tokenize given input correctly (5)', () => {
+    const actual : Token[] = lexer(`
+      10 == 10;
+      10 != 9;
+    `);
+
+    const expected : Token[] = [
+      { kind: TokenKind.Int, literal: '10' },
+      { kind: TokenKind.Equal, literal: '==' },
+      { kind: TokenKind.Int, literal: '10' },
+      { kind: TokenKind.Semicolon, literal: ';' },
+      { kind: TokenKind.Int, literal: '10' },
+      { kind: TokenKind.NotEqual, literal: '!=' },
+      { kind: TokenKind.Int, literal: '9' },
+      { kind: TokenKind.Semicolon, literal: ';' },
       { kind: TokenKind.EOF, literal: '' }
     ];
 

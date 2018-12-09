@@ -8,6 +8,12 @@ function createToken(literal : string) : Token {
     case '=':
       token.kind = TokenKind.Assign;
       break;
+    case '==':
+      token.kind = TokenKind.Equal;
+      break;
+    case '!=':
+      token.kind = TokenKind.NotEqual;
+      break;
     case '+':
       token.kind = TokenKind.Plus;
       break;
@@ -68,6 +74,11 @@ function determineValidLiteralTokenKind(literal : string) : TokenKind {
   return TokenKind.Identifier;
 }
 
+// Sticky operators can form `==` or `!=`
+function isStickyOperator(literal : string) : boolean {
+  return /[!=]/.test(literal);
+}
+
 function isLetter(literal : string) : boolean {
   return /[a-z_]/i.test(literal);
 }
@@ -93,7 +104,11 @@ export default function (input : string) : Token[] {
 
   while (index < characters.length) {
     currentCharacter = characters[index];
-    if (isLetter(currentCharacter) || isNumber(currentCharacter)) {
+    if (
+      isLetter(currentCharacter) ||
+      isNumber(currentCharacter) ||
+      isStickyOperator(currentCharacter)
+    ) {
       buffer.push(currentCharacter);
     } else {
       if (buffer.length) {

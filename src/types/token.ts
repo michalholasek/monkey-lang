@@ -15,6 +15,8 @@ export enum TokenKind {
   Slash,
   LessThan,
   GreatThan,
+  Equal,
+  NotEqual,
 
   // Delimiters
   Comma,
