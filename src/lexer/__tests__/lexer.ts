@@ -79,4 +79,37 @@ describe('Lexer', () => {
     });
   });
 
+  it('should tokenize given input correctly (3)', () => {
+    const actual : Token[] = lexer('! - / * < >');
+
+    const expected : Token[] = [
+      { kind: TokenKind.Bang, literal: '!' },
+      { kind: TokenKind.Minus, literal: '-' },
+      { kind: TokenKind.Slash, literal: '/' },
+      { kind: TokenKind.Asterisk, literal: '*' },
+      { kind: TokenKind.LessThan, literal: '<' },
+      { kind: TokenKind.GreatThan, literal: '>' }
+    ];
+
+    expected.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
+  it('should tokenize given input correctly (4)', () => {
+    const actual : Token[] = lexer('true false if else return');
+
+    const expected : Token[] = [
+      { kind: TokenKind.True, literal: 'true' },
+      { kind: TokenKind.False, literal: 'false' },
+      { kind: TokenKind.If, literal: 'if' },
+      { kind: TokenKind.Else, literal: 'else' },
+      { kind: TokenKind.Return, literal: 'return' }
+    ];
+
+    expected.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
 });

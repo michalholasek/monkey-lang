@@ -1,5 +1,5 @@
-import KEYWORDS from './keywords';
 import { Token, TokenKind } from '../types/token';
+import KEYWORDS from './keywords';
 
 function createToken(literal : string) : Token {
   let token : Token = { kind: TokenKind.Illegal , literal };
@@ -10,6 +10,24 @@ function createToken(literal : string) : Token {
       break;
     case '+':
       token.kind = TokenKind.Plus;
+      break;
+    case '-':
+      token.kind = TokenKind.Minus;
+      break;
+    case '*':
+      token.kind = TokenKind.Asterisk;
+      break;
+    case '!':
+      token.kind = TokenKind.Bang;
+      break;
+    case '>':
+      token.kind = TokenKind.GreatThan;
+      break;
+    case '<':
+      token.kind = TokenKind.LessThan;
+      break;
+    case '/':
+      token.kind = TokenKind.Slash;
       break;
     case ';':
       token.kind = TokenKind.Semicolon;
@@ -46,7 +64,7 @@ function createToken(literal : string) : Token {
 }
 
 function determineValidLiteralTokenKind(literal : string) : TokenKind {
-  if (KEYWORDS[literal]) return KEYWORDS[literal];
+  if (KEYWORDS[literal]) { return KEYWORDS[literal]; }
   return TokenKind.Identifier;
 }
 
@@ -57,7 +75,6 @@ function isLetter(literal : string) : boolean {
 function isNumber(literal : string) : boolean {
   return /[0-9]/g.test(literal);
 }
-
 
 function isValidLiteral(literal : string) : boolean {
   return /[a-z_]/gi.test(literal);
@@ -88,6 +105,12 @@ export default function (input : string) : Token[] {
       }
     }
     index++;
+  }
+
+  // Flush buffered tokens
+  if (buffer.length) {
+    tokens.push(createToken(buffer.join('')));
+    buffer = [];
   }
 
   // Create EOF token

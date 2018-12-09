@@ -9,6 +9,12 @@ export enum TokenKind {
   // Operators
   Assign,
   Plus,
+  Minus,
+  Bang,
+  Asterisk,
+  Slash,
+  LessThan,
+  GreatThan,
 
   // Delimiters
   Comma,
@@ -17,6 +23,11 @@ export enum TokenKind {
   // Keywords
   Function,
   Let,
+  True,
+  False,
+  If,
+  Else,
+  Return,
 
   LeftParenthesis,
   RightParenthesis,
