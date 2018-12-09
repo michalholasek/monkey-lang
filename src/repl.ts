@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import { createInterface } from 'readline';
 import lexer from './lexer';
 
