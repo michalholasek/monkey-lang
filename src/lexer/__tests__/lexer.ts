@@ -70,7 +70,7 @@ describe('Lexer', () => {
       { kind: TokenKind.Comma, literal: ',' },
       { kind: TokenKind.Identifier, literal: 'ten' },
       { kind: TokenKind.RightParenthesis, literal: ')' },
-      { kind: TokenKind.Semicolon, literal: ';' }
+      { kind: TokenKind.Semicolon, literal: ';' },
       { kind: TokenKind.EOF, literal: '' }
     ];
 
@@ -88,7 +88,8 @@ describe('Lexer', () => {
       { kind: TokenKind.Slash, literal: '/' },
       { kind: TokenKind.Asterisk, literal: '*' },
       { kind: TokenKind.LessThan, literal: '<' },
-      { kind: TokenKind.GreatThan, literal: '>' }
+      { kind: TokenKind.GreatThan, literal: '>' },
+      { kind: TokenKind.EOF, literal: '' }
     ];
 
     expected.forEach((item, index) => {
@@ -104,7 +105,8 @@ describe('Lexer', () => {
       { kind: TokenKind.False, literal: 'false' },
       { kind: TokenKind.If, literal: 'if' },
       { kind: TokenKind.Else, literal: 'else' },
-      { kind: TokenKind.Return, literal: 'return' }
+      { kind: TokenKind.Return, literal: 'return' },
+      { kind: TokenKind.EOF, literal: '' }
     ];
 
     expected.forEach((item, index) => {
