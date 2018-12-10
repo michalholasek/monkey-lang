@@ -16,6 +16,10 @@
     "transform": {
       "^.+\\.ts$": "<rootDir>/preprocessor.js"
     },
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "fixtures.ts"
+    ],
     "testRegex": "(/__tests__/.*)\\.ts$"
   },
   "scripts": {
