@@ -1,5 +1,4 @@
-import { Token, TokenKind } from '../types/token';
-import KEYWORDS from './keywords';
+import { KEYWORDS, Token, TokenKind } from './types';
 
 function createToken(literal : string) : Token {
   let token : Token = { kind: TokenKind.Illegal , literal };

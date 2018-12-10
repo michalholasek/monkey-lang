@@ -41,3 +41,13 @@ export interface Token {
   literal : string;
   kind : TokenKind;
 }
+
+export const KEYWORDS : { [index : string] : TokenKind } = {
+  else: TokenKind.Else,
+  false: TokenKind.False,
+  fn: TokenKind.Function,
+  if: TokenKind.If,
+  let: TokenKind.Let,
+  return: TokenKind.Return,
+  true: TokenKind.True
+};

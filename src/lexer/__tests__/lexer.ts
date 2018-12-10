@@ -1,6 +1,6 @@
 import lexer from '../index';
 
-import { Token, TokenKind } from '../../types/token';
+import { Token, TokenKind } from '../types';
 
 describe('Lexer', () => {
   it('should tokenize given input correctly (1)', () => {
