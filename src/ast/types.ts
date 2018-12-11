@@ -5,19 +5,19 @@ export enum StatementKind {
 }
 
 export interface Expression {
-  tokens : Token[],
-  value : string
+  tokens: Token[],
+  value: string
 }
 
 export interface Identifier extends Token { }
 
 export interface Statement {
-  kind : StatementKind,
-  name : Identifier,
-  tokens : Token[],
-  expression : Expression
+  kind: StatementKind,
+  name: Identifier,
+  tokens: Token[],
+  expression: Expression
 }
 
 export interface Program {
-  statements : Statement[]
+  statements: Statement[]
 }

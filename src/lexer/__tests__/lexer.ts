@@ -4,9 +4,9 @@ import { Token, TokenKind } from '../types';
 
 describe('Lexer', () => {
   it('should tokenize given input correctly (1)', () => {
-    const actual : Token[] = lexer('=+(){},;');
+    const actual: Token[] = lexer('=+(){},;');
 
-    const expected : Token[] = [
+    const expected: Token[] = [
       { kind: TokenKind.Assign, literal: '=' },
       { kind: TokenKind.Plus, literal: '+' },
       { kind: TokenKind.LeftParenthesis, literal: '(' },
@@ -24,7 +24,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (2)', () => {
-    const actual : Token[] = lexer(`
+    const actual: Token[] = lexer(`
       let five = 5;
       let ten = 10;
       let add = fn(x, y) {
@@ -33,7 +33,7 @@ describe('Lexer', () => {
       let _result = add(five, ten);
     `);
 
-    const expected : Token[] = [
+    const expected: Token[] = [
       { kind: TokenKind.Let, literal: 'let' },
       { kind: TokenKind.Identifier, literal: 'five' },
       { kind: TokenKind.Assign, literal: '=' },
@@ -79,9 +79,9 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (3)', () => {
-    const actual : Token[] = lexer('! - / * < >');
+    const actual: Token[] = lexer('! - / * < >');
 
-    const expected : Token[] = [
+    const expected: Token[] = [
       { kind: TokenKind.Bang, literal: '!' },
       { kind: TokenKind.Minus, literal: '-' },
       { kind: TokenKind.Slash, literal: '/' },
@@ -97,9 +97,9 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (4)', () => {
-    const actual : Token[] = lexer('true false if else return');
+    const actual: Token[] = lexer('true false if else return');
 
-    const expected : Token[] = [
+    const expected: Token[] = [
       { kind: TokenKind.True, literal: 'true' },
       { kind: TokenKind.False, literal: 'false' },
       { kind: TokenKind.If, literal: 'if' },
@@ -114,12 +114,12 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (5)', () => {
-    const actual : Token[] = lexer(`
+    const actual: Token[] = lexer(`
       10 == 10;
       10 != 9;
     `);
 
-    const expected : Token[] = [
+    const expected: Token[] = [
       { kind: TokenKind.Int, literal: '10' },
       { kind: TokenKind.Equal, literal: '==' },
       { kind: TokenKind.Int, literal: '10' },

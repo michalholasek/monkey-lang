@@ -38,11 +38,11 @@ export enum TokenKind {
 }
 
 export interface Token {
-  literal : string;
-  kind : TokenKind;
+  literal: string;
+  kind: TokenKind;
 }
 
-export const KEYWORDS : { [index : string] : TokenKind } = {
+export const KEYWORDS: { [index: string]: TokenKind } = {
   else: TokenKind.Else,
   false: TokenKind.False,
   fn: TokenKind.Function,

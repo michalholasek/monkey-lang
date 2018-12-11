@@ -1,13 +1,13 @@
 import { Expression} from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
 
-function evaluateExpression(tokens : Token[]) : string {
+function evaluateExpression(tokens: Token[]): string {
   return tokens.reduce((previous, current) => {
     return previous.concat('', current.literal || '');
   }, '');
 }
 
-export function getStatementExpression(tokens : Token[], start : number, end : number) : Expression {
+export function getStatementExpression(tokens: Token[], start: number, end: number): Expression {
   let currentToken;
   let expressionTokenRangeStart = 0;
   let expressionTokens = [];
@@ -28,7 +28,7 @@ export function getStatementExpression(tokens : Token[], start : number, end : n
   };
 }
 
-export function getStatementTokenRangeEnd(tokens : Token[], start : number) : number {
+export function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
   let currentToken;
   let end = 0;
 
@@ -43,12 +43,12 @@ export function getStatementTokenRangeEnd(tokens : Token[], start : number) : nu
   return end;
 }
 
-export function getStatementTokens(tokens : Token[], start : number, end : number) : Token[] {
+export function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
   return tokens.slice(start, end);
 }
 
-export function getStatementIdentifierToken(tokens : Token[], start : number, end : number) : Token {
-  let currentToken = { kind: TokenKind.Illegal, literal : '' };
+export function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
+  let currentToken = { kind: TokenKind.Illegal, literal: '' };
 
   for (let i = start; i < end; i++) {
     currentToken = tokens[i];

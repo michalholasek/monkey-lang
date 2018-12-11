@@ -8,18 +8,18 @@ import {
 
 import { Token } from '../lexer/types';
 
-export function createASTStructure() : Program {
+export function createASTStructure(): Program {
   return {
     statements: []
   };
 }
 
 export function createStatementNode(
-  kind : StatementKind,
-  name : Identifier,
-  tokens : Token[],
-  expression : Expression
-) : Statement {
+  kind: StatementKind,
+  name: Identifier,
+  tokens: Token[],
+  expression: Expression
+): Statement {
   return {
     kind,
     name,

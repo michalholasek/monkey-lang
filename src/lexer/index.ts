@@ -1,7 +1,7 @@
 import { KEYWORDS, Token, TokenKind } from './types';
 
-function createToken(literal : string) : Token {
-  let token : Token = { kind: TokenKind.Illegal , literal };
+function createToken(literal: string): Token {
+  let token: Token = { kind: TokenKind.Illegal , literal };
 
   switch (literal) {
     case '=':
@@ -68,38 +68,38 @@ function createToken(literal : string) : Token {
   return token;
 }
 
-function determineValidLiteralTokenKind(literal : string) : TokenKind {
+function determineValidLiteralTokenKind(literal: string): TokenKind {
   if (KEYWORDS[literal]) { return KEYWORDS[literal]; }
   return TokenKind.Identifier;
 }
 
 // Sticky operators can form `==` or `!=`
-function isStickyOperator(literal : string) : boolean {
+function isStickyOperator(literal: string): boolean {
   return /[!=]/.test(literal);
 }
 
-function isLetter(literal : string) : boolean {
+function isLetter(literal: string): boolean {
   return /[a-z_]/i.test(literal);
 }
 
-function isNumber(literal : string) : boolean {
+function isNumber(literal: string): boolean {
   return /[0-9]/g.test(literal);
 }
 
-function isValidLiteral(literal : string) : boolean {
+function isValidLiteral(literal: string): boolean {
   return /[a-z_]/gi.test(literal);
 }
 
-function isWhiteSpace(literal : string) : boolean {
+function isWhiteSpace(literal: string): boolean {
   return /\s/g.test(literal);
 }
 
-export default function (input : string) : Token[] {
-  const characters : string[] = input.split('');
-  let index : number = 0;
-  let tokens : Token[] = [];
-  let buffer : string[] = [];
-  let currentCharacter : string;
+export default function (input: string): Token[] {
+  const characters: string[] = input.split('');
+  let index: number = 0;
+  let tokens: Token[] = [];
+  let buffer: string[] = [];
+  let currentCharacter: string;
 
   while (index < characters.length) {
     currentCharacter = characters[index];

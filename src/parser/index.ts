@@ -13,7 +13,7 @@ import {
   getStatementTokenRangeEnd
 } from './helpers';
 
-export default function parser(tokens : Token[]) : Program {
+export default function parser(tokens: Token[]): Program {
   const ast = createASTStructure();
   let currentStatement;
   let currentStatementTokenRangeStart = 0;
