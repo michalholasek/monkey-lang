@@ -3,7 +3,6 @@ import parser from '../index';
 
 import { Statements } from './fixtures';
 
-
 describe('Parser', () => {
 
   it('should return empty AST tree for empty array of tokens', () => {

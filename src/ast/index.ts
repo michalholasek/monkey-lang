@@ -21,9 +21,9 @@ export function createStatementNode(
   expression: Expression
 ): Statement {
   return {
+    expression,
     kind,
     name,
-    tokens,
-    expression
+    tokens
   };
 }

@@ -3,12 +3,14 @@ import { Expression, Statement, StatementKind } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
 import { StatementParseResult } from './types';
 
-export function parseStatement(tokens: Token[], startToken: Token, statementTokenRangeStart: number): StatementParseResult|null {
+export function parseStatement(
+  tokens: Token[], startToken: Token, statementTokenRangeStart: number
+): StatementParseResult|null {
   let statement;
   let statementTokenRangeEnd = 0;
   let statementParseResult = null;
 
-  if (startToken.kind == TokenKind.Let) {
+  if (startToken.kind === TokenKind.Let) {
     statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
 
     statement = createStatementNode(
@@ -28,11 +30,13 @@ export function parseStatement(tokens: Token[], startToken: Token, statementToke
   return statementParseResult;
 }
 
-function createStatementParseResult(statement: Statement,  tokenRangeStart: number,  tokenRangeEnd: number): StatementParseResult {
+function createStatementParseResult(
+  statement: Statement,  tokenRangeStart: number,  tokenRangeEnd: number
+): StatementParseResult {
   return {
     node: statement,
-    tokenRangeStart,
-    tokenRangeEnd
+    tokenRangeEnd,
+    tokenRangeStart
   };
 }
 
@@ -49,7 +53,7 @@ function getStatementExpression(tokens: Token[], start: number, end: number): Ex
 
   for (let i = start; i < end; i++) {
     currentToken = tokens[i];
-    if (currentToken.kind == TokenKind.Assign) {
+    if (currentToken.kind === TokenKind.Assign) {
       expressionTokenRangeStart = i + 1;
       break;
     }
@@ -69,7 +73,7 @@ function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
 
   for (let i = start; i < tokens.length; i++) {
     currentToken = tokens[i];
-    if (currentToken.kind == TokenKind.Semicolon) {
+    if (currentToken.kind === TokenKind.Semicolon) {
       end = i;
       break;
     }
@@ -87,7 +91,7 @@ function getStatementIdentifierToken(tokens: Token[], start: number, end: number
 
   for (let i = start; i < end; i++) {
     currentToken = tokens[i];
-    if (currentToken.kind == TokenKind.Identifier) {
+    if (currentToken.kind === TokenKind.Identifier) {
       break;
     }
   }
