@@ -1,10 +1,10 @@
-import lexer from '../index';
+import { tokenize } from '../index';
 
 import { Token, TokenKind } from '../types';
 
 describe('Lexer', () => {
   it('should tokenize given input correctly (1)', () => {
-    const actual: Token[] = lexer('=+(){},;');
+    const actual: Token[] = tokenize('=+(){},;');
 
     const expected: Token[] = [
       { kind: TokenKind.Assign, literal: '=' },
@@ -24,7 +24,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (2)', () => {
-    const actual: Token[] = lexer(`
+    const actual: Token[] = tokenize(`
       let five = 5;
       let ten = 10;
       let add = fn(x, y) {
@@ -79,7 +79,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (3)', () => {
-    const actual: Token[] = lexer('! - / * < >');
+    const actual: Token[] = tokenize('! - / * < >');
 
     const expected: Token[] = [
       { kind: TokenKind.Bang, literal: '!' },
@@ -97,7 +97,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (4)', () => {
-    const actual: Token[] = lexer('true false if else return');
+    const actual: Token[] = tokenize('true false if else return');
 
     const expected: Token[] = [
       { kind: TokenKind.True, literal: 'true' },
@@ -114,7 +114,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (5)', () => {
-    const actual: Token[] = lexer(`
+    const actual: Token[] = tokenize(`
       10 == 10;
       10 != 9;
     `);

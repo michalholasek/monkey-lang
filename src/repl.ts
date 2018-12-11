@@ -1,7 +1,7 @@
 /* tslint:disable:no-console */
 
 import { createInterface } from 'readline';
-import lexer from './lexer';
+import { tokenize } from './lexer';
 
 const cli = createInterface({
   input: process.stdin,
@@ -18,7 +18,7 @@ cli.on('line', (line) => {
       cli.close();
       break;
     default:
-      const tokens = lexer(line);
+      const tokens = tokenize(line);
       console.log(tokens);
       cli.prompt();
   }

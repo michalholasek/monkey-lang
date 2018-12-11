@@ -1,21 +1,21 @@
-import lexer from '../../lexer';
-import parser from '../index';
+import { tokenize } from '../../lexer';
+import { parse } from '../index';
 
 import { Statements } from './fixtures';
 
 describe('Parser', () => {
 
   it('should return empty AST tree for empty array of tokens', () => {
-    expect(parser([])).toMatchObject(Statements.Empty);
+    expect(parse([])).toMatchObject(Statements.Empty);
   });
 
   it('should parse given input correctly (let)', () => {
-    const tokens = lexer(`
+    const tokens = tokenize(`
       let x = 5;
       let y = 10;
       let foobar = 838383;
     `);
-    const actual = parser(tokens);
+    const actual = parse(tokens);
 
     expect(actual).toMatchObject(Statements.Let);
   });

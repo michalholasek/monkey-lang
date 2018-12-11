@@ -94,7 +94,7 @@ function isWhiteSpace(literal: string): boolean {
   return /\s/g.test(literal);
 }
 
-export default function lexer(input: string): Token[] {
+export function tokenize(input: string): Token[] {
   const characters: string[] = input.split('');
   let index: number = 0;
   let tokens: Token[] = [];

@@ -5,7 +5,7 @@ import { Program } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
 import { StatementParseResult } from './types';
 
-export default function parser(tokens: Token[]): Program {
+export function parse(tokens: Token[]): Program {
   const ast = createASTStructure();
   let currentStatementParseResult: StatementParseResult|null = null;
   let currentStatementTokenRangeStart = 0;
