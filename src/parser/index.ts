@@ -20,10 +20,10 @@ export default function parser(tokens: Token[]): Program {
   let currentStatementTokenRangeEnd = 0;
   let currentToken;
 
-  // Last token is EOF, hence tokens.length - 1. We are not processing
-  // it in any way for now
-  while (currentStatementTokenRangeStart < tokens.length - 1) {
+  while (currentStatementTokenRangeStart < tokens.length) {
     currentToken = tokens[currentStatementTokenRangeStart];
+
+    if (currentToken.kind == TokenKind.EOF) { break; }
 
     if (currentToken.kind == TokenKind.Let) {
       currentStatementTokenRangeEnd = getStatementTokenRangeEnd(tokens, currentStatementTokenRangeStart);
