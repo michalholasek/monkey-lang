@@ -6,6 +6,10 @@ import { Statements } from './fixtures';
 
 describe('Parser', () => {
 
+  it('should return empty AST tree for empty array of tokens', () => {
+    expect(parser([])).toMatchObject(Statements.Empty);
+  });
+
   it('should parse given input correctly (let)', () => {
     const tokens = lexer(`
       let x = 5;

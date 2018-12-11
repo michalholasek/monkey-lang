@@ -2,6 +2,7 @@ import { StatementKind } from '../../ast/types';
 import { TokenKind } from '../../lexer/types';
 
 export const Statements = {
+  Empty: { statements: [] },
   Let: {
     statements: [
       {
