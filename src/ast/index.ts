@@ -3,7 +3,7 @@ import {
   Identifier,
   Program,
   Statement,
-  StatementKind 
+  StatementKind
 } from './types';
 
 import { Token } from '../lexer/types';

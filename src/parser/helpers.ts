@@ -1,5 +1,40 @@
-import { Expression} from '../ast/types';
+import { createStatementNode } from '../ast';
+import { Expression, Statement, StatementKind } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
+import { StatementParseResult } from './types';
+
+export function parseStatement(tokens: Token[], startToken: Token, statementTokenRangeStart: number): StatementParseResult|null {
+  let statement;
+  let statementTokenRangeEnd = 0;
+  let statementParseResult = null;
+
+  if (startToken.kind == TokenKind.Let) {
+    statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
+
+    statement = createStatementNode(
+      StatementKind.Let,
+      getStatementIdentifierToken(tokens, statementTokenRangeStart, statementTokenRangeEnd),
+      getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd),
+      getStatementExpression(tokens, statementTokenRangeStart, statementTokenRangeEnd)
+    );
+
+    statementParseResult = createStatementParseResult(
+      statement,
+      statementTokenRangeStart,
+      statementTokenRangeEnd
+    );
+  }
+
+  return statementParseResult;
+}
+
+function createStatementParseResult(statement: Statement,  tokenRangeStart: number,  tokenRangeEnd: number): StatementParseResult {
+  return {
+    node: statement,
+    tokenRangeStart,
+    tokenRangeEnd
+  };
+}
 
 function evaluateExpression(tokens: Token[]): string {
   return tokens.reduce((previous, current) => {
@@ -7,7 +42,7 @@ function evaluateExpression(tokens: Token[]): string {
   }, '');
 }
 
-export function getStatementExpression(tokens: Token[], start: number, end: number): Expression {
+function getStatementExpression(tokens: Token[], start: number, end: number): Expression {
   let currentToken;
   let expressionTokenRangeStart = 0;
   let expressionTokens = [];
@@ -28,7 +63,7 @@ export function getStatementExpression(tokens: Token[], start: number, end: numb
   };
 }
 
-export function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
+function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
   let currentToken;
   let end = 0;
 
@@ -43,11 +78,11 @@ export function getStatementTokenRangeEnd(tokens: Token[], start: number): numbe
   return end;
 }
 
-export function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
+function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
   return tokens.slice(start, end);
 }
 
-export function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
+function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
   let currentToken = { kind: TokenKind.Illegal, literal: '' };
 
   for (let i = start; i < end; i++) {

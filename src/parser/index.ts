@@ -1,45 +1,31 @@
-import {
-  createASTStructure,
-  createStatementNode
-} from '../ast';
+import { createASTStructure } from '../ast';
+import { parseStatement } from './helpers';
 
-import { Program, StatementKind } from '../ast/types';
+import { Program } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
-
-import {
-  getStatementExpression,
-  getStatementTokens,
-  getStatementIdentifierToken,
-  getStatementTokenRangeEnd
-} from './helpers';
+import { StatementParseResult } from './types';
 
 export default function parser(tokens: Token[]): Program {
   const ast = createASTStructure();
-  let currentStatement;
+  let currentStatementParseResult: StatementParseResult|null = null;
   let currentStatementTokenRangeStart = 0;
-  let currentStatementTokenRangeEnd = 0;
   let currentToken;
 
   while (currentStatementTokenRangeStart < tokens.length) {
     currentToken = tokens[currentStatementTokenRangeStart];
 
-    if (currentToken.kind == TokenKind.EOF) { break; }
+    if (currentToken.kind === TokenKind.EOF) { break; }
 
-    if (currentToken.kind == TokenKind.Let) {
-      currentStatementTokenRangeEnd = getStatementTokenRangeEnd(tokens, currentStatementTokenRangeStart);
-
-      currentStatement = createStatementNode(
-        StatementKind.Let,
-        getStatementIdentifierToken(tokens, currentStatementTokenRangeStart, currentStatementTokenRangeEnd),
-        getStatementTokens(tokens, currentStatementTokenRangeStart, currentStatementTokenRangeEnd),
-        getStatementExpression(tokens, currentStatementTokenRangeStart, currentStatementTokenRangeEnd)
-      );
-
-      ast.statements.push(currentStatement);
+    currentStatementParseResult = parseStatement(tokens, currentToken, currentStatementTokenRangeStart);
+    if (currentStatementParseResult != null) {
+      ast.statements.push(currentStatementParseResult.node);
     }
 
     // Set index behind last semicolon
-    currentStatementTokenRangeStart = currentStatementTokenRangeEnd + 1;
+    currentStatementTokenRangeStart = currentStatementParseResult ?
+      currentStatementParseResult.tokenRangeEnd + 1 :
+      tokens.length
+    ;
   }
 
   return ast;
