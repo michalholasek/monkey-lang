@@ -1,4 +1,5 @@
 import {
+  AssertionError,
   Expression,
   Identifier,
   Program,
@@ -8,9 +9,12 @@ import {
 
 import { Token } from '../lexer/types';
 
-export function createASTStructure(): Program {
+export function createASTStructure(
+  errors: AssertionError[] = [], statements: Statement[] = []
+): Program {
   return {
-    statements: []
+    errors,
+    statements
   };
 }
 

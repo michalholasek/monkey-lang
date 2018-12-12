@@ -1,39 +1,129 @@
 import { createStatementNode } from '../ast';
-import { Expression, Statement, StatementKind } from '../ast/types';
+
+import { AssertionError, Expression, Statement, StatementKind } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
-import { StatementParseResult } from './types';
+
+import {
+  AssertionErrorKind,
+  StatementAssertionResult,
+  StatementParseResult
+} from './types';
+
+export function assertStatement(
+  tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number
+): StatementAssertionResult {
+  const assertionResult = createAssertionResult();
+  let currentToken;
+  let nextToken;
+
+  for (let i = tokenRangeStart; i < tokenRangeEnd; i++) {
+    currentToken = tokens[i];
+    nextToken = tokens[i + 1];
+
+    switch (currentToken.kind) {
+      case (TokenKind.Let):
+        if (nextToken.kind !== TokenKind.Identifier) {
+          assertionResult.errors.push(createAssertionError(
+            AssertionErrorKind.InvalidToken,
+            TokenKind.Identifier,
+            nextToken.kind
+          ));
+        }
+        break;
+      case (TokenKind.Identifier):
+        if (nextToken.kind !== TokenKind.Assign) {
+          assertionResult.errors.push(createAssertionError(
+            AssertionErrorKind.InvalidToken,
+            TokenKind.Assign,
+            nextToken.kind
+          ));
+        }
+        break;
+      case (TokenKind.Assign):
+        if (nextToken.kind !== TokenKind.Int) {
+          assertionResult.errors.push(createAssertionError(
+            AssertionErrorKind.InvalidToken,
+            TokenKind.Int,
+            nextToken.kind
+          ));
+        }
+        break;
+      case (TokenKind.Int):
+        if (nextToken.kind !== TokenKind.Semicolon) {
+          assertionResult.errors.push(createAssertionError(
+            AssertionErrorKind.InvalidToken,
+            TokenKind.Semicolon,
+            nextToken.kind
+          ));
+        }
+        break;
+    }
+  }
+
+  return assertionResult;
+}
 
 export function parseStatement(
   tokens: Token[], startToken: Token, statementTokenRangeStart: number
-): StatementParseResult|null {
+): StatementParseResult {
   let statement;
-  let statementTokenRangeEnd = 0;
-  let statementParseResult = null;
+  let statementParseResult = createStatementParseResult();
 
   if (startToken.kind === TokenKind.Let) {
-    statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
+    let statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
+    let assertionResult = assertStatement(tokens, statementTokenRangeStart, statementTokenRangeEnd);
 
-    statement = createStatementNode(
-      StatementKind.Let,
-      getStatementIdentifierToken(tokens, statementTokenRangeStart, statementTokenRangeEnd),
-      getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd),
-      getStatementExpression(tokens, statementTokenRangeStart, statementTokenRangeEnd)
-    );
+    if (!assertionResult.errors.length) {
+      statement = createStatementNode(
+        StatementKind.Let,
+        getStatementIdentifierToken(tokens, statementTokenRangeStart, statementTokenRangeEnd),
+        getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd),
+        getStatementExpression(tokens, statementTokenRangeStart, statementTokenRangeEnd)
+      );
 
-    statementParseResult = createStatementParseResult(
-      statement,
-      statementTokenRangeStart,
-      statementTokenRangeEnd
-    );
+      statementParseResult = createStatementParseResult(
+        [], // No errors during parsing
+        statement,
+        statementTokenRangeStart,
+        statementTokenRangeEnd
+      );
+    } else {
+      statementParseResult = createStatementParseResult(
+        assertionResult.errors,
+        {}, // Empty statement, there were errors during parsing
+        statementTokenRangeStart,
+        statementTokenRangeEnd
+      );
+    }
   }
 
   return statementParseResult;
 }
 
+function createAssertionResult(errors: AssertionError[] = []): StatementAssertionResult {
+  return {
+    errors
+  };
+}
+
+function createAssertionError(
+  errorKind: string, expectedTokenKind: TokenKind, actualTokenKind: TokenKind
+): AssertionError {
+  const expectedToken = TokenKind[expectedTokenKind];
+  const actualToken = TokenKind[actualTokenKind];
+  return {
+    message: `${errorKind}: expected ${expectedToken}, got ${actualToken} instead`
+  };
+}
+
 function createStatementParseResult(
-  statement: Statement,  tokenRangeStart: number,  tokenRangeEnd: number
+  errors: AssertionError[] = [],
+  statement: Statement = {},
+  tokenRangeStart: number = 0,
+  tokenRangeEnd: number = 0
 ): StatementParseResult {
   return {
+    errors,
     node: statement,
     tokenRangeEnd,
     tokenRangeStart

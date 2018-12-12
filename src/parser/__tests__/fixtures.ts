@@ -3,6 +3,15 @@ import { TokenKind } from '../../lexer/types';
 
 export const Statements = {
   Empty: { statements: [] },
+  Error: {
+    InvalidToken: {
+      errors: [
+        { message: 'invalid token: expected Identifier, got Let instead' },
+        { message: 'invalid token: expected Identifier, got Assign instead' }
+      ],
+      statements: []
+    }
+  },
   Let: {
     statements: [
       {

@@ -1,7 +1,7 @@
 import { Token, TokenKind } from '../lexer/types';
 
-export enum StatementKind {
-  Let
+export interface AssertionError {
+  message: string;
 }
 
 export interface Expression {
@@ -14,13 +14,18 @@ export interface Identifier {
   literal: string;
 }
 
-export interface Statement {
-  kind: StatementKind;
-  name: Identifier;
-  tokens: Token[];
-  expression: Expression;
+export interface Program {
+  errors: AssertionError[];
+  statements: Statement[];
 }
 
-export interface Program {
-  statements: Statement[];
+export interface Statement {
+  kind?: StatementKind;
+  name?: Identifier;
+  tokens?: Token[];
+  expression?: Expression;
+}
+
+export enum StatementKind {
+  Let
 }

@@ -3,11 +3,9 @@ import { parseStatement } from './helpers';
 
 import { Program } from '../ast/types';
 import { Token, TokenKind } from '../lexer/types';
-import { StatementParseResult } from './types';
 
 export function parse(tokens: Token[]): Program {
   const ast = createASTStructure();
-  let currentStatementParseResult: StatementParseResult|null = null;
   let currentStatementTokenRangeStart = 0;
   let currentToken;
 
@@ -16,9 +14,11 @@ export function parse(tokens: Token[]): Program {
 
     if (currentToken.kind === TokenKind.EOF) { break; }
 
-    currentStatementParseResult = parseStatement(tokens, currentToken, currentStatementTokenRangeStart);
-    if (currentStatementParseResult != null) {
+    let currentStatementParseResult = parseStatement(tokens, currentToken, currentStatementTokenRangeStart);
+    if (!currentStatementParseResult.errors.length) {
       ast.statements.push(currentStatementParseResult.node);
+    } else {
+      ast.errors = ast.errors.concat(currentStatementParseResult.errors);
     }
 
     // Set index behind last semicolon

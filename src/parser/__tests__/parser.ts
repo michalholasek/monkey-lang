@@ -20,4 +20,9 @@ describe('Parser', () => {
     expect(actual).toMatchObject(Statements.Let);
   });
 
+  it('should return an error for invalid statement (1)', () => {
+    const actual = parse(tokenize('let let = 0;'));
+    expect(actual).toMatchObject(Statements.Error.InvalidToken);
+  });
+
 });
