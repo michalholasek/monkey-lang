@@ -1,4 +1,4 @@
-import { StatementKind } from '../../ast/types';
+import { StatementKind } from '../ast/types';
 import { TokenKind } from '../../lexer/types';
 
 export const Statements = {

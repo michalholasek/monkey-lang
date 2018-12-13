@@ -1,4 +1,4 @@
-import { Token, TokenKind } from '../lexer/types';
+import { Token, TokenKind } from '../../lexer/types';
 
 export interface AssertionError {
   message: string;

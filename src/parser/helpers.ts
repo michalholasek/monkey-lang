@@ -1,6 +1,6 @@
-import { createStatementNode } from '../ast';
+import { createStatementNode } from './ast';
 
-import { AssertionError, Expression, Statement, StatementKind } from '../ast/types';
+import { AssertionError, Expression, Statement, StatementKind } from './ast/types';
 import { Token, TokenKind } from '../lexer/types';
 
 import {

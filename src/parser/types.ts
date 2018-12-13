@@ -1,4 +1,4 @@
-import { AssertionError, Statement } from '../ast/types';
+import { AssertionError, Statement } from './ast/types';
 
 export enum AssertionErrorKind {
   InvalidToken = 'invalid token'

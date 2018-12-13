@@ -7,7 +7,7 @@ import {
   StatementKind
 } from './types';
 
-import { Token } from '../lexer/types';
+import { Token } from '../../lexer/types';
 
 export function createASTStructure(
   errors: AssertionError[] = [], statements: Statement[] = []
