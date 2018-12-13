@@ -1,7 +1,11 @@
 import { KEYWORDS, Token, TokenKind } from './types';
 
-function createToken(literal: string): Token {
-  let token: Token = { kind: TokenKind.Illegal , literal };
+function computeBufferColumnPosition(buffer: string[], currentColumn: number): number {
+  return currentColumn - (buffer.length !== 1 ? buffer.length - 1 : 0);
+}
+
+function createToken(literal: string, column: number, line: number): Token {
+  let token: Token = { column, kind: TokenKind.Illegal, line, literal };
 
   switch (literal) {
     case '=':
@@ -73,6 +77,10 @@ function determineValidLiteralTokenKind(literal: string): TokenKind {
   return TokenKind.Identifier;
 }
 
+function isNewlineOrReturnCharacter(literal: string): boolean {
+  return /\n|\r/.test(literal);
+}
+
 // Sticky operators can form `==` or `!=`
 function isStickyOperator(literal: string): boolean {
   return /[!=]/.test(literal);
@@ -100,9 +108,12 @@ export function tokenize(input: string): Token[] {
   let tokens: Token[] = [];
   let buffer: string[] = [];
   let currentCharacter: string;
+  let currentColumn: number = 1;
+  let currentLine: number = 1;
 
   while (index < characters.length) {
     currentCharacter = characters[index];
+
     if (
       isLetter(currentCharacter) ||
       isNumber(currentCharacter) ||
@@ -111,24 +122,36 @@ export function tokenize(input: string): Token[] {
       buffer.push(currentCharacter);
     } else {
       if (buffer.length) {
-        tokens.push(createToken(buffer.join('')));
+        tokens.push(createToken(
+          buffer.join(''), computeBufferColumnPosition(buffer, currentColumn), currentLine)
+        );
         buffer = [];
       }
       if (!isWhiteSpace(currentCharacter)) {
-        tokens.push(createToken(currentCharacter));
+        tokens.push(createToken(currentCharacter, currentColumn + 1, currentLine));
       }
     }
+
+    if (isNewlineOrReturnCharacter(currentCharacter)) {
+      currentColumn = 1;
+      currentLine++;
+    } else {
+      currentColumn++;
+    }
+
     index++;
   }
 
   // Flush buffered tokens
   if (buffer.length) {
-    tokens.push(createToken(buffer.join('')));
+    tokens.push(createToken(
+      buffer.join(''), computeBufferColumnPosition(buffer, currentColumn), currentLine)
+    );
     buffer = [];
   }
 
   // Create EOF token
-  tokens.push(createToken(''));
+  tokens.push(createToken('', currentColumn, currentLine));
 
   return tokens;
 }

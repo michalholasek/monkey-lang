@@ -1,5 +1,5 @@
-import { StatementKind } from '../ast/types';
 import { TokenKind } from '../../lexer/types';
+import { StatementKind } from '../ast/types';
 
 export const Statements = {
   Empty: { statements: [] },

@@ -38,6 +38,8 @@ export enum TokenKind {
 }
 
 export interface Token {
+  column: number;
+  line: number;
   literal: string;
   kind: TokenKind;
 }

@@ -1,7 +1,7 @@
 import { createStatementNode } from './ast';
 
-import { AssertionError, Expression, Statement, StatementKind } from './ast/types';
 import { Token, TokenKind } from '../lexer/types';
+import { AssertionError, Expression, Statement, StatementKind } from './ast/types';
 
 import {
   AssertionErrorKind,
@@ -177,7 +177,7 @@ function getStatementTokens(tokens: Token[], start: number, end: number): Token[
 }
 
 function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
-  let currentToken = { kind: TokenKind.Illegal, literal: '' };
+  let currentToken = { column: -1, kind: TokenKind.Illegal, line: -1, literal: '' };
 
   for (let i = start; i < end; i++) {
     currentToken = tokens[i];
