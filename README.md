@@ -11,18 +11,19 @@ excellent [Writing An Interpreter In Go](https://interpreterbook.com/) book.
 
 ## How To Run
 1. Open Terminal
+2. `$ cd <monkey-lang directory>`
 2. `$ node ./dist/monkey.js`
 
 ## REPL
 ```
 Welcome to monkey-lang REPL!
 > let value = 5;
-[ { kind: 17, literal: 'let' },
-  { kind: 2, literal: 'value' },
-  { kind: 4, literal: '=' },
-  { kind: 3, literal: '5' },
-  { kind: 15, literal: ';' },
-  { kind: 1, literal: '' } ]
+[ { column: 2, kind: 17, line: 1, literal: 'let' },
+  { column: 6, kind: 2, line: 1, literal: 'value' },
+  { column: 12, kind: 4, line: 1, literal: '=' },
+  { column: 14, kind: 3, line: 1, literal: '5' },
+  { column: 15, kind: 15, line: 1, literal: ';' },
+  { column: 15, kind: 1, line: 1, literal: '' } ]
 > quit
 Exiting monkey-lang REPL...
 ```
