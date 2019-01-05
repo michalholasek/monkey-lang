@@ -1,6 +1,6 @@
 # monkey-lang
 
-[![CircleCI](https://circleci.com/gh/michalholasek/monkey-lang.svg?style=svg)](https://circleci.com/gh/michalholasek/monkey-lang)
+[![CircleCI](https://circleci.com/gh/michalholasek/monkey-lang.svg?style=shield)](https://circleci.com/gh/michalholasek/monkey-lang)
 
 A [TypeScript](http://www.typescriptlang.org/) implementation of C-like language based on
 excellent [Writing An Interpreter In Go](https://interpreterbook.com/) book.
