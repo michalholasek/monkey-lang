@@ -16,44 +16,44 @@ export const Statements = {
     statements: [
       {
         expression: {
-          tokens: [{ kind: TokenKind.Int, literal: '5' }],
+          tokens: [{ column: 16, kind: 3, line: 2, literal: '5' }],
           value: '5'
         },
         kind: StatementKind.Let,
-        name: { kind: TokenKind.Identifier, literal: 'x' },
+        name: { column: 12, kind: 2, line: 2, literal: 'x' },
         tokens: [
-          { kind: TokenKind.Let, literal: 'let' },
-          { kind: TokenKind.Identifier, literal: 'x' },
-          { kind: TokenKind.Assign, literal: '=' },
-          { kind: TokenKind.Int, literal: '5' }
+          { column: 8, kind: 17, line: 2, literal: 'let' },
+          { column: 12, kind: 2, line: 2, literal: 'x' },
+          { column: 14, kind: 4, line: 2, literal: '=' },
+          { column: 16, kind: 3, line: 2, literal: '5' }
         ]
       },
       {
         expression: {
-          tokens: [{ kind: TokenKind.Int, literal: '10' }],
+          tokens: [{ column: 16, kind: 3, line: 3, literal: '10' }],
           value: '10'
         },
         kind: StatementKind.Let,
-        name: { kind: TokenKind.Identifier, literal: 'y' },
+        name: { column: 12, kind: 2, line: 3, literal: 'y' },
         tokens: [
-          { kind: TokenKind.Let, literal: 'let' },
-          { kind: TokenKind.Identifier, literal: 'y' },
-          { kind: TokenKind.Assign, literal: '=' },
-          { kind: TokenKind.Int, literal: '10' }
+          { column: 8, kind: 17, line: 3, literal: 'let' },
+          { column: 12, kind: 2, line: 3, literal: 'y' },
+          { column: 14, kind: 4, line: 3, literal: '=' },
+          { column: 16, kind: 3, line: 3, literal: '10' }
         ]
       },
       {
         expression: {
-          tokens: [{ kind: TokenKind.Int, literal: '838383' }],
+          tokens: [{ column: 21, kind: 3, line: 4, literal: '838383' }],
           value: '838383'
         },
         kind: StatementKind.Let,
-        name: { kind: TokenKind.Identifier, literal: 'foobar' },
+        name: { column: 12, kind: 2, line: 4, literal: 'foobar' },
         tokens: [
-          { kind: TokenKind.Let, literal: 'let' },
-          { kind: TokenKind.Identifier, literal: 'foobar' },
-          { kind: TokenKind.Assign, literal: '=' },
-          { kind: TokenKind.Int, literal: '838383' }
+          { column: 8, kind: 17, line: 4, literal: 'let' },
+          { column: 12, kind: 2, line: 4, literal: 'foobar' },
+          { column: 19, kind: 4, line: 4, literal: '=' },
+          { column: 21, kind: 3, line: 4, literal: '838383' }
         ]
       }
     ]
