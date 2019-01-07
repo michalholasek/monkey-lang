@@ -6,8 +6,8 @@ export const Statements = {
   Error: {
     InvalidToken: {
       errors: [
-        { message: 'invalid token: expected Identifier, got Let instead' },
-        { message: 'invalid token: expected Identifier, got Assign instead' }
+        { message: 'invalid token(6, 1): expected Identifier, got Let instead' },
+        { message: 'invalid token(10, 1): expected Identifier, got Assign instead' }
       ],
       statements: []
     }

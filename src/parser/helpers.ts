@@ -1,7 +1,13 @@
 import { createStatementNode } from './ast';
 
 import { Token, TokenKind } from '../lexer/types';
-import { AssertionError, Expression, Statement, StatementKind } from './ast/types';
+import {
+  AssertionError,
+  Expression,
+  Statement,
+  StatementKind,
+  TokenCoordinates
+} from './ast/types';
 
 import {
   AssertionErrorKind,
@@ -26,7 +32,8 @@ export function assertStatement(
           assertionResult.errors.push(createAssertionError(
             AssertionErrorKind.InvalidToken,
             TokenKind.Identifier,
-            nextToken.kind
+            nextToken.kind,
+            createTokenCoordinates(nextToken)
           ));
         }
         break;
@@ -35,7 +42,8 @@ export function assertStatement(
           assertionResult.errors.push(createAssertionError(
             AssertionErrorKind.InvalidToken,
             TokenKind.Assign,
-            nextToken.kind
+            nextToken.kind,
+            createTokenCoordinates(nextToken)
           ));
         }
         break;
@@ -44,7 +52,8 @@ export function assertStatement(
           assertionResult.errors.push(createAssertionError(
             AssertionErrorKind.InvalidToken,
             TokenKind.Int,
-            nextToken.kind
+            nextToken.kind,
+            createTokenCoordinates(nextToken)
           ));
         }
         break;
@@ -53,7 +62,8 @@ export function assertStatement(
           assertionResult.errors.push(createAssertionError(
             AssertionErrorKind.InvalidToken,
             TokenKind.Semicolon,
-            nextToken.kind
+            nextToken.kind,
+            createTokenCoordinates(nextToken)
           ));
         }
         break;
@@ -107,12 +117,16 @@ function createAssertionResult(errors: AssertionError[] = []): StatementAssertio
 }
 
 function createAssertionError(
-  errorKind: string, expectedTokenKind: TokenKind, actualTokenKind: TokenKind
+  errorKind: string,
+  expectedTokenKind: TokenKind,
+  actualTokenKind: TokenKind,
+  coordinates: TokenCoordinates
 ): AssertionError {
   const expectedToken = TokenKind[expectedTokenKind];
   const actualToken = TokenKind[actualTokenKind];
   return {
-    message: `${errorKind}: expected ${expectedToken}, got ${actualToken} instead`
+    // tslint:disable-next-line
+    message: `${errorKind}(${coordinates.column}, ${coordinates.line}): expected ${expectedToken}, got ${actualToken} instead`
   };
 }
 
@@ -127,6 +141,13 @@ function createStatementParseResult(
     node: statement,
     tokenRangeEnd,
     tokenRangeStart
+  };
+}
+
+function createTokenCoordinates(token: Token): TokenCoordinates {
+  return {
+    column: token.column,
+    line: token.line
   };
 }
 

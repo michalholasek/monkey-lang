@@ -29,3 +29,8 @@ export interface Statement {
 export enum StatementKind {
   Let
 }
+
+export interface TokenCoordinates {
+  column: number;
+  line: number;
+}
