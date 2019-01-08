@@ -85,7 +85,6 @@ export function assertStatement(
 export function parseStatement(
   tokens: Token[], startToken: Token, statementTokenRangeStart: number
 ): StatementParseResult {
-  let statement;
   let statementKind = ValidStatementKind[startToken.kind];
   let statementParseResult = createStatementParseResult();
 
@@ -94,16 +93,14 @@ export function parseStatement(
     let assertionResult = assertStatement(tokens, statementTokenRangeStart, statementTokenRangeEnd);
 
     if (!assertionResult.errors.length) {
-      statement = createStatementNode(
-        tokens,
-        statementTokenRangeStart,
-        statementTokenRangeEnd,
-        statementKind
-      );
-
       statementParseResult = createStatementParseResult(
         [], // No errors during parsing
-        statement,
+        createStatementNode(
+          tokens,
+          statementTokenRangeStart,
+          statementTokenRangeEnd,
+          statementKind
+        ),
         statementTokenRangeStart,
         statementTokenRangeEnd
       );
