@@ -23,15 +23,17 @@ export function createStatementNode(
   statementTokenRangeEnd: number,
   kind: StatementKind
 ): Statement {
+  let statementTokens = getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd);
+
   let statement = {
-    expression: getStatementExpression(tokens, statementTokenRangeStart, statementTokenRangeEnd),
-    tokens: getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd),
+    expression: getStatementExpression(statementTokens),
+    tokens: statementTokens,
     kind
   };
 
   if (kind === StatementKind.Let) {
     statement = Object.assign({}, statement, {
-      name: getStatementIdentifierToken(tokens, statementTokenRangeStart, statementTokenRangeEnd)
+      name: getStatementIdentifierToken(statementTokens)
     });
   }
 
@@ -44,31 +46,31 @@ function evaluateExpression(tokens: Token[]): string {
   }, '');
 }
 
-function getStatementExpression(tokens: Token[], start: number, end: number): Expression {
-  let currentToken;
-  let expressionTokenRangeStart = 0;
-  let expressionTokens = [];
+function getStatementExpression(tokens: Token[]): Expression {
+  let expressionTokens = tokens;
 
-  for (let i = start; i < end; i++) {
-    currentToken = tokens[i];
-    if (currentToken.kind === TokenKind.Assign || currentToken.kind === TokenKind.Return) {
-      expressionTokenRangeStart = i + 1;
-      break;
+  if (tokens.filter(token => token.kind === TokenKind.Assign).length) {
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].kind === TokenKind.Assign) {
+        expressionTokens = tokens.slice(i + 1);
+      }
     }
+  } else {
+    expressionTokens = tokens.filter(token => {
+      return token.kind !== TokenKind.Return
+    });
   }
 
-  expressionTokens = tokens.slice(expressionTokenRangeStart, end);
-
   return {
-    tokens: tokens.slice(expressionTokenRangeStart, end),
+    tokens: expressionTokens,
     value: evaluateExpression(expressionTokens)
   };
 }
 
-function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
+function getStatementIdentifierToken(tokens: Token[]): Token {
   let currentToken = { column: -1, kind: TokenKind.Illegal, line: -1, literal: '' };
 
-  for (let i = start; i < end; i++) {
+  for (let i = 0; i < tokens.length; i++) {
     currentToken = tokens[i];
     if (currentToken.kind === TokenKind.Identifier) {
       break;
