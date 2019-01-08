@@ -22,7 +22,7 @@ export function parse(tokens: Token[]): Program {
     }
 
     // Set index behind last semicolon
-    currentStatementTokenRangeStart = currentStatementParseResult ?
+    currentStatementTokenRangeStart = currentStatementParseResult.node ?
       currentStatementParseResult.tokenRangeEnd + 1 :
       tokens.length
     ;

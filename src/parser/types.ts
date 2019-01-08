@@ -4,7 +4,7 @@ export enum AssertionErrorKind {
   InvalidToken = 'invalid token'
 }
 
-export interface StatementAssertionResult {
+export interface AssertionResult {
   errors: AssertionError[];
 }
 

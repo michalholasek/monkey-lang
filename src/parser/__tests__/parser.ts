@@ -1,12 +1,17 @@
 import { tokenize } from '../../lexer';
 import { parse } from '../index';
 
-import { Statements } from './fixtures';
+import { Expressions, Statements } from './fixtures';
 
 describe('Parser', () => {
 
   it('should return empty AST tree for empty array of tokens', () => {
     expect(parse([])).toMatchObject(Statements.Empty);
+  });
+
+  it('should return an error for invalid statement (1)', () => {
+    const actual = parse(tokenize('let let = 0;'));
+    expect(actual).toMatchObject(Statements.Error.InvalidToken);
   });
 
   it('should parse given input correctly (let)', () => {
@@ -31,9 +36,11 @@ describe('Parser', () => {
     expect(actual).toMatchObject(Statements.Return);
   });
 
-  it('should return an error for invalid statement (1)', () => {
-    const actual = parse(tokenize('let let = 0;'));
-    expect(actual).toMatchObject(Statements.Error.InvalidToken);
+  it('should parse given input correctly (identifier expression)', () => {
+    const tokens = tokenize('foobar;');
+    const actual = parse(tokens);
+
+    expect(actual).toMatchObject(Expressions.Identifier);
   });
 
 });

@@ -96,3 +96,18 @@ export const Statements = {
     ]
   }
 };
+
+export const Expressions = {
+  Identifier: {
+    statements: [
+      {
+        expression: {
+          tokens: [{ column: 2, kind: 2, line: 1, literal: 'foobar' }],
+          value: 'foobar'
+        },
+        kind: StatementKind.Expression,
+        tokens: [{ column: 2, kind: 2, line: 1, literal: 'foobar' }]
+      }
+    ]
+  }
+};

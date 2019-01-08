@@ -4,19 +4,59 @@ import { Token, TokenKind } from '../lexer/types';
 import {
   AssertionError,
   Statement,
-  TokenCoordinates,
-  ValidStatementKind
+  StatementKind,
+  TokenCoordinates
 } from './ast/types';
 
 import {
   AssertionErrorKind,
-  StatementAssertionResult,
+  AssertionResult,
   StatementParseResult
 } from './types';
 
-export function assertStatement(
+export function parseStatement(
+  tokens: Token[], startToken: Token, statementTokenRangeStart: number
+): StatementParseResult {
+  let statementKind = determineStatementKind(startToken.kind);
+  let statementParseResult;
+  let statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
+
+  let assertionResult = startToken.kind === TokenKind.Let || startToken.kind === TokenKind.Return ?
+    assertStatement(tokens, statementTokenRangeStart, statementTokenRangeEnd) :
+    assertExpression()
+  ;
+
+  if (!assertionResult.errors.length) {
+    statementParseResult = createStatementParseResult(
+      [], // No errors during parsing
+      createStatementNode(
+        tokens,
+        statementTokenRangeStart,
+        statementTokenRangeEnd,
+        statementKind
+      ),
+      statementTokenRangeStart,
+      statementTokenRangeEnd
+    );
+  } else {
+    statementParseResult = createStatementParseResult(
+      assertionResult.errors,
+      {}, // Empty statement, there were errors during parsing
+      statementTokenRangeStart,
+      statementTokenRangeEnd
+    );
+  }
+
+  return statementParseResult;
+}
+
+function assertExpression(): AssertionResult {
+  return createAssertionResult();
+}
+
+function assertStatement(
   tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number
-): StatementAssertionResult {
+): AssertionResult {
   const assertionResult = createAssertionResult();
   let currentToken;
   let nextToken;
@@ -82,42 +122,7 @@ export function assertStatement(
   return assertionResult;
 }
 
-export function parseStatement(
-  tokens: Token[], startToken: Token, statementTokenRangeStart: number
-): StatementParseResult {
-  let statementKind = ValidStatementKind[startToken.kind];
-  let statementParseResult = createStatementParseResult();
-
-  if (statementKind) { // Only 'Let' and 'Return for now
-    let statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
-    let assertionResult = assertStatement(tokens, statementTokenRangeStart, statementTokenRangeEnd);
-
-    if (!assertionResult.errors.length) {
-      statementParseResult = createStatementParseResult(
-        [], // No errors during parsing
-        createStatementNode(
-          tokens,
-          statementTokenRangeStart,
-          statementTokenRangeEnd,
-          statementKind
-        ),
-        statementTokenRangeStart,
-        statementTokenRangeEnd
-      );
-    } else {
-      statementParseResult = createStatementParseResult(
-        assertionResult.errors,
-        {}, // Empty statement, there were errors during parsing
-        statementTokenRangeStart,
-        statementTokenRangeEnd
-      );
-    }
-  }
-
-  return statementParseResult;
-}
-
-function createAssertionResult(errors: AssertionError[] = []): StatementAssertionResult {
+function createAssertionResult(errors: AssertionError[] = []): AssertionResult {
   return {
     errors
   };
@@ -156,6 +161,14 @@ function createTokenCoordinates(token: Token): TokenCoordinates {
     column: token.column,
     line: token.line
   };
+}
+
+function determineStatementKind(startTokenKind: TokenKind): StatementKind {
+  switch (startTokenKind) {
+    case TokenKind.Let: return StatementKind.Let;
+    case TokenKind.Return: return StatementKind.Return;
+    default: return StatementKind.Expression;
+  }
 }
 
 function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
