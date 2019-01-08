@@ -9,7 +9,7 @@ const cli = createInterface({
   prompt: '> '
 });
 
-cli.on('line', (line) => {
+cli.on('line', line => {
   const input = line.trim();
 
   switch (input) {

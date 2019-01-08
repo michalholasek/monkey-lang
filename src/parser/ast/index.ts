@@ -57,7 +57,7 @@ function getStatementExpression(tokens: Token[]): Expression {
     }
   } else {
     expressionTokens = tokens.filter(token => {
-      return token.kind !== TokenKind.Return
+      return token.kind !== TokenKind.Return;
     });
   }
 
@@ -68,16 +68,11 @@ function getStatementExpression(tokens: Token[]): Expression {
 }
 
 function getStatementIdentifierToken(tokens: Token[]): Token {
-  let currentToken = { column: -1, kind: TokenKind.Illegal, line: -1, literal: '' };
-
-  for (let i = 0; i < tokens.length; i++) {
-    currentToken = tokens[i];
-    if (currentToken.kind === TokenKind.Identifier) {
-      break;
-    }
-  }
-
-  return currentToken;
+  return tokens
+    .filter(token => token.kind === TokenKind.Identifier)
+    .reduce((_, currentToken) => {
+      return currentToken;
+    });
 }
 
 function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
