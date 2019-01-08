@@ -44,7 +44,7 @@ export interface Token {
   kind: TokenKind;
 }
 
-export const KEYWORDS: { [index: string]: TokenKind } = {
+export const Keywords: { [index: string]: TokenKind } = {
   else: TokenKind.Else,
   false: TokenKind.False,
   fn: TokenKind.Function,

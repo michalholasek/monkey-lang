@@ -1,4 +1,4 @@
-import { KEYWORDS, Token, TokenKind } from './types';
+import { Keywords, Token, TokenKind } from './types';
 
 function computeBufferColumnPosition(buffer: string[], currentColumn: number): number {
   return currentColumn - (buffer.length !== 1 ? buffer.length - 1 : 0);
@@ -73,7 +73,7 @@ function createToken(literal: string, column: number, line: number): Token {
 }
 
 function determineValidLiteralTokenKind(literal: string): TokenKind {
-  if (KEYWORDS[literal]) { return KEYWORDS[literal]; }
+  if (Keywords[literal]) { return Keywords[literal]; }
   return TokenKind.Identifier;
 }
 
