@@ -26,10 +26,11 @@ export interface Statement {
   expression?: Expression;
 }
 
-// Number ordering matches TokenKind
+// Let and Return ordering matches TokenKind
 export enum StatementKind {
   Let = 17,
-  Return = 22
+  Return = 22,
+  Expression = 100
 }
 
 export interface TokenCoordinates {
