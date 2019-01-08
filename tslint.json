@@ -7,6 +7,7 @@
     "prefer-const": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always"],
+    "object-literal-sort-keys": false,
     "space-before-function-paren": [true, {
       "anonymous": "always"
     }],
