@@ -26,11 +26,18 @@ export interface Statement {
   expression?: Expression;
 }
 
+// Number ordering matches TokenKind
 export enum StatementKind {
-  Let
+  Let = 17,
+  Return = 22
 }
 
 export interface TokenCoordinates {
   column: number;
   line: number;
 }
+
+export const ValidStatementKind: { [index: number]: StatementKind } = {
+  17: StatementKind.Let,
+  22: StatementKind.Return
+};

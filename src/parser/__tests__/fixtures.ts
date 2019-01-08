@@ -57,5 +57,42 @@ export const Statements = {
         ]
       }
     ]
+  },
+  Return: {
+    statements: [
+      {
+        expression: {
+          tokens: [{ column: 15, kind: 3, line: 2, literal: '5' }],
+          value: '5'
+        },
+        kind: StatementKind.Return,
+        tokens: [
+          { column: 8, kind: 22, line: 2, literal: 'return' },
+          { column: 15, kind: 3, line: 2, literal: '5' }
+        ]
+      },
+      {
+        expression: {
+          tokens: [{ column: 15, kind: 3, line: 3, literal: '10' }],
+          value: '10'
+        },
+        kind: StatementKind.Return,
+        tokens: [
+          { column: 8, kind: 22, line: 3, literal: 'return' },
+          { column: 15, kind: 3, line: 3, literal: '10' }
+        ]
+      },
+      {
+        expression: {
+          tokens: [{ column: 15, kind: 3, line: 4, literal: '993322' }],
+          value: '993322'
+        },
+        kind: StatementKind.Return,
+        tokens: [
+          { column: 8, kind: 22, line: 4, literal: 'return' },
+          { column: 15, kind: 3, line: 4, literal: '993322' }
+        ]
+      }
+    ]
   }
 };

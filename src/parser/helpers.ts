@@ -3,10 +3,9 @@ import { createStatementNode } from './ast';
 import { Token, TokenKind } from '../lexer/types';
 import {
   AssertionError,
-  Expression,
   Statement,
-  StatementKind,
-  TokenCoordinates
+  TokenCoordinates,
+  ValidStatementKind
 } from './ast/types';
 
 import {
@@ -29,6 +28,16 @@ export function assertStatement(
     switch (currentToken.kind) {
       case (TokenKind.Let):
         if (nextToken.kind !== TokenKind.Identifier) {
+          assertionResult.errors.push(createAssertionError(
+            AssertionErrorKind.InvalidToken,
+            TokenKind.Identifier,
+            nextToken.kind,
+            createTokenCoordinates(nextToken)
+          ));
+        }
+        break;
+      case (TokenKind.Return):
+        if (nextToken.kind !== TokenKind.Int) {
           assertionResult.errors.push(createAssertionError(
             AssertionErrorKind.InvalidToken,
             TokenKind.Identifier,
@@ -77,18 +86,19 @@ export function parseStatement(
   tokens: Token[], startToken: Token, statementTokenRangeStart: number
 ): StatementParseResult {
   let statement;
+  let statementKind = ValidStatementKind[startToken.kind];
   let statementParseResult = createStatementParseResult();
 
-  if (startToken.kind === TokenKind.Let) {
+  if (statementKind) { // Only 'Let' and 'Return for now
     let statementTokenRangeEnd = getStatementTokenRangeEnd(tokens, statementTokenRangeStart);
     let assertionResult = assertStatement(tokens, statementTokenRangeStart, statementTokenRangeEnd);
 
     if (!assertionResult.errors.length) {
       statement = createStatementNode(
-        StatementKind.Let,
-        getStatementIdentifierToken(tokens, statementTokenRangeStart, statementTokenRangeEnd),
-        getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd),
-        getStatementExpression(tokens, statementTokenRangeStart, statementTokenRangeEnd)
+        tokens,
+        statementTokenRangeStart,
+        statementTokenRangeEnd,
+        statementKind
       );
 
       statementParseResult = createStatementParseResult(
@@ -151,33 +161,6 @@ function createTokenCoordinates(token: Token): TokenCoordinates {
   };
 }
 
-function evaluateExpression(tokens: Token[]): string {
-  return tokens.reduce((previous, current) => {
-    return previous.concat('', current.literal || '');
-  }, '');
-}
-
-function getStatementExpression(tokens: Token[], start: number, end: number): Expression {
-  let currentToken;
-  let expressionTokenRangeStart = 0;
-  let expressionTokens = [];
-
-  for (let i = start; i < end; i++) {
-    currentToken = tokens[i];
-    if (currentToken.kind === TokenKind.Assign) {
-      expressionTokenRangeStart = i + 1;
-      break;
-    }
-  }
-
-  expressionTokens = tokens.slice(expressionTokenRangeStart, end);
-
-  return {
-    tokens: tokens.slice(expressionTokenRangeStart, end),
-    value: evaluateExpression(expressionTokens)
-  };
-}
-
 function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
   let currentToken;
   let end = 0;
@@ -191,21 +174,4 @@ function getStatementTokenRangeEnd(tokens: Token[], start: number): number {
   }
 
   return end;
-}
-
-function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
-  return tokens.slice(start, end);
-}
-
-function getStatementIdentifierToken(tokens: Token[], start: number, end: number): Token {
-  let currentToken = { column: -1, kind: TokenKind.Illegal, line: -1, literal: '' };
-
-  for (let i = start; i < end; i++) {
-    currentToken = tokens[i];
-    if (currentToken.kind === TokenKind.Identifier) {
-      break;
-    }
-  }
-
-  return currentToken;
 }
