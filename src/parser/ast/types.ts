@@ -37,8 +37,3 @@ export interface TokenCoordinates {
   column: number;
   line: number;
 }
-
-export const ValidStatementKind: { [index: number]: StatementKind } = {
-  17: StatementKind.Let,
-  22: StatementKind.Return
-};
