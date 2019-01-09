@@ -6,8 +6,10 @@ export interface AssertionError {
 
 export interface Expression {
   tokens: Token[];
-  value: string;
+  value: ExpressionValue;
 }
+
+export type ExpressionValue = number|string;
 
 export interface Identifier {
   kind: TokenKind;

@@ -17,7 +17,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 16, kind: 3, line: 2, literal: '5' }],
-          value: '5'
+          value: 5
         },
         kind: StatementKind.Let,
         name: { column: 12, kind: 2, line: 2, literal: 'x' },
@@ -31,7 +31,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 16, kind: 3, line: 3, literal: '10' }],
-          value: '10'
+          value: 10
         },
         kind: StatementKind.Let,
         name: { column: 12, kind: 2, line: 3, literal: 'y' },
@@ -45,7 +45,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 21, kind: 3, line: 4, literal: '838383' }],
-          value: '838383'
+          value: 838383
         },
         kind: StatementKind.Let,
         name: { column: 12, kind: 2, line: 4, literal: 'foobar' },
@@ -63,7 +63,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 15, kind: 3, line: 2, literal: '5' }],
-          value: '5'
+          value: 5
         },
         kind: StatementKind.Return,
         tokens: [
@@ -74,7 +74,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 15, kind: 3, line: 3, literal: '10' }],
-          value: '10'
+          value: 10
         },
         kind: StatementKind.Return,
         tokens: [
@@ -85,7 +85,7 @@ export const Statements = {
       {
         expression: {
           tokens: [{ column: 15, kind: 3, line: 4, literal: '993322' }],
-          value: '993322'
+          value: 993322
         },
         kind: StatementKind.Return,
         tokens: [
@@ -107,6 +107,18 @@ export const Expressions = {
         },
         kind: StatementKind.Expression,
         tokens: [{ column: 2, kind: 2, line: 1, literal: 'foobar' }]
+      }
+    ]
+  },
+  Integer: {
+    statements: [
+      {
+        expression: {
+          tokens: [{ column: 2, kind: 3, line: 1, literal: '5' }],
+          value: 5
+        },
+        kind: StatementKind.Expression,
+        tokens: [{ column: 2, kind: 3, line: 1, literal: '5' }]
       }
     ]
   }

@@ -43,4 +43,11 @@ describe('Parser', () => {
     expect(actual).toMatchObject(Expressions.Identifier);
   });
 
+  it('should parse given input correctly (integer expression)', () => {
+    const tokens = tokenize('5;');
+    const actual = parse(tokens);
+
+    expect(actual).toMatchObject(Expressions.Integer);
+  });
+
 });
