@@ -1,5 +1,5 @@
 import { createASTStructure } from './ast';
-import { parseStatement } from './helpers';
+import { parseStatement } from './statement';
 
 import { Token, TokenKind } from '../lexer/types';
 import { Program } from './ast/types';
