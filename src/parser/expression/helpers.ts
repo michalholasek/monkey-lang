@@ -9,10 +9,11 @@ export function createAssertionResult(errors: AssertionError[] = []): AssertionR
 }
 
 export function evaluateExpression(tokens: Token[]): ExpressionValue {
-  return tokens.reduce((previous, current) => {
-    return current.kind === TokenKind.Int ?
-      parseInt(current.literal, 10) :
-      previous.concat('', current.literal || '')
-    ;
+  return tokens.reduce((_, current) => {
+    return current.kind === TokenKind.Int ? parseIntegerExpression(current.literal) : current.literal;
   }, '');
+}
+
+function parseIntegerExpression(literal: string): ExpressionValue {
+  return parseInt(literal, 10);
 }
