@@ -47,9 +47,10 @@ function evaluateExpression(tokens: Token[]): string {
 }
 
 function getStatementExpression(tokens: Token[]): Expression {
+  const containsAssignToken = tokens.filter(token => token.kind === TokenKind.Assign).length;
   let expressionTokens = tokens;
 
-  if (tokens.filter(token => token.kind === TokenKind.Assign).length) {
+  if (containsAssignToken) {
     for (let i = 0; i < tokens.length; i++) {
       if (tokens[i].kind === TokenKind.Assign) {
         expressionTokens = tokens.slice(i + 1);
