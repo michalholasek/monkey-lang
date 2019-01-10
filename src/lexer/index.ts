@@ -132,8 +132,8 @@ export function tokenize(input: string): Token[] {
           literals = buffer;
         }
 
-        tokens = tokens.concat(literals.map((literal, index) => {
-          return createToken(literal, computeBufferColumnPosition(buffer, currentColumn + index), currentLine);
+        tokens = tokens.concat(literals.map((currentLiteral, idx) => {
+          return createToken(currentLiteral, computeBufferColumnPosition(buffer, currentColumn + idx), currentLine);
         }));
 
         buffer = [];
