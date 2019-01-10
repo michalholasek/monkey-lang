@@ -25,9 +25,10 @@ export function createStatementNode(
   kind: StatementKind
 ): Statement {
   let statementTokens = getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd);
+  let expressionTokens = getStatementExpressionTokens(statementTokens);
 
   let statement = {
-    expression: parseExpression(statementTokens),
+    expression: parseExpression(expressionTokens),
     tokens: statementTokens,
     kind
   };
@@ -39,6 +40,25 @@ export function createStatementNode(
   }
 
   return statement;
+}
+
+function getStatementExpressionTokens(tokens: Token[]): Token[] {
+  const containsAssignToken = tokens.filter(token => token.kind === TokenKind.Assign).length;
+  let expressionTokens = tokens;
+
+  if (containsAssignToken) {
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].kind === TokenKind.Assign) {
+        expressionTokens = tokens.slice(i + 1);
+      }
+    }
+  } else {
+    expressionTokens = tokens.filter(token => {
+      return token.kind !== TokenKind.Return;
+    });
+  }
+
+  return expressionTokens;
 }
 
 function getStatementIdentifierToken(tokens: Token[]): Token {
