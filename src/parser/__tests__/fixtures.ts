@@ -121,5 +121,63 @@ export const Expressions = {
         tokens: [{ column: 2, kind: 3, line: 1, literal: '5' }]
       }
     ]
+  },
+  Prefix: {
+    statements: [
+      {
+        expression: {
+          operands: [
+            {
+              operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              right: {
+                tokens: [{ column: 3, kind: TokenKind.Int, line: 1, literal: '5' }],
+                value: 5
+              },
+              tokens: [
+                { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+                { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
+              ]
+            }
+          ],
+          tokens: [
+            { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+            { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
+          ],
+          value: 5
+        },
+        kind: StatementKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+          { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
+        ]
+      },
+      {
+        expression: {
+          operands: [
+            {
+              operator: { column: 5, kind: TokenKind.Minus, line: 1, literal: '-' },
+              right: {
+                tokens: [{ column: 6, kind: TokenKind.Int, line: 1, literal: '15' }],
+                value: 15
+              },
+              tokens: [
+                { column: 5, kind: TokenKind.Minus, line: 1, literal: '-' },
+                { column: 6, kind: TokenKind.Int, line: 1, literal: '15' }
+              ]
+            }
+          ],
+          tokens: [
+            { column: 5, kind: TokenKind.Minus, line: 1, literal: '-' },
+            { column: 6, kind: TokenKind.Int, line: 1, literal: '15' }
+          ],
+          value: 15
+        },
+        kind: StatementKind.Expression,
+        tokens: [
+          { column: 5, kind: TokenKind.Minus, line: 1, literal: '-' },
+          { column: 6, kind: TokenKind.Int, line: 1, literal: '15' }
+        ]
+      }
+    ]
   }
 };

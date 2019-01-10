@@ -50,4 +50,11 @@ describe('Parser', () => {
     expect(actual).toMatchObject(Expressions.Integer);
   });
 
+  it('should parse given input correctly (prefix operator)', () => {
+    const tokens = tokenize('!5;-15;');
+    const actual = parse(tokens);
+
+    expect(actual).toMatchObject(Expressions.Prefix);
+  });
+
 });
