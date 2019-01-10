@@ -54,4 +54,12 @@ describe('Lexer', () => {
     });
   });
 
+  it('should tokenize given input correctly (6)', () => {
+    const actual = tokenize('!5;');
+
+    Tokens.PrefixOperator.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
 });

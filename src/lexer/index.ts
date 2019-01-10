@@ -77,6 +77,10 @@ function determineValidLiteralTokenKind(literal: string): TokenKind {
   return TokenKind.Identifier;
 }
 
+function stickyOperatorHasBothSides(literal: string): boolean {
+  return /==|!=/.test(literal);
+}
+
 function isNewlineOrReturnCharacter(literal: string): boolean {
   return /\n|\r/.test(literal);
 }
@@ -107,12 +111,11 @@ export function tokenize(input: string): Token[] {
   let index: number = 0;
   let tokens: Token[] = [];
   let buffer: string[] = [];
-  let currentCharacter: string;
   let currentColumn: number = 1;
   let currentLine: number = 1;
 
   while (index < characters.length) {
-    currentCharacter = characters[index];
+    let currentCharacter = characters[index];
 
     if (
       isLetter(currentCharacter) ||
@@ -122,9 +125,17 @@ export function tokenize(input: string): Token[] {
       buffer.push(currentCharacter);
     } else {
       if (buffer.length) {
-        tokens.push(createToken(
-          buffer.join(''), computeBufferColumnPosition(buffer, currentColumn), currentLine)
-        );
+        let literal = buffer.join('');
+        let literals = [literal];
+
+        if (isStickyOperator(literal) && !stickyOperatorHasBothSides(literal)) {
+          literals = buffer;
+        }
+
+        tokens = tokens.concat(literals.map((literal, index) => {
+          return createToken(literal, computeBufferColumnPosition(buffer, currentColumn + index), currentLine);
+        }));
+
         buffer = [];
       }
       if (!isWhiteSpace(currentCharacter)) {

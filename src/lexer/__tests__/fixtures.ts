@@ -1,6 +1,10 @@
 import { TokenKind } from '../types';
 
 export const Tokens = {
+  PrefixOperator: [
+    { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+    { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
+  ],
   Keywords: [
     { column: 2, kind: TokenKind.True, line: 1, literal: 'true' },
     { column: 7, kind: TokenKind.False, line: 1, literal: 'false' },
