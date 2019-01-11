@@ -19,3 +19,13 @@ export interface ExpressionParseResult {
   expression: Expression;
   cursor: number;
 }
+
+export enum Precedence {
+  Lowest = 1,
+  Equals,
+  LessGreater,
+  Sum,
+  Product,
+  Prefix,
+  Call
+}

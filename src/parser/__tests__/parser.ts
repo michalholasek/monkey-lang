@@ -56,4 +56,11 @@ describe('Parser', () => {
 
     expect(actual).toMatchObject(Expressions.Prefix);
   });
+
+  it('should parse given input correctly (infix operators)', () => {
+    const tokens = tokenize(`5 + 5;`);
+    const actual = parse(tokens);
+
+    expect(actual).toMatchObject(Expressions.Infix);
+  });
 });

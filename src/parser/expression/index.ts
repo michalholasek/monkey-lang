@@ -1,6 +1,10 @@
 import { Token, TokenKind } from '../../lexer/types';
 import { Expression, ExpressionValue } from '../ast/types';
-import { AssertionResult, ExpressionParseResult } from '../types';
+import {
+  AssertionResult,
+  ExpressionParseResult,
+  Precedence
+} from '../types';
 
 import { createAssertionResult } from './helpers';
 
@@ -9,7 +13,7 @@ export function assertExpression(): AssertionResult {
 }
 
 export function parseStatementExpression(tokens: Token[]): Expression {
-  return parseExpression(tokens, 0).expression;
+  return parseExpression(tokens, 0, Precedence.Lowest).expression;
 }
 
 function createExpression(tokens: Token[]): Expression {
@@ -20,8 +24,32 @@ function isPrefixToken(token: Token): boolean {
   return token.kind === TokenKind.Bang || token.kind === TokenKind.Minus;
 }
 
-function parseExpression(tokens: Token[], cursor: number): ExpressionParseResult {
-  return parsePrefixExpression(tokens, cursor);
+function parseExpression(tokens: Token[], cursor: number, precedence: number): ExpressionParseResult {
+  let leftExpressionParseResult = parsePrefixExpression(tokens, cursor);
+  let nextPrecedence = Precedence.Lowest;
+
+  cursor = leftExpressionParseResult.cursor;
+
+  while (cursor < tokens.length && precedence <= nextPrecedence) {
+    leftExpressionParseResult = parseInfixExpression(tokens, cursor, leftExpressionParseResult.expression);
+    cursor = leftExpressionParseResult.cursor;
+  }
+
+  return leftExpressionParseResult;
+}
+
+function parseInfixExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
+  let expression = createExpression(tokens);
+  let rightExpressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Lowest);
+
+  expression.left = left;
+  expression.operator = tokens[cursor];
+  expression.right = rightExpressionParseResult.expression;
+
+  return {
+    cursor: rightExpressionParseResult.cursor,
+    expression
+  };
 }
 
 function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
@@ -30,11 +58,15 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
   let nextCursor = 0;
 
   if (isPrefixToken(prefix)) {
-    expression.value = parseExpressionValue(tokens[cursor + 1]);
-    expression.operator = prefix;
+    expression.left = {
+      operator: prefix,
+      tokens: tokens.slice(cursor, cursor + 2),
+      value: parseExpressionValue(tokens[cursor + 1])
+    };
     nextCursor = cursor + 2;
   } else {
     expression.value = parseExpressionValue(prefix);
+    expression.tokens = tokens.slice(cursor, cursor + 1);
     nextCursor = cursor + 1;
   }
 
