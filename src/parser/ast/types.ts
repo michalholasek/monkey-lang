@@ -5,18 +5,12 @@ export interface AssertionError {
 }
 
 export interface Expression {
-  operands?: ExpressionOperand[];
+  left?: Expression;
+  operator?: Token;
+  right?: Expression;
   tokens: Token[];
-  value: ExpressionValue;
+  value?: ExpressionValue;
 }
-
-export interface PrefixExpression {
-  tokens: Token[];
-  operator: Token;
-  right: Expression;
-}
-
-export type ExpressionOperand = Expression | PrefixExpression;
 
 export type ExpressionValue = number | string;
 

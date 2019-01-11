@@ -7,7 +7,7 @@ import {
   StatementKind
 } from './types';
 
-import { parseExpression } from '../expression';
+import { parseStatementExpression } from '../expression';
 
 export function createASTStructure(
   errors: AssertionError[] = [], statements: Statement[] = []
@@ -28,7 +28,7 @@ export function createStatementNode(
   let expressionTokens = getStatementExpressionTokens(statementTokens);
 
   let statement = {
-    expression: parseExpression(expressionTokens),
+    expression: parseStatementExpression(expressionTokens),
     tokens: statementTokens,
     kind
   };

@@ -1,4 +1,4 @@
-import { AssertionError, Statement } from './ast/types';
+import { AssertionError, Expression, Statement } from './ast/types';
 
 export enum AssertionErrorKind {
   InvalidToken = 'invalid token'
@@ -13,4 +13,9 @@ export interface StatementParseResult {
   node: Statement;
   tokenRangeStart: number;
   tokenRangeEnd: number;
+}
+
+export interface ExpressionParseResult {
+  expression: Expression;
+  cursor: number;
 }

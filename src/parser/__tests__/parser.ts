@@ -56,5 +56,4 @@ describe('Parser', () => {
 
     expect(actual).toMatchObject(Expressions.Prefix);
   });
-
 });

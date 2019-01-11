@@ -1,57 +1,49 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { Expression, PrefixExpression } from '../ast/types';
-import { AssertionResult } from '../types';
+import { Expression, ExpressionValue } from '../ast/types';
+import { AssertionResult, ExpressionParseResult } from '../types';
 
-import { createAssertionResult, evaluateExpression } from './helpers';
+import { createAssertionResult } from './helpers';
 
 export function assertExpression(): AssertionResult {
   return createAssertionResult();
 }
 
-export function parseExpression(tokens: Token[]): Expression {
-  let expression = createExpression(tokens);
-  const hasPrefixToken = detectPrefixToken(tokens);
-
-  if (hasPrefixToken) {
-    let prefixExpression = parsePrefixExpression(tokens);
-    expression = Object.assign({}, expression, {
-      operands: [prefixExpression]
-    });
-  }
-
-  expression = Object.assign({}, expression, {
-    value: evaluateExpression(tokens)
-  });
-
-  return expression;
+export function parseStatementExpression(tokens: Token[]): Expression {
+  return parseExpression(tokens, 0).expression;
 }
 
 function createExpression(tokens: Token[]): Expression {
-  return { tokens, value: '' };
+  return { tokens };
 }
 
-function detectPrefixToken(tokens: Token[]): boolean {
-  let hasPrefixToken = false;
+function isPrefixToken(token: Token): boolean {
+  return token.kind === TokenKind.Bang || token.kind === TokenKind.Minus;
+}
 
-  for (let token of tokens) {
-    switch (token.kind) {
-      case TokenKind.Bang:
-      case TokenKind.Minus:
-        hasPrefixToken = true;
-        break;
-    }
+function parseExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  return parsePrefixExpression(tokens, cursor);
+}
+
+function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let expression = createExpression(tokens);
+  let prefix = tokens[cursor];
+  let nextCursor = 0;
+
+  if (isPrefixToken(prefix)) {
+    expression.value = parseExpressionValue(tokens[cursor + 1]);
+    expression.operator = prefix;
+    nextCursor = cursor + 2;
+  } else {
+    expression.value = parseExpressionValue(prefix);
+    nextCursor = cursor + 1;
   }
 
-  return hasPrefixToken;
+  return {
+    cursor: nextCursor,
+    expression
+  };
 }
 
-function parsePrefixExpression(tokens: Token[]): PrefixExpression {
-  const prefix = tokens[0];
-  const rightOperandTokens = tokens.slice(1);
-
-  return {
-    operator: prefix,
-    right: parseExpression(rightOperandTokens),
-    tokens
-  };
+function parseExpressionValue(token: Token): ExpressionValue {
+  return token.kind === TokenKind.Int ? parseInt(token.literal, 10) : token.literal;
 }
