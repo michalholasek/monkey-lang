@@ -75,11 +75,16 @@ describe('Parser', () => {
 
   [
     '-a * b;',
-    '((-a) * b);',
     '!-a;',
-    '(!(-a));',
     'a + b + c;',
-    '((a + b) + c);'
+    'a + b - c;',
+    'a * b * c;',
+    'a * b / c;',
+    'a + b / c;',
+    'a + b * c + d / e - f;',
+    '5 > 4 == 3 < 4;',
+    '5 < 4 != 3 > 4;',
+    '3 + 4 * 5 == 3 * 1 + 4 * 5;'
   ].forEach(expression => {
     it(`should parse given input correctly - ${expression}`, () => {
       const tokens = tokenize(expression);

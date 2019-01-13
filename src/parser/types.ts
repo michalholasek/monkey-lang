@@ -18,6 +18,7 @@ export interface StatementParseResult {
 export interface ExpressionParseResult {
   expression: Expression;
   cursor: number;
+  nextPrecedence: Precedence;
 }
 
 export enum Precedence {
