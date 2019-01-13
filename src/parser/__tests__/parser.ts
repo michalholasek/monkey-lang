@@ -72,4 +72,21 @@ describe('Parser', () => {
 
     expect(actual).toMatchObject(Expressions.Infix);
   });
+
+  [
+    '-a * b;',
+    '((-a) * b);',
+    '!-a;',
+    '(!(-a));',
+    'a + b + c;',
+    '((a + b) + c);'
+  ].forEach(expression => {
+    it(`should parse given input correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Expressions.OperatorPrecedence[expression]);
+    });
+  });
+
 });

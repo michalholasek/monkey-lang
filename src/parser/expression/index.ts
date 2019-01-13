@@ -3,6 +3,7 @@ import { Expression, ExpressionValue } from '../ast/types';
 import {
   AssertionResult,
   ExpressionParseResult,
+  OperatorPrecedences,
   Precedence
 } from '../types';
 
@@ -13,20 +14,59 @@ export function assertExpression(): AssertionResult {
 }
 
 export function parseStatementExpression(tokens: Token[]): Expression {
-  return parseExpression(tokens, 0, Precedence.Lowest).expression;
+  let expressionTokens = tokens.filter(token => {
+    let isTokenValid = true;
+
+    switch (token.kind) {
+      case TokenKind.LeftParenthesis:
+      case TokenKind.RightParenthesis:
+        isTokenValid = false;
+    }
+
+    return isTokenValid;
+  });
+
+  let cursor = 0;
+
+  return parseExpression(expressionTokens, cursor, Precedence.Lowest).expression;
 }
 
 function createExpression(tokens: Token[]): Expression {
   return { tokens };
 }
 
+function determineNextOperatorPrecedence(tokens: Token[], cursor: number, precedence: Precedence) {
+  let nextToken = tokens[cursor + 1];
+  let nextPrecedence;
+
+  if (nextToken) {
+    nextPrecedence = OperatorPrecedences[nextToken.kind];
+  }
+
+  return nextPrecedence || precedence;
+}
+
+function determineOperatorPrecedence(expression: Expression): Precedence {
+  let precedence;
+
+  if (expression.operator) {
+    precedence = OperatorPrecedences[expression.operator.kind];
+  }
+
+  return precedence || Precedence.Lowest;
+}
+
+function isNextTokenImmediateValue(token: Token): boolean {
+  return token.kind === TokenKind.Int || token.kind === TokenKind.Identifier;
+}
+
 function isPrefixToken(token: Token): boolean {
   return token.kind === TokenKind.Bang || token.kind === TokenKind.Minus;
 }
 
-function parseExpression(tokens: Token[], cursor: number, precedence: number): ExpressionParseResult {
-  let leftExpressionParseResult = parsePrefixExpression(tokens, cursor);
-  let nextPrecedence = Precedence.Lowest;
+function parseExpression(tokens: Token[], cursor: number, precedence: Precedence): ExpressionParseResult {
+  let leftExpressionParseResult = parsePrefixExpression(tokens, cursor, precedence);
+  let nextPrecedence = determineNextOperatorPrecedence(tokens, cursor, precedence);
 
   cursor = leftExpressionParseResult.cursor;
 
@@ -40,11 +80,13 @@ function parseExpression(tokens: Token[], cursor: number, precedence: number): E
 
 function parseInfixExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let expression = createExpression(tokens);
-  let rightExpressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Lowest);
+  let currentPrecedence = determineOperatorPrecedence(left);
+  let rightExpressionParseResult = parseExpression(tokens, cursor + 1, currentPrecedence);
 
   expression.left = left;
   expression.operator = tokens[cursor];
   expression.right = rightExpressionParseResult.expression;
+  expression.tokens = left.tokens.concat([expression.operator]).concat(expression.right.tokens);
 
   return {
     cursor: rightExpressionParseResult.cursor,
@@ -52,26 +94,41 @@ function parseInfixExpression(tokens: Token[], cursor: number, left: Expression)
   };
 }
 
-function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
-  let expression = createExpression(tokens);
+function parsePrefixExpression(tokens: Token[], cursor: number, precedence: Precedence): ExpressionParseResult {
   let prefix = tokens[cursor];
-  let nextCursor = 0;
+  let hasPrefix = isPrefixToken(prefix);
+  let nextToken = tokens[cursor + 1];
+  let hasImmediateValue = nextToken ? isNextTokenImmediateValue(nextToken) : false;
+  let noOfTokens = 0;
+  let expression;
+  let expressionTokens;
 
-  if (isPrefixToken(prefix)) {
+  if (!hasPrefix) { // Base case, immediate value
+    noOfTokens = 1;
+    expressionTokens = tokens.slice(cursor, cursor + noOfTokens);
+    expression = createExpression(expressionTokens);
+    expression.value = parseExpressionValue(prefix);
+    expression.tokens = expressionTokens;
+  } else if (hasPrefix && hasImmediateValue) {
+    noOfTokens = 2;
+    expressionTokens = tokens.slice(cursor, cursor + noOfTokens);
+    expression = createExpression(expressionTokens);
     expression.left = {
       operator: prefix,
-      tokens: tokens.slice(cursor, cursor + 2),
-      value: parseExpressionValue(tokens[cursor + 1])
+      tokens: expressionTokens,
+      value: parseExpressionValue(expressionTokens[1])
     };
-    nextCursor = cursor + 2;
   } else {
-    expression.value = parseExpressionValue(prefix);
-    expression.tokens = tokens.slice(cursor, cursor + 1);
-    nextCursor = cursor + 1;
+    let expressionParseResult = parseExpression(tokens, cursor + 1, precedence);
+    noOfTokens = expressionParseResult.cursor + 1;
+    expressionTokens = tokens.slice(cursor, cursor + noOfTokens);
+    expression = createExpression(expressionTokens);
+    expression.operator = prefix;
+    expression.left = expressionParseResult.expression.left;
   }
 
   return {
-    cursor: nextCursor,
+    cursor: cursor + noOfTokens,
     expression
   };
 }
