@@ -3,11 +3,16 @@ import { Expression, ExpressionValue } from '../ast/types';
 import {
   AssertionResult,
   ExpressionParseResult,
-  OperatorPrecedences,
   Precedence
 } from '../types';
 
-import { createAssertionResult } from './helpers';
+import {
+  createAssertionResult,
+  createExpression,
+  determineOperatorPrecedence,
+  isNextTokenImmediateValue,
+  isPrefixToken
+} from './helpers';
 
 export function assertExpression(): AssertionResult {
   return createAssertionResult();
@@ -17,28 +22,6 @@ export function parseStatementExpression(tokens: Token[]): Expression {
   let cursor = 0;
 
   return parseExpression(tokens, cursor, Precedence.Lowest).expression;
-}
-
-function createExpression(tokens: Token[]): Expression {
-  return { tokens };
-}
-
-function determineOperatorPrecedence(operator: Token): Precedence {
-  let precedence;
-
-  if (operator) {
-    precedence = OperatorPrecedences[operator.kind];
-  }
-
-  return precedence || Precedence.Lowest;
-}
-
-function isNextTokenImmediateValue(token: Token): boolean {
-  return token.kind === TokenKind.Int || token.kind === TokenKind.Identifier;
-}
-
-function isPrefixToken(token: Token): boolean {
-  return token.kind === TokenKind.Bang || token.kind === TokenKind.Minus;
 }
 
 function parseExpression(tokens: Token[], cursor: number, precedence: Precedence): ExpressionParseResult {
