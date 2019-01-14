@@ -79,46 +79,40 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
   let nextToken = tokens[cursor + 1];
   let hasPrefix = isPrefixToken(currentToken);
   let hasImmediateValue = nextToken ? isNextTokenImmediateValue(nextToken) : false;
-  let expression;
 
-  let expressionParseResult;
+  let expression;
+  let nextCursor;
+  let nextPrecedence;
 
   if (!hasPrefix) {
     expression = createExpression([currentToken]);
     expression.value = parseExpressionValue(currentToken);
-    expressionParseResult = {
-      cursor: cursor + 1,
-      expression,
-      nextPrecedence: determineOperatorPrecedence(nextToken)
-    };
+    nextCursor = cursor + 1;
+    nextPrecedence = determineOperatorPrecedence(nextToken);
   } else if (hasPrefix && hasImmediateValue) {
     expression = createExpression([currentToken, nextToken]);
-    expression.operator = currentToken;
     expression.value = parseExpressionValue(nextToken);
-
-    expressionParseResult = {
-      cursor: cursor + 2,
-      expression,
-      nextPrecedence: determineOperatorPrecedence(tokens[cursor + 2])
-    };
+    expression.operator = currentToken;
+    nextCursor = cursor + 2;
+    nextPrecedence = determineOperatorPrecedence(tokens[nextCursor]);
   } else {
-    let prefixExpressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Prefix);
-
     let left = createExpression([currentToken]);
     left.operator = currentToken;
 
+    let prefixExpressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Prefix);
     expression = createExpression([currentToken].concat(prefixExpressionParseResult.expression.tokens));
     expression.left = left;
     expression.right = prefixExpressionParseResult.expression;
 
-    expressionParseResult = {
-      cursor: cursor + prefixExpressionParseResult.cursor,
-      expression,
-      nextPrecedence: prefixExpressionParseResult.nextPrecedence
-    };
+    nextCursor = prefixExpressionParseResult.cursor;
+    nextPrecedence = prefixExpressionParseResult.nextPrecedence;
   }
 
-  return expressionParseResult;
+  return {
+    expression,
+    cursor: nextCursor,
+    nextPrecedence
+  };
 }
 
 function parseExpressionValue(token: Token): ExpressionValue {
