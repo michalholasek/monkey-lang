@@ -26,6 +26,7 @@
     "clean": "rimraf dist",
     "build": "npm run clean && tsc",
     "build:watch": "tsc --watch",
+    "debug": "npm run build && node --inspect-brk=1337 ./dist/monkey.js",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "test": "jest",
     "test:watch": "jest --watch"

@@ -6,7 +6,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "strictNullChecks": true,
     "target": "es2015"
   },
