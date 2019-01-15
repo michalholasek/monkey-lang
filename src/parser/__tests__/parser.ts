@@ -56,7 +56,7 @@ describe('Parser', () => {
     '!true;',
     '!false;'
   ].forEach(expression => {
-    it(`should parse given input correctly - ${expression}`, () => {
+    it(`should parse given prefix expression correctly - ${expression}`, () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
@@ -64,20 +64,25 @@ describe('Parser', () => {
     });
   });
 
-  it('should parse given input correctly (infix operators)', () => {
-    const tokens = tokenize(`
-      5 + 5;
-      5 - 5;
-      5 * 5;
-      5 / 5;
-      5 > 5;
-      5 < 5;
-      5 == 5;
-      5 != 5;
-    `);
-    const actual = parse(tokens);
+  [
+    '5 + 5;',
+    '5 - 5;',
+    '5 * 5;',
+    '5 / 5;',
+    '5 > 5;',
+    '5 < 5;',
+    '5 == 5;',
+    '5 != 5;',
+    'true == true;',
+    'true != false;',
+    'false == false;'
+  ].forEach(expression => {
+    it(`should parse given infix expression correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
 
-    expect(actual).toMatchObject(Expressions.Infix);
+      expect(actual).toMatchObject(Expressions.Infix[expression]);
+    });
   });
 
   [
@@ -97,7 +102,7 @@ describe('Parser', () => {
     '3 > 5 == false;',
     '3 < 5 == true;'
   ].forEach(expression => {
-    it(`should parse given input correctly - ${expression}`, () => {
+    it(`should parse given operator precedences correctly - ${expression}`, () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
