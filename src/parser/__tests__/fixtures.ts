@@ -127,12 +127,18 @@ export const Expressions = {
       statements: [
         {
           expression: {
-            operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+            left: {
+              operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              tokens: [{ column: 2, kind: TokenKind.Bang, line: 1, literal: '!' }]
+            },
+            right: {
+              tokens: [{ column: 3, kind: TokenKind.Int, line: 1, literal: '5' }],
+              value: 5
+            },
             tokens: [
               { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
               { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
-            ],
-            value: 5
+            ]
           },
           kind: StatementKind.Expression,
           tokens: [
@@ -146,12 +152,18 @@ export const Expressions = {
       statements: [
         {
           expression: {
-            operator: { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+            left: {
+              operator: { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+              tokens: [{ column: 2, kind: TokenKind.Minus, line: 1, literal: '-' }]
+            },
+            right: {
+              tokens: [{ column: 3, kind: TokenKind.Int, line: 1, literal: '15' }],
+              value: 15
+            },
             tokens: [
               { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
               { column: 3, kind: TokenKind.Int, line: 1, literal: '15' }
-            ],
-            value: 15
+            ]
           },
           kind: StatementKind.Expression,
           tokens: [
@@ -165,12 +177,18 @@ export const Expressions = {
       statements: [
         {
           expression: {
-            operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+            left: {
+              operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              tokens: [{ column: 2, kind: TokenKind.Bang, line: 1, literal: '!' }]
+            },
+            right: {
+              tokens: [{ column: 3, kind: TokenKind.True, line: 1, literal: 'true' }],
+              value: true
+            },
             tokens: [
               { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
               { column: 3, kind: TokenKind.True, line: 1, literal: 'true' }
-            ],
-            value: true
+            ]
           },
           kind: StatementKind.Expression,
           tokens: [
@@ -184,12 +202,18 @@ export const Expressions = {
       statements: [
         {
           expression: {
-            operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+            left: {
+              operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              tokens: [{ column: 2, kind: TokenKind.Bang, line: 1, literal: '!' }]
+            },
+            right: {
+              tokens: [{ column: 3, kind: TokenKind.False, line: 1, literal: 'false' }],
+              value: false
+            },
             tokens: [
               { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
               { column: 3, kind: TokenKind.False, line: 1, literal: 'false' }
-            ],
-            value: false
+            ]
           },
           kind: StatementKind.Expression,
           tokens: [
@@ -401,12 +425,18 @@ export const Expressions = {
       statements: [{
         expression: {
           left: {
-            operator: { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+            left: {
+              operator: { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+              tokens: [{ column: 2, kind: TokenKind.Minus, line: 1, literal: '-' }]
+            },
+            right: {
+              tokens: [{ column: 3, kind: TokenKind.Identifier, line: 1, literal: 'a' }],
+              value: 'a'
+            },
             tokens: [
               { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
               { column: 3, kind: TokenKind.Identifier, line: 1, literal: 'a' }
-            ],
-            value: 'a'
+            ]
           },
           operator: { column: 5, kind: TokenKind.Asterisk, line: 1, literal: '*' },
           right: {
@@ -437,12 +467,18 @@ export const Expressions = {
             tokens: [{ column: 2, kind: TokenKind.Bang, line: 1, literal: '!' }]
           },
           right: {
-            operator: { column: 3, kind: TokenKind.Minus, line: 1, literal: '-' },
+            left: {
+              operator: { column: 3, kind: TokenKind.Minus, line: 1, literal: '-' },
+              tokens: [{ column: 3, kind: TokenKind.Minus, line: 1, literal: '-' }]
+            },
+            right: {
+              tokens: [{ column: 4, kind: TokenKind.Identifier, line: 1, literal: 'a' }],
+              value: 'a'
+            },
             tokens: [
               { column: 3, kind: TokenKind.Minus, line: 1, literal: '-' },
               { column: 4, kind: TokenKind.Identifier, line: 1, literal: 'a' }
-            ],
-            value: 'a'
+            ]
           },
           tokens: [
             { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },

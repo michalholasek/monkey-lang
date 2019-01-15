@@ -10,7 +10,6 @@ import {
   createAssertionResult,
   createExpression,
   determineOperatorPrecedence,
-  isNextTokenImmediateValue,
   isPrefixToken
 } from './helpers';
 
@@ -61,7 +60,6 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
   let currentToken = tokens[cursor];
   let nextToken = tokens[cursor + 1];
   let hasPrefix = isPrefixToken(currentToken);
-  let hasImmediateValue = nextToken ? isNextTokenImmediateValue(nextToken) : false;
 
   let expression;
   let nextCursor;
@@ -72,12 +70,6 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     expression.value = parseExpressionValue(currentToken);
     nextCursor = cursor + 1;
     nextPrecedence = determineOperatorPrecedence(nextToken);
-  } else if (hasPrefix && hasImmediateValue) {
-    expression = createExpression([currentToken, nextToken]);
-    expression.value = parseExpressionValue(nextToken);
-    expression.operator = currentToken;
-    nextCursor = cursor + 2;
-    nextPrecedence = determineOperatorPrecedence(tokens[nextCursor]);
   } else {
     let left = createExpression([currentToken]);
     left.operator = currentToken;
