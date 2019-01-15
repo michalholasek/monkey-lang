@@ -100,7 +100,12 @@ describe('Parser', () => {
     'true;',
     'false;',
     '3 > 5 == false;',
-    '3 < 5 == true;'
+    '3 < 5 == true;',
+    '1 + (2 + 3) + 4;',
+    '(5 + 5) * 2;',
+    '2 / (5 + 5);',
+    '-(5 + 5);',
+    '!(true == true);'
   ].forEach(expression => {
     it(`should parse given operator precedences correctly - ${expression}`, () => {
       const tokens = tokenize(expression);

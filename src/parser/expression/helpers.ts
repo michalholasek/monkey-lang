@@ -22,6 +22,14 @@ export function determineOperatorPrecedence(operator: Token): Precedence {
   return precedence || Precedence.Lowest;
 }
 
+export function isLeftParenthesisToken(token: Token): boolean {
+  return token.kind === TokenKind.LeftParenthesis;
+}
+
+export function isRightParenthesisToken(token: Token): boolean {
+  return token.kind === TokenKind.RightParenthesis;
+}
+
 export function isPrefixToken(token: Token): boolean {
   return token.kind === TokenKind.Bang || token.kind === TokenKind.Minus;
 }

@@ -1251,6 +1251,242 @@ export const Expressions = {
           { column: 11, kind: TokenKind.True, line: 1, literal: 'true' }
         ]
       }]
+    },
+    '1 + (2 + 3) + 4;': {
+      statements: [{
+        expression: {
+          left: {
+            left: {
+              tokens: [{ column: 2, kind: TokenKind.Int, line: 1, literal: '1' }],
+              value: 1
+            },
+            operator: { column: 4, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              left: {
+                tokens: [{ column: 7, kind: TokenKind.Int, line: 1, literal: '2' }],
+                value: 2
+              },
+              operator: { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+              right: {
+                tokens: [{ column: 11, kind: TokenKind.Int, line: 1, literal: '3' }],
+                value: 3
+              },
+              tokens: [
+                { column: 7, kind: TokenKind.Int, line: 1, literal: '2' },
+                { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+                { column: 11, kind: TokenKind.Int, line: 1, literal: '3' }
+              ]
+            },
+            tokens: [
+              { column: 2, kind: TokenKind.Int, line: 1, literal: '1' },
+              { column: 4, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 7, kind: TokenKind.Int, line: 1, literal: '2' },
+              { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 11, kind: TokenKind.Int, line: 1, literal: '3' }
+            ]
+          },
+          operator: { column: 14, kind: TokenKind.Plus, line: 1, literal: '+' },
+          right: {
+            tokens: [{ column: 16, kind: TokenKind.Int, line: 1, literal: '4' }],
+            value: 4
+          },
+          tokens: [
+            { column: 2, kind: TokenKind.Int, line: 1, literal: '1' },
+            { column: 4, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 7, kind: TokenKind.Int, line: 1, literal: '2' },
+            { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
+            { column: 14, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 16, kind: TokenKind.Int, line: 1, literal: '4' }
+          ]
+        },
+        kind: StatementKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.Int, line: 1, literal: '1' },
+          { column: 4, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 6, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+          { column: 7, kind: TokenKind.Int, line: 1, literal: '2' },
+          { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
+          { column: 12, kind: TokenKind.RightParenthesis, line: 1, literal: ')' },
+          { column: 14, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 16, kind: TokenKind.Int, line: 1, literal: '4' }
+        ]
+      }]
+    },
+    '(5 + 5) * 2;': {
+      statements: [{
+        expression: {
+          left: {
+            left: {
+              tokens: [{ column: 3, kind: TokenKind.Int, line: 1, literal: '5' }],
+              value: 5
+            },
+            operator: { column: 5, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              tokens: [{ column: 7, kind: TokenKind.Int, line: 1, literal: '5' }],
+              value: 5
+            },
+            tokens: [
+              { column: 3, kind: TokenKind.Int, line: 1, literal: '5' },
+              { column: 5, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 7, kind: TokenKind.Int, line: 1, literal: '5' }
+            ]
+          },
+          operator: { column: 10, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+          right: {
+            tokens: [{ column: 12, kind: TokenKind.Int, line: 1, literal: '2' }],
+            value: 2
+          },
+          tokens: [
+            { column: 3, kind: TokenKind.Int, line: 1, literal: '5' },
+            { column: 5, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 7, kind: TokenKind.Int, line: 1, literal: '5' },
+            { column: 10, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+            { column: 12, kind: TokenKind.Int, line: 1, literal: '2' }
+          ]
+        },
+        kind: StatementKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+          { column: 3, kind: TokenKind.Int, line: 1, literal: '5' },
+          { column: 5, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 7, kind: TokenKind.Int, line: 1, literal: '5' },
+          { column: 8, kind: TokenKind.RightParenthesis, line: 1, literal: ')' },
+          { column: 10, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+          { column: 12, kind: TokenKind.Int, line: 1, literal: '2' }
+        ]
+      }]
+    },
+    '2 / (5 + 5);': {
+      statements: [{
+        expression: {
+          left: {
+            tokens: [{ column: 2, kind: TokenKind.Int, line: 1, literal: '2' }],
+            value: 2
+          },
+          operator: { column: 4, kind: TokenKind.Slash, line: 1, literal: '/' },
+          right: {
+            left: {
+              tokens: [{ column: 7, kind: TokenKind.Int, line: 1, literal: '5' }],
+              value: 5
+            },
+            operator: { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              tokens: [{ column: 11, kind: TokenKind.Int, line: 1, literal: '5' }],
+              value: 5
+            },
+            tokens: [
+              { column: 7, kind: TokenKind.Int, line: 1, literal: '5' },
+              { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 11, kind: TokenKind.Int, line: 1, literal: '5' }
+            ]
+          },
+          tokens: [
+            { column: 2, kind: TokenKind.Int, line: 1, literal: '2' },
+            { column: 4, kind: TokenKind.Slash, line: 1, literal: '/' },
+            { column: 7, kind: TokenKind.Int, line: 1, literal: '5' },
+            { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 11, kind: TokenKind.Int, line: 1, literal: '5' }
+          ]
+        },
+        kind: StatementKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.Int, line: 1, literal: '2' },
+          { column: 4, kind: TokenKind.Slash, line: 1, literal: '/' },
+          { column: 6, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+          { column: 7, kind: TokenKind.Int, line: 1, literal: '5' },
+          { column: 9, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 11, kind: TokenKind.Int, line: 1, literal: '5' },
+          { column: 12, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+        ]
+      }]
+    },
+    '-(5 + 5);': {
+      statements: [
+        {
+          expression: {
+            left: {
+              operator: { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+              tokens: [{ column: 2, kind: TokenKind.Minus, line: 1, literal: '-' }]
+            },
+            right: {
+              left: {
+                tokens: [{ column: 4, kind: TokenKind.Int, line: 1, literal: '5' }],
+                value: 5
+              },
+              operator: { column: 6, kind: TokenKind.Plus, line: 1, literal: '+' },
+              right: {
+                tokens: [{ column: 8, kind: TokenKind.Int, line: 1, literal: '5' }],
+                value: 5
+              },
+              tokens: [
+                { column: 4, kind: TokenKind.Int, line: 1, literal: '5' },
+                { column: 6, kind: TokenKind.Plus, line: 1, literal: '+' },
+                { column: 8, kind: TokenKind.Int, line: 1, literal: '5' }
+              ]
+            },
+            tokens: [
+              { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+              { column: 4, kind: TokenKind.Int, line: 1, literal: '5' },
+              { column: 6, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 8, kind: TokenKind.Int, line: 1, literal: '5' }
+            ]
+          },
+          kind: StatementKind.Expression,
+          tokens: [
+            { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
+            { column: 3, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+            { column: 4, kind: TokenKind.Int, line: 1, literal: '5' },
+            { column: 6, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 8, kind: TokenKind.Int, line: 1, literal: '5' },
+            { column: 9, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+          ]
+        }
+      ]
+    },
+    '!(true == true);': {
+      statements: [
+        {
+          expression: {
+            left: {
+              operator: { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              tokens: [{ column: 2, kind: TokenKind.Bang, line: 1, literal: '!' }]
+            },
+            right: {
+              left: {
+                tokens: [{ column: 4, kind: TokenKind.True, line: 1, literal: 'true' }],
+                value: true
+              },
+              operator: { column: 9, kind: TokenKind.Equal, line: 1, literal: '==' },
+              right: {
+                tokens: [{ column: 12, kind: TokenKind.True, line: 1, literal: 'true' }],
+                value: true
+              },
+              tokens: [
+                { column: 4, kind: TokenKind.True, line: 1, literal: 'true' },
+                { column: 9, kind: TokenKind.Equal, line: 1, literal: '==' },
+                { column: 12, kind: TokenKind.True, line: 1, literal: 'true' }
+              ]
+            },
+            tokens: [
+              { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+              { column: 4, kind: TokenKind.True, line: 1, literal: 'true' },
+              { column: 9, kind: TokenKind.Equal, line: 1, literal: '==' },
+              { column: 12, kind: TokenKind.True, line: 1, literal: 'true' }
+            ]
+          },
+          kind: StatementKind.Expression,
+          tokens: [
+            { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
+            { column: 3, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+            { column: 4, kind: TokenKind.True, line: 1, literal: 'true' },
+            { column: 9, kind: TokenKind.Equal, line: 1, literal: '==' },
+            { column: 12, kind: TokenKind.True, line: 1, literal: 'true' },
+            { column: 16, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+          ]
+        }
+      ]
     }
   }
 };

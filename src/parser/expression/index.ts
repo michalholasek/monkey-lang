@@ -10,7 +10,9 @@ import {
   createAssertionResult,
   createExpression,
   determineOperatorPrecedence,
-  isPrefixToken
+  isLeftParenthesisToken,
+  isPrefixToken,
+  isRightParenthesisToken
 } from './helpers';
 
 export function assertExpression(): AssertionResult {
@@ -38,6 +40,22 @@ function parseExpression(tokens: Token[], cursor: number, precedence: Precedence
   return leftExpressionParseResult;
 }
 
+function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let expressionParseResult = parseExpression(tokens, cursor, Precedence.Lowest);
+  let nextToken = tokens[expressionParseResult.cursor];
+  let index = 0;
+
+  while (nextToken && isRightParenthesisToken(nextToken)) {
+    index++;
+    nextToken = tokens[expressionParseResult.cursor + index];
+  }
+
+  expressionParseResult.cursor = expressionParseResult.cursor + index;
+  expressionParseResult.nextPrecedence = determineOperatorPrecedence(nextToken);
+
+  return expressionParseResult;
+}
+
 function parseInfixExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let operator = tokens[cursor];
   let currentPrecedence = determineOperatorPrecedence(operator);
@@ -59,13 +77,17 @@ function parseInfixExpression(tokens: Token[], cursor: number, left: Expression)
 function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let currentToken = tokens[cursor];
   let nextToken = tokens[cursor + 1];
-  let hasPrefix = isPrefixToken(currentToken);
 
   let expression;
   let nextCursor;
   let nextPrecedence;
 
-  if (!hasPrefix) {
+  if (isLeftParenthesisToken(currentToken)) {
+    let groupedExpressionParseResult = parseGroupedExpression(tokens, cursor + 1);
+    expression = groupedExpressionParseResult.expression;
+    nextCursor = groupedExpressionParseResult.cursor;
+    nextPrecedence = groupedExpressionParseResult.nextPrecedence;
+  } else if (!isPrefixToken(currentToken)) {
     expression = createExpression([currentToken]);
     expression.value = parseExpressionValue(currentToken);
     nextCursor = cursor + 1;
