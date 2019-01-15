@@ -1,9 +1,5 @@
 import { Keywords, Token, TokenKind } from './types';
 
-function computeBufferColumnPosition(buffer: string[], currentColumn: number): number {
-  return currentColumn - (buffer.length !== 1 ? buffer.length - 1 : 0);
-}
-
 function createToken(literal: string, column: number, line: number): Token {
   let token: Token = { column, kind: TokenKind.Illegal, line, literal };
 
@@ -77,10 +73,6 @@ function determineValidLiteralTokenKind(literal: string): TokenKind {
   return TokenKind.Identifier;
 }
 
-function stickyOperatorHasBothSides(literal: string): boolean {
-  return /==|!=/.test(literal);
-}
-
 function isNewlineOrReturnCharacter(literal: string): boolean {
   return /\n|\r/.test(literal);
 }
@@ -111,40 +103,39 @@ export function tokenize(input: string): Token[] {
   let index: number = 0;
   let tokens: Token[] = [];
   let buffer: string[] = [];
-  let currentColumn: number = 1;
+  let currentColumn: number = 2;
   let currentLine: number = 1;
 
   while (index < characters.length) {
     let currentCharacter = characters[index];
 
-    if (
-      isLetter(currentCharacter) ||
-      isNumber(currentCharacter) ||
-      isStickyOperator(currentCharacter)
-    ) {
+    if (isLetter(currentCharacter) || isNumber(currentCharacter)) {
       buffer.push(currentCharacter);
+    } else if (isStickyOperator(currentCharacter)) {
+      let nextCharacter = characters[index + 1];
+      let operatorColumn = currentColumn;
+      let operatorLiteral;
+
+      if (isStickyOperator(nextCharacter)) {
+        operatorLiteral = [currentCharacter, nextCharacter].join('');
+        currentColumn++;
+        index++;
+      } else {
+        operatorLiteral = currentCharacter;
+      }
+      tokens.push(createToken(operatorLiteral, operatorColumn, currentLine));
     } else {
       if (buffer.length) {
-        let literal = buffer.join('');
-        let literals = [literal];
-
-        if (isStickyOperator(literal) && !stickyOperatorHasBothSides(literal)) {
-          literals = buffer;
-        }
-
-        tokens = tokens.concat(literals.map((currentLiteral, idx) => {
-          return createToken(currentLiteral, computeBufferColumnPosition(buffer, currentColumn + idx), currentLine);
-        }));
-
+        tokens.push(createToken(buffer.join(''), currentColumn - buffer.length, currentLine));
         buffer = [];
       }
       if (!isWhiteSpace(currentCharacter)) {
-        tokens.push(createToken(currentCharacter, currentColumn + 1, currentLine));
+        tokens.push(createToken(currentCharacter, currentColumn, currentLine));
       }
     }
 
     if (isNewlineOrReturnCharacter(currentCharacter)) {
-      currentColumn = 1;
+      currentColumn = 2;
       currentLine++;
     } else {
       currentColumn++;
@@ -153,16 +144,13 @@ export function tokenize(input: string): Token[] {
     index++;
   }
 
-  // Flush buffered tokens
+  // Flush buffered characters
   if (buffer.length) {
-    tokens.push(createToken(
-      buffer.join(''), computeBufferColumnPosition(buffer, currentColumn), currentLine)
-    );
-    buffer = [];
+    tokens.push(createToken(buffer.join(''), currentColumn - buffer.length, currentLine));
   }
 
   // Create EOF token
-  tokens.push(createToken('', currentColumn, currentLine));
+  tokens.push(createToken('', currentColumn - 1, currentLine));
 
   return tokens;
 }

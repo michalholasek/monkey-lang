@@ -3,7 +3,12 @@ import { TokenKind } from '../types';
 export const Tokens = {
   PrefixOperator: [
     { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
-    { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
+    { column: 3, kind: TokenKind.Int, line: 1, literal: '5' },
+    { column: 4, kind: TokenKind.Semicolon, line: 1, literal: ';' },
+    { column: 5, kind: TokenKind.Bang, line: 1, literal: '!' },
+    { column: 6, kind: TokenKind.True, line: 1, literal: 'true' },
+    { column: 10, kind: TokenKind.Semicolon, line: 1, literal: ';' },
+    { column: 10, kind: TokenKind.EOF, line: 1, literal: '' }
   ],
   Keywords: [
     { column: 2, kind: TokenKind.True, line: 1, literal: 'true' },

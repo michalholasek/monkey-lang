@@ -55,7 +55,7 @@ describe('Lexer', () => {
   });
 
   it('should tokenize given input correctly (6)', () => {
-    const actual = tokenize('!5;');
+    const actual = tokenize('!5;!true;');
 
     Tokens.PrefixOperator.forEach((item, index) => {
       expect(actual[index]).toEqual(item);
