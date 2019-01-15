@@ -12,7 +12,7 @@ export interface Expression {
   value?: ExpressionValue;
 }
 
-export type ExpressionValue = number | string;
+export type ExpressionValue = number | string | boolean;
 
 export interface Identifier {
   kind: TokenKind;

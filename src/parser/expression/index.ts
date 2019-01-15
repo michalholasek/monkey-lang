@@ -99,5 +99,13 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
 }
 
 function parseExpressionValue(token: Token): ExpressionValue {
-  return token.kind === TokenKind.Int ? parseInt(token.literal, 10) : token.literal;
+  switch (token.kind) {
+    case TokenKind.Int:
+      return parseInt(token.literal, 10);
+    case TokenKind.True:
+    case TokenKind.False:
+      return token.kind === TokenKind.True ? true : false;
+    default:
+      return token.literal;
+  }
 }
