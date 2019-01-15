@@ -4,10 +4,18 @@ export interface AssertionError {
   message: string;
 }
 
+interface BlockStatement {
+  statements: Statement[];
+  tokens: [];
+}
+
 export interface Expression {
   left?: Expression;
   operator?: Token;
   right?: Expression;
+  condition?: Expression;
+  consequence?: BlockStatement;
+  alternative?: BlockStatement;
   tokens: Token[];
   value?: ExpressionValue;
 }

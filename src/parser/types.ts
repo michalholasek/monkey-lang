@@ -1,3 +1,4 @@
+import { Token } from '../lexer/types';
 import { AssertionError, Expression, Statement } from './ast/types';
 
 export enum AssertionErrorKind {
@@ -20,6 +21,8 @@ export interface ExpressionParseResult {
   cursor: number;
   nextPrecedence: Precedence;
 }
+
+export type ParsingFunction = (tokens: Token[], cursor: number) => ExpressionParseResult;
 
 export enum Precedence {
   Lowest = 1,
