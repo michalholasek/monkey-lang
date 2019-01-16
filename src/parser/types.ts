@@ -9,6 +9,12 @@ export interface AssertionResult {
   errors: AssertionError[];
 }
 
+export interface BlockStatementParseResult {
+  cursor: number;
+  statements: Statement[];
+  tokens: Token[];
+}
+
 export interface StatementParseResult {
   errors: AssertionError[];
   node: Statement;

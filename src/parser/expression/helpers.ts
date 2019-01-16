@@ -8,6 +8,8 @@ import {
   Precedence
 } from '../types';
 
+import { parseBlockStatement } from '../statement';
+
 export function createAssertionResult(errors: AssertionError[] = []): AssertionResult {
   return {
     errors
@@ -48,6 +50,7 @@ const ParsingFunctions: { [index: number]: ParsingFunction } = {
    3: parseValueExpression,
   18: parseValueExpression,
   19: parseValueExpression,
+  20: parseIfExpression,
   23: parseGroupedExpression
 };
 
@@ -84,6 +87,28 @@ function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionPars
   return expressionParseResult;
 }
 
+function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let skipIfTokenCursor = cursor + 1;
+  let conditionParseResult = parseExpression(tokens, skipIfTokenCursor, Precedence.Lowest);
+
+  let skipLeftBraceCursor = conditionParseResult.cursor + 1;
+  let consequenceParseResult = parseBlockStatement(tokens, skipLeftBraceCursor);
+
+  let includeRightBraceCursor = consequenceParseResult.cursor + 1;
+  let expression = createExpression(tokens.slice(cursor, includeRightBraceCursor));
+  expression.condition = conditionParseResult.expression;
+  expression.consequence = {
+    statements: consequenceParseResult.statements,
+    tokens: consequenceParseResult.tokens
+  };
+
+  return {
+    expression,
+    cursor: consequenceParseResult.cursor,
+    nextPrecedence: Precedence.Lowest
+  };
+}
+
 function parseInfixExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let operator = tokens[cursor];
   let currentPrecedence = determineOperatorPrecedence(operator);
@@ -111,6 +136,7 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     case TokenKind.True:
     case TokenKind.False:
     case TokenKind.LeftParenthesis:
+    case TokenKind.If:
       return ParsingFunctions[currentToken.kind](tokens, cursor);
     default:
       return expandPrefixExpression(tokens, cursor);

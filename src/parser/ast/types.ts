@@ -6,7 +6,7 @@ export interface AssertionError {
 
 interface BlockStatement {
   statements: Statement[];
-  tokens: [];
+  tokens: Token[];
 }
 
 export interface Expression {

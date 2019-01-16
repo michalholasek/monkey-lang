@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { StatementParseResult } from '../types';
+import { BlockStatementParseResult, StatementParseResult } from '../types';
 
 import { createStatementNode } from '../ast';
 import { assertExpression } from '../expression';
@@ -10,6 +10,29 @@ import {
   determineStatementKind,
   determineStatementTokenRangeEnd
 } from './helpers';
+
+export function parseBlockStatement(tokens: Token[], cursor: number): BlockStatementParseResult {
+  let statements = [];
+  let nextToken = tokens[cursor];
+  let index = cursor;
+
+  while (nextToken && nextToken.kind !== TokenKind.RightBrace) {
+    if (nextToken.kind !== TokenKind.Semicolon) {
+      let statementParseResult = parseStatement(tokens, nextToken, index);
+      index = statementParseResult.tokenRangeEnd;
+      statements.push(statementParseResult.node);
+    } else {
+      index++;
+    }
+    nextToken = tokens[index];
+  }
+
+  return {
+    statements,
+    cursor: index,
+    tokens: tokens.slice(cursor, index)
+  };
+}
 
 export function parseStatement(
   tokens: Token[], startToken: Token, statementTokenRangeStart: number

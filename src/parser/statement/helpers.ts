@@ -107,11 +107,13 @@ export function determineStatementTokenRangeEnd(tokens: Token[], start: number):
   let currentToken;
   let end = 0;
 
-  for (let i = start; i < tokens.length; i++) {
-    currentToken = tokens[i];
+  for (let index = start; index < tokens.length; index++) {
+    currentToken = tokens[index];
     if (currentToken.kind === TokenKind.Semicolon) {
-      end = i;
+      end = index;
       break;
+    } else if (currentToken.kind === TokenKind.LeftBrace) {
+      index = determineBlockStatementTokenRangeEnd(tokens, index + 1);
     }
   }
 
@@ -141,6 +143,22 @@ function createAssertionError(
     // tslint:disable-next-line
     message: `${errorKind}(${coordinates.column}, ${coordinates.line}): expected ${expectedToken}, got ${actualToken} instead`
   };
+}
+
+function determineBlockStatementTokenRangeEnd(tokens: Token[], start: number): number {
+  let currentToken = tokens[start];
+  let index = start;
+
+  while (index < tokens.length && currentToken && currentToken.kind !== TokenKind.RightBrace) {
+    if (currentToken.kind === TokenKind.LeftBrace) {
+      index = determineBlockStatementTokenRangeEnd(tokens, index) + 1;
+    } else {
+      index++;
+    }
+    currentToken = tokens[index];
+  }
+
+  return index;
 }
 
 function createTokenCoordinates(token: Token): TokenCoordinates {

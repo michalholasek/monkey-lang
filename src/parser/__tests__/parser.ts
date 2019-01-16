@@ -115,4 +115,15 @@ describe('Parser', () => {
     });
   });
 
+  [
+    'if (x < y) { x; }'
+  ].forEach(expression => {
+    it(`should parse given if expression correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Expressions.If[expression]);
+    });
+  });
+
 });
