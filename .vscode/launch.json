@@ -4,11 +4,14 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "node",
-      "request": "attach",
+      "request": "launch",
       "name": "Debug",
-      "port": 1337
+      "program": "${workspaceFolder}/dist/monkey.js",
+      "console": "integratedTerminal",
+      "preLaunchTask": "NPM_BUILD"
     }
   ]
 }
