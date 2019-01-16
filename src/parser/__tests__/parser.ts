@@ -116,7 +116,8 @@ describe('Parser', () => {
   });
 
   [
-    'if (x < y) { x; }'
+    'if (x < y) { x; }',
+    'if (x < y) { x; } else { y; }'
   ].forEach(expression => {
     it(`should parse given if expression correctly - ${expression}`, () => {
       const tokens = tokenize(expression);

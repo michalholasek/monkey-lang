@@ -94,7 +94,17 @@ function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResu
   let skipLeftBraceCursor = conditionParseResult.cursor + 1;
   let consequenceParseResult = parseBlockStatement(tokens, skipLeftBraceCursor);
 
+  let ifExpressionParseResultCursor = consequenceParseResult.cursor;
   let includeRightBraceCursor = consequenceParseResult.cursor + 1;
+
+  let alternativeParseResult;
+  let elseToken = tokens[consequenceParseResult.cursor + 1];
+  if (elseToken && elseToken.kind === TokenKind.Else) {
+    let skipElseLeftBraceTokenCursor = consequenceParseResult.cursor + 3;
+    alternativeParseResult = parseBlockStatement(tokens, skipElseLeftBraceTokenCursor);
+    includeRightBraceCursor = alternativeParseResult.cursor + 1;
+  }
+
   let expression = createExpression(tokens.slice(cursor, includeRightBraceCursor));
   expression.condition = conditionParseResult.expression;
   expression.consequence = {
@@ -102,9 +112,16 @@ function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResu
     tokens: consequenceParseResult.tokens
   };
 
+  if (alternativeParseResult) {
+    expression.alternative = {
+      statements: alternativeParseResult.statements,
+      tokens: alternativeParseResult.tokens
+    };
+  }
+
   return {
     expression,
-    cursor: consequenceParseResult.cursor,
+    cursor: ifExpressionParseResultCursor,
     nextPrecedence: Precedence.Lowest
   };
 }
