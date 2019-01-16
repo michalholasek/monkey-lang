@@ -115,6 +115,11 @@ export function determineStatementTokenRangeEnd(tokens: Token[], start: number):
     }
   }
 
+  // Enable parsing of simple expressions, eg. '1 + 1' without semicolon
+  if (end === 0) {
+    end = tokens.length - 1;
+  }
+
   return end;
 }
 
