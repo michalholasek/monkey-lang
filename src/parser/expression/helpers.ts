@@ -88,24 +88,19 @@ function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionPars
 }
 
 function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResult {
-  let skipIfTokenCursor = cursor + 1;
-  let conditionParseResult = parseExpression(tokens, skipIfTokenCursor, Precedence.Lowest);
-
-  let skipLeftBraceCursor = conditionParseResult.cursor + 1;
-  let consequenceParseResult = parseBlockStatement(tokens, skipLeftBraceCursor);
-
-  let ifExpressionParseResultCursor = consequenceParseResult.cursor;
-  let includeRightBraceCursor = consequenceParseResult.cursor + 1;
-
+  let conditionParseResult = parseExpression(tokens, cursor + 1, Precedence.Lowest);
+  let consequenceParseResult = parseBlockStatement(tokens, conditionParseResult.cursor + 1);
   let alternativeParseResult;
-  let elseToken = tokens[consequenceParseResult.cursor + 1];
-  if (elseToken && elseToken.kind === TokenKind.Else) {
-    let skipElseLeftBraceTokenCursor = consequenceParseResult.cursor + 3;
-    alternativeParseResult = parseBlockStatement(tokens, skipElseLeftBraceTokenCursor);
-    includeRightBraceCursor = alternativeParseResult.cursor + 1;
+
+  let possibleElseToken = tokens[consequenceParseResult.cursor + 1];
+
+  if (possibleElseToken && possibleElseToken.kind === TokenKind.Else) {
+    alternativeParseResult = parseBlockStatement(tokens, consequenceParseResult.cursor + 3);
   }
 
-  let expression = createExpression(tokens.slice(cursor, includeRightBraceCursor));
+  let ifExpressionParseResultCursor = alternativeParseResult ? alternativeParseResult.cursor : consequenceParseResult.cursor;
+
+  let expression = createExpression(tokens.slice(cursor, ifExpressionParseResultCursor + 1));
   expression.condition = conditionParseResult.expression;
   expression.consequence = {
     statements: consequenceParseResult.statements,
