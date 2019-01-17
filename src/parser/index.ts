@@ -2,7 +2,7 @@ import { Token, TokenKind } from '../lexer/types';
 import { Program } from './ast/types';
 
 import { createASTStructure } from './ast';
-import { Skip } from './helpers';
+import { Skip } from './constants';
 import { parseStatement } from './statement';
 
 export function parse(tokens: Token[]): Program {

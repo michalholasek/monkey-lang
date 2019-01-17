@@ -13,7 +13,7 @@ import {
   StatementParseResult
 } from '../types';
 
-import { Skip } from '../helpers';
+import { Skip } from '../constants';
 
 export function assertStatement(
   tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number

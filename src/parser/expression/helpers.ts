@@ -8,7 +8,7 @@ import {
   Precedence
 } from '../types';
 
-import { Include, Skip } from '../helpers';
+import { Include, Skip } from '../constants';
 import { parseBlockStatement } from '../statement';
 
 export function createAssertionResult(errors: AssertionError[] = []): AssertionResult {
