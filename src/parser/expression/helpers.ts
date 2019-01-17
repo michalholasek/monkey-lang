@@ -8,6 +8,7 @@ import {
   Precedence
 } from '../types';
 
+import { Include, Skip } from '../helpers';
 import { parseBlockStatement } from '../statement';
 
 export function createAssertionResult(errors: AssertionError[] = []): AssertionResult {
@@ -31,6 +32,15 @@ export function parseExpression(tokens: Token[], cursor: number, precedence: Pre
   return leftExpressionParseResult;
 }
 
+const ParsingFunctions: { [index: number]: ParsingFunction } = {
+   2: parseValueExpression,
+   3: parseValueExpression,
+  18: parseValueExpression,
+  19: parseValueExpression,
+  20: parseIfExpression,
+  23: parseGroupedExpression
+};
+
 function createExpression(tokens: Token[]): Expression {
   return { tokens };
 }
@@ -45,21 +55,12 @@ function determineOperatorPrecedence(operator: Token): Precedence {
   return precedence || Precedence.Lowest;
 }
 
-const ParsingFunctions: { [index: number]: ParsingFunction } = {
-   2: parseValueExpression,
-   3: parseValueExpression,
-  18: parseValueExpression,
-  19: parseValueExpression,
-  20: parseIfExpression,
-  23: parseGroupedExpression
-};
-
 function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let operator = tokens[cursor];
   let left = createExpression([operator]);
   left.operator = operator;
 
-  let prefixExpressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Prefix);
+  let prefixExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, Precedence.Prefix);
   let expression = createExpression(left.tokens.concat(prefixExpressionParseResult.expression.tokens));
   expression.left = left;
   expression.right = prefixExpressionParseResult.expression;
@@ -72,7 +73,7 @@ function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionPars
 }
 
 function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionParseResult {
-  let expressionParseResult = parseExpression(tokens, cursor + 1, Precedence.Lowest);
+  let expressionParseResult = parseExpression(tokens, cursor + Skip.Parenthesis, Precedence.Lowest);
   let nextToken = tokens[expressionParseResult.cursor];
   let index = 0;
 
@@ -88,19 +89,19 @@ function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionPars
 }
 
 function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResult {
-  let conditionParseResult = parseExpression(tokens, cursor + 1, Precedence.Lowest);
-  let consequenceParseResult = parseBlockStatement(tokens, conditionParseResult.cursor + 1);
+  let conditionParseResult = parseExpression(tokens, cursor + Skip.If, Precedence.Lowest);
+  let consequenceParseResult = parseBlockStatement(tokens, conditionParseResult.cursor + Skip.Brace);
   let alternativeParseResult;
 
   let possibleElseToken = tokens[consequenceParseResult.cursor + 1];
 
   if (possibleElseToken && possibleElseToken.kind === TokenKind.Else) {
-    alternativeParseResult = parseBlockStatement(tokens, consequenceParseResult.cursor + 3);
+    alternativeParseResult = parseBlockStatement(tokens, consequenceParseResult.cursor + Skip.Brace + Skip.Else + Skip.Brace);
   }
 
   let ifExpressionParseResultCursor = alternativeParseResult ? alternativeParseResult.cursor : consequenceParseResult.cursor;
 
-  let expression = createExpression(tokens.slice(cursor, ifExpressionParseResultCursor + 1));
+  let expression = createExpression(tokens.slice(cursor, ifExpressionParseResultCursor + Include.Brace));
   expression.condition = conditionParseResult.expression;
   expression.consequence = {
     statements: consequenceParseResult.statements,
@@ -125,7 +126,7 @@ function parseInfixExpression(tokens: Token[], cursor: number, left: Expression)
   let operator = tokens[cursor];
   let currentPrecedence = determineOperatorPrecedence(operator);
 
-  let rightExpressionParseResult = parseExpression(tokens, cursor + 1, currentPrecedence);
+  let rightExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, currentPrecedence);
 
   let expression = createExpression(left.tokens.concat([operator]).concat(rightExpressionParseResult.expression.tokens));
   expression.left = left;

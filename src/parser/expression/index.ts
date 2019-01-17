@@ -13,6 +13,5 @@ export function assertExpression(): AssertionResult {
 
 export function parseStatementExpression(tokens: Token[]): Expression {
   let cursor = 0;
-
   return parseExpression(tokens, cursor, Precedence.Lowest).expression;
 }

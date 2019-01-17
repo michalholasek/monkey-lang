@@ -13,6 +13,8 @@ import {
   StatementParseResult
 } from '../types';
 
+import { Skip } from '../helpers';
+
 export function assertStatement(
   tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number
 ): AssertionResult {
@@ -113,7 +115,7 @@ export function determineStatementTokenRangeEnd(tokens: Token[], start: number):
       end = index;
       break;
     } else if (currentToken.kind === TokenKind.LeftBrace) {
-      index = determineBlockStatementTokenRangeEnd(tokens, index + 1);
+      index = determineBlockStatementTokenRangeEnd(tokens, index + Skip.Brace);
     }
   }
 
@@ -151,7 +153,7 @@ function determineBlockStatementTokenRangeEnd(tokens: Token[], start: number): n
 
   while (index < tokens.length && currentToken && currentToken.kind !== TokenKind.RightBrace) {
     if (currentToken.kind === TokenKind.LeftBrace) {
-      index = determineBlockStatementTokenRangeEnd(tokens, index) + 1;
+      index = determineBlockStatementTokenRangeEnd(tokens, index) + Skip.Brace;
     } else {
       index++;
     }

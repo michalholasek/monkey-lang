@@ -1,8 +1,9 @@
-import { createASTStructure } from './ast';
-import { parseStatement } from './statement';
-
 import { Token, TokenKind } from '../lexer/types';
 import { Program } from './ast/types';
+
+import { createASTStructure } from './ast';
+import { Skip } from './helpers';
+import { parseStatement } from './statement';
 
 export function parse(tokens: Token[]): Program {
   const ast = createASTStructure();
@@ -23,7 +24,7 @@ export function parse(tokens: Token[]): Program {
 
     // Set index behind last semicolon
     currentStatementTokenRangeStart = currentStatementParseResult.node ?
-      currentStatementParseResult.tokenRangeEnd + 1 :
+      currentStatementParseResult.tokenRangeEnd + Skip.Semicolon :
       tokens.length
     ;
   }
