@@ -5,6 +5,7 @@ export const Include = {
 export const Skip = {
   Brace: 1,
   Else: 1,
+  Function: 1,
   If: 1,
   Operator: 1,
   Parenthesis: 1,

@@ -15,6 +15,12 @@ export interface BlockStatementParseResult {
   tokens: Token[];
 }
 
+export interface FunctionParametersParseResult {
+  cursor: number;
+  parameters: Token[];
+  tokens: Token[];
+}
+
 export interface StatementParseResult {
   errors: AssertionError[];
   node: Statement;

@@ -3,6 +3,7 @@ import { AssertionError, Expression, ExpressionValue } from '../ast/types';
 import {
   AssertionResult,
   ExpressionParseResult,
+  FunctionParametersParseResult,
   OperatorPrecedences,
   ParsingFunction,
   Precedence
@@ -35,6 +36,7 @@ export function parseExpression(tokens: Token[], cursor: number, precedence: Pre
 const ParsingFunctions: { [index: number]: ParsingFunction } = {
    2: parseValueExpression,
    3: parseValueExpression,
+  16: parseFunctionExpression,
   18: parseValueExpression,
   19: parseValueExpression,
   20: parseIfExpression,
@@ -69,6 +71,56 @@ function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionPars
     expression,
     cursor: prefixExpressionParseResult.cursor,
     nextPrecedence: prefixExpressionParseResult.nextPrecedence
+  };
+}
+
+function parseFunctionExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let parametersParseResult = parseFunctionParameters(tokens, cursor + Skip.Function + Skip.Parenthesis);
+  let bodyParseResult = parseBlockStatement(tokens, parametersParseResult.cursor + Skip.Parenthesis + Skip.Brace);
+  let functionExpressionTokens = tokens.slice(cursor, bodyParseResult.cursor + Include.Brace);
+  let expression = createExpression(functionExpressionTokens);
+
+  expression.value = {
+    body: {
+      statements: bodyParseResult.statements,
+      tokens: bodyParseResult.tokens
+    },
+    parameters: parametersParseResult.parameters,
+    tokens: functionExpressionTokens
+  };
+
+  return {
+    expression,
+    cursor: bodyParseResult.cursor,
+    nextPrecedence: Precedence.Lowest
+  };
+}
+
+function parseFunctionParameters(tokens: Token[], cursor: number): FunctionParametersParseResult {
+  let currentToken = tokens[cursor];
+  let index = cursor;
+  let parameters: Token[] = [];
+
+  if (currentToken && currentToken.kind === TokenKind.RightParenthesis) {
+    return {
+      cursor,
+      parameters,
+      tokens: []
+    };
+  }
+
+  while (index < tokens.length && currentToken.kind !== TokenKind.RightParenthesis) {
+    if (currentToken.kind === TokenKind.Identifier) {
+      parameters.push(currentToken);
+    }
+    index++;
+    currentToken = tokens[index];
+  }
+
+  return {
+    cursor: index,
+    parameters,
+    tokens: tokens.slice(cursor, index)
   };
 }
 
@@ -150,6 +202,7 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     case TokenKind.False:
     case TokenKind.LeftParenthesis:
     case TokenKind.If:
+    case TokenKind.Function:
       return ParsingFunctions[currentToken.kind](tokens, cursor);
     default:
       return expandPrefixExpression(tokens, cursor);

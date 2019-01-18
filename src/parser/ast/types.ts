@@ -24,7 +24,7 @@ export type ExpressionValue = number | string | boolean | FunctionLiteral;
 
 export interface FunctionLiteral {
   body: BlockStatement;
-  parameters: Identifier[];
+  parameters: Token[];
   tokens: Token[];
 }
 
