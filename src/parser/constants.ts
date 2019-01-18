@@ -1,5 +1,6 @@
 export const Include = {
   Brace: 1,
+  Identifier: 1,
   Parenthesis: 1
 };
 

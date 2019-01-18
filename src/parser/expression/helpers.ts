@@ -124,13 +124,15 @@ function parseCallExpression(tokens: Token[], cursor: number, left: Expression):
     currentToken = tokens[index];
   }
 
-  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Parenthesis, index + Include.Parenthesis)));
+  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Identifier, index + Include.Parenthesis)));
   expression.arguments = args;
+
+  let nextToken = tokens[index + Skip.Parenthesis];
 
   return {
     expression,
-    cursor: index,
-    nextPrecedence: Precedence.Lowest
+    cursor: index + Skip.Parenthesis,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
   };
 }
 
