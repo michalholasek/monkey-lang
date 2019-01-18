@@ -1176,5 +1176,126 @@ export const OperatorPrecedence = {
         { column: 42, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
       ]
     }]
+  },
+  'add(a + b + c * d / f + g)': {
+    statements: [{
+      expression: {
+        arguments: [
+          {
+            left: {
+              left: {
+                left: {
+                  tokens: [{ column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' }],
+                  value: 'a'
+                },
+                operator: { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+                right: {
+                  tokens: [{ column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' }],
+                  value: 'b'
+                },
+                tokens: [
+                  { column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' },
+                  { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+                  { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' }
+                ]
+              },
+              operator: { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+              right: {
+                left: {
+                  left: {
+                    tokens: [{ column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' }],
+                    value: 'c'
+                  },
+                  operator: { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+                  right: {
+                    tokens: [{ column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' }],
+                    value: 'd'
+                  },
+                  tokens: [
+                    { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+                    { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+                    { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' }
+                  ]
+                },
+                operator: { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+                right: {
+                  tokens: [{ column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' }],
+                  value: 'f'
+                },
+                tokens: [
+                  { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+                  { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+                  { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' },
+                  { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+                  { column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' }
+                ]
+              },
+              tokens: [
+                { column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' },
+                { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+                { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' },
+                { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+                { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+                { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+                { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' },
+                { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+                { column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' }
+              ]
+            },
+            operator: { column: 24, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              tokens: [{ column: 26, kind: TokenKind.Identifier, line: 1, literal: 'g' }],
+              value: 'g'
+            },
+            tokens: [
+              { column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' },
+              { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' },
+              { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+              { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+              { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' },
+              { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+              { column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' },
+              { column: 24, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 26, kind: TokenKind.Identifier, line: 1, literal: 'g' }
+            ]
+          }
+        ],
+        tokens: [
+          { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'add' },
+          { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+          { column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' },
+          { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' },
+          { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+          { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+          { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' },
+          { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+          { column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' },
+          { column: 24, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 26, kind: TokenKind.Identifier, line: 1, literal: 'g' },
+          { column: 27, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+        ]
+      },
+      kind: StatementKind.Expression,
+      tokens: [
+        { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'add' },
+        { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+        { column: 6, kind: TokenKind.Identifier, line: 1, literal: 'a' },
+        { column: 8, kind: TokenKind.Plus, line: 1, literal: '+' },
+        { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'b' },
+        { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+        { column: 14, kind: TokenKind.Identifier, line: 1, literal: 'c' },
+        { column: 16, kind: TokenKind.Asterisk, line: 1, literal: '*' },
+        { column: 18, kind: TokenKind.Identifier, line: 1, literal: 'd' },
+        { column: 20, kind: TokenKind.Slash, line: 1, literal: '/' },
+        { column: 22, kind: TokenKind.Identifier, line: 1, literal: 'f' },
+        { column: 24, kind: TokenKind.Plus, line: 1, literal: '+' },
+        { column: 26, kind: TokenKind.Identifier, line: 1, literal: 'g' },
+        { column: 27, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+      ]
+    }]
   }
 };

@@ -130,7 +130,8 @@ describe('Parser', () => {
     '-(5 + 5);',
     '!(true == true);',
     'a + add(b * c) + d',
-    'add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))'
+    'add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))',
+    'add(a + b + c * d / f + g)'
   ].forEach(expression => {
     it(`should parse given operator precedences correctly - ${expression}`, () => {
       const tokens = tokenize(expression);
