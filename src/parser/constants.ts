@@ -1,5 +1,6 @@
 export const Include = {
-  Brace: 1
+  Brace: 1,
+  Parenthesis: 1
 };
 
 export const Skip = {

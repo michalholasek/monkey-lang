@@ -1,6 +1,7 @@
 import { tokenize } from '../../lexer';
 import { parse } from '../index';
 
+import { Call } from './fixtures/expressions/call';
 import { Function } from './fixtures/expressions/function';
 import { Identifier } from './fixtures/expressions/identifier';
 import { If } from './fixtures/expressions/if';
@@ -13,6 +14,7 @@ import { Statements } from './fixtures/statements';
 
 const Fixtures = Object.assign({}, {
   Expressions: {
+    Call,
     Function,
     Identifier,
     If,
@@ -157,6 +159,17 @@ describe('Parser', () => {
       const actual = parse(tokens);
 
       expect(actual).toMatchObject(Fixtures.Expressions.Function[expression]);
+    });
+  });
+
+  [
+    'add(1, 2 * 3, 4 + 5);'
+  ].forEach(expression => {
+    it(`should parse given function call expression correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Fixtures.Expressions.Call[expression]);
     });
   });
 

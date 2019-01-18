@@ -10,12 +10,14 @@ interface BlockStatement {
 }
 
 export interface Expression {
+  alternative?: BlockStatement;
+  arguments?: Expression[];
+  consequence?: BlockStatement;
+  condition?: Expression;
+  function?: Expression;
   left?: Expression;
   operator?: Token;
   right?: Expression;
-  condition?: Expression;
-  consequence?: BlockStatement;
-  alternative?: BlockStatement;
   tokens: Token[];
   value?: ExpressionValue;
 }
