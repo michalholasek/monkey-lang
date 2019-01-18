@@ -1,17 +1,36 @@
 import { tokenize } from '../../lexer';
 import { parse } from '../index';
 
-import { Expressions, Statements } from './fixtures';
+import { Identifier } from './fixtures/expressions/identifier';
+import { If } from './fixtures/expressions/if';
+import { Infix } from './fixtures/expressions/infix';
+import { Integer } from './fixtures/expressions/integer';
+import { OperatorPrecedence } from './fixtures/expressions/precedences';
+import { Prefix } from './fixtures/expressions/prefix';
+
+import { Statements } from './fixtures/statements';
+
+const Fixtures = Object.assign({}, {
+  Expressions: {
+    Identifier,
+    If,
+    Infix,
+    Integer,
+    OperatorPrecedence,
+    Prefix
+  },
+  Statements
+});
 
 describe('Parser', () => {
 
   it('should return empty AST tree for empty array of tokens', () => {
-    expect(parse([])).toMatchObject(Statements.Empty);
+    expect(parse([])).toMatchObject(Fixtures.Statements.Empty);
   });
 
   it('should return an error for invalid statement (1)', () => {
     const actual = parse(tokenize('let let = 0;'));
-    expect(actual).toMatchObject(Statements.Error.InvalidToken);
+    expect(actual).toMatchObject(Fixtures.Statements.Error.InvalidToken);
   });
 
   it('should parse given input correctly (let)', () => {
@@ -22,7 +41,7 @@ describe('Parser', () => {
     `);
     const actual = parse(tokens);
 
-    expect(actual).toMatchObject(Statements.Let);
+    expect(actual).toMatchObject(Fixtures.Statements.Let);
   });
 
   it('should parse given input correctly (return)', () => {
@@ -33,21 +52,21 @@ describe('Parser', () => {
     `);
     const actual = parse(tokens);
 
-    expect(actual).toMatchObject(Statements.Return);
+    expect(actual).toMatchObject(Fixtures.Statements.Return);
   });
 
   it('should parse given input correctly (identifier expression)', () => {
     const tokens = tokenize('foobar;');
     const actual = parse(tokens);
 
-    expect(actual).toMatchObject(Expressions.Identifier);
+    expect(actual).toMatchObject(Fixtures.Expressions.Identifier);
   });
 
   it('should parse given input correctly (integer expression)', () => {
     const tokens = tokenize('5;');
     const actual = parse(tokens);
 
-    expect(actual).toMatchObject(Expressions.Integer);
+    expect(actual).toMatchObject(Fixtures.Expressions.Integer);
   });
 
   [
@@ -60,7 +79,7 @@ describe('Parser', () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
-      expect(actual).toMatchObject(Expressions.Prefix[expression]);
+      expect(actual).toMatchObject(Fixtures.Expressions.Prefix[expression]);
     });
   });
 
@@ -81,7 +100,7 @@ describe('Parser', () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
-      expect(actual).toMatchObject(Expressions.Infix[expression]);
+      expect(actual).toMatchObject(Fixtures.Expressions.Infix[expression]);
     });
   });
 
@@ -111,7 +130,7 @@ describe('Parser', () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
-      expect(actual).toMatchObject(Expressions.OperatorPrecedence[expression]);
+      expect(actual).toMatchObject(Fixtures.Expressions.OperatorPrecedence[expression]);
     });
   });
 
@@ -123,7 +142,7 @@ describe('Parser', () => {
       const tokens = tokenize(expression);
       const actual = parse(tokens);
 
-      expect(actual).toMatchObject(Expressions.If[expression]);
+      expect(actual).toMatchObject(Fixtures.Expressions.If[expression]);
     });
   });
 

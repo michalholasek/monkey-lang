@@ -18,6 +18,7 @@
     },
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
+      "fixtures",
       "fixtures.ts"
     ],
     "testRegex": "(/__tests__/.*)\\.ts$"

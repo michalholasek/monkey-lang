@@ -20,7 +20,13 @@ export interface Expression {
   value?: ExpressionValue;
 }
 
-export type ExpressionValue = number | string | boolean;
+export type ExpressionValue = number | string | boolean | FunctionLiteral;
+
+export interface FunctionLiteral {
+  body: BlockStatement;
+  parameters: Identifier[];
+  tokens: Token[];
+}
 
 export interface Identifier {
   kind: TokenKind;
