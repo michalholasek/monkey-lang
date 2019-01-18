@@ -45,13 +45,13 @@ export const OperatorPrecedences: { [index: number]: Precedence } = {
 };
 
 const ParsingFunctions: { [index: number]: ParsingFunction } = {
-   2: parseValueExpression,
-   3: parseValueExpression,
-  16: parseFunctionExpression,
-  18: parseValueExpression,
-  19: parseValueExpression,
-  20: parseIfExpression,
-  23: parseGroupedExpression
+   2: parseValueExpression,    // TokenKind.Identifier
+   3: parseValueExpression,    // TokenKind.Int
+  16: parseFunctionExpression, // TokenKind.Function
+  18: parseValueExpression,    // TokenKind.True
+  19: parseValueExpression,    // TokenKind.False
+  20: parseIfExpression,       // TokenKind.If
+  23: parseGroupedExpression   // TokenKind.LeftParenthesis
 };
 
 function createExpression(tokens: Token[]): Expression {
