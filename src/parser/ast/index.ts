@@ -8,32 +8,27 @@ import {
 } from './types';
 
 import { parseStatementExpression } from '../expression';
+import { determineStatementKind } from '../statement/helpers';
 
-export function createASTStructure(
-  errors: AssertionError[] = [], statements: Statement[] = []
-): Program {
+export function createASTStructure(errors: AssertionError[] = [], statements: Statement[] = []): Program {
   return {
     errors,
     statements
   };
 }
 
-export function createStatementNode(
-  tokens: Token[],
-  statementTokenRangeStart: number,
-  statementTokenRangeEnd: number,
-  kind: StatementKind
-): Statement {
-  let statementTokens = getStatementTokens(tokens, statementTokenRangeStart, statementTokenRangeEnd);
+export function createStatement(tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number): Statement {
+  let statementTokens = getStatementTokens(tokens, tokenRangeStart, tokenRangeEnd);
   let expressionTokens = getStatementExpressionTokens(statementTokens);
+  let startToken = tokens[tokenRangeStart];
 
   let statement = {
-    expression: parseStatementExpression(expressionTokens),
+    expression: parseStatementExpression(expressionTokens).expression,
     tokens: statementTokens,
-    kind
+    kind: determineStatementKind(startToken.kind)
   };
 
-  if (kind === StatementKind.Let) {
+  if (statement.kind === StatementKind.Let) {
     statement = Object.assign({}, statement, {
       name: getStatementIdentifierToken(statementTokens)
     });

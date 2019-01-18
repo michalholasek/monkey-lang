@@ -1,26 +1,19 @@
 import { Token, TokenKind } from '../../lexer/types';
+import { AssertionError, StatementKind, TokenCoordinates } from '../ast/types';
+import { AssertionErrorKind, AssertionResult, StatementParseResult } from '../types';
 
-import {
-  AssertionError,
-  Statement,
-  StatementKind,
-  TokenCoordinates
-} from '../ast/types';
-
-import {
-  AssertionErrorKind,
-  AssertionResult,
-  StatementParseResult
-} from '../types';
-
+import { createStatement } from '../ast';
 import { Skip } from '../constants';
 
-export function assertStatement(
-  tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number
-): AssertionResult {
+export function assertStatement(tokens: Token[], tokenRangeStart: number, tokenRangeEnd: number): AssertionResult {
   const assertionResult = createAssertionResult();
+  let statementKind = determineStatementKind(tokens[tokenRangeStart].kind);
   let currentToken;
   let nextToken;
+
+  if (statementKind === StatementKind.Expression) {
+    return assertionResult;
+  }
 
   for (let i = tokenRangeStart; i < tokenRangeEnd; i++) {
     currentToken = tokens[i];
@@ -83,15 +76,13 @@ export function assertStatement(
   return assertionResult;
 }
 
-export function createStatementParseResult(
-  errors: AssertionError[] = [],
-  statement: Statement = {},
-  tokenRangeStart: number = 0,
-  tokenRangeEnd: number = 0
-): StatementParseResult {
+export function createStatementParseResult(tokens: Token[], tokenRangeStart: number): StatementParseResult {
+  let tokenRangeEnd = determineStatementTokenRangeEnd(tokens, tokenRangeStart);
+  let errors = assertStatement(tokens, tokenRangeStart, tokenRangeEnd).errors;
+
   return {
     errors,
-    node: statement,
+    statement: errors.length ? {} : createStatement(tokens, tokenRangeStart, tokenRangeEnd),
     tokenRangeEnd,
     tokenRangeStart
   };
@@ -103,28 +94,6 @@ export function determineStatementKind(startTokenKind: TokenKind): StatementKind
     case TokenKind.Return: return StatementKind.Return;
     default: return StatementKind.Expression;
   }
-}
-
-export function determineStatementTokenRangeEnd(tokens: Token[], start: number): number {
-  let currentToken;
-  let end = 0;
-
-  for (let index = start; index < tokens.length; index++) {
-    currentToken = tokens[index];
-    if (currentToken.kind === TokenKind.Semicolon) {
-      end = index;
-      break;
-    } else if (currentToken.kind === TokenKind.LeftBrace) {
-      index = determineBlockStatementTokenRangeEnd(tokens, index + Skip.Brace);
-    }
-  }
-
-  // Enable parsing of simple expressions, eg. '1 + 1' without semicolon
-  if (end === 0) {
-    end = tokens.length - 1;
-  }
-
-  return end;
 }
 
 function createAssertionResult(errors: AssertionError[] = []): AssertionResult {
@@ -147,6 +116,13 @@ function createAssertionError(
   };
 }
 
+function createTokenCoordinates(token: Token): TokenCoordinates {
+  return {
+    column: token.column,
+    line: token.line
+  };
+}
+
 function determineBlockStatementTokenRangeEnd(tokens: Token[], start: number): number {
   let currentToken = tokens[start];
   let index = start;
@@ -163,9 +139,24 @@ function determineBlockStatementTokenRangeEnd(tokens: Token[], start: number): n
   return index;
 }
 
-function createTokenCoordinates(token: Token): TokenCoordinates {
-  return {
-    column: token.column,
-    line: token.line
-  };
+function determineStatementTokenRangeEnd(tokens: Token[], start: number): number {
+  let currentToken;
+  let end = 0;
+
+  for (let index = start; index < tokens.length; index++) {
+    currentToken = tokens[index];
+    if (currentToken.kind === TokenKind.Semicolon) {
+      end = index;
+      break;
+    } else if (currentToken.kind === TokenKind.LeftBrace) {
+      index = determineBlockStatementTokenRangeEnd(tokens, index + Skip.Brace);
+    }
+  }
+
+  // Enable parsing of simple expressions, eg. '1 + 1' without semicolon
+  if (end === 0) {
+    end = tokens.length - 1;
+  }
+
+  return end;
 }

@@ -23,7 +23,7 @@ export interface FunctionParametersParseResult {
 
 export interface StatementParseResult {
   errors: AssertionError[];
-  node: Statement;
+  statement: Statement;
   tokenRangeStart: number;
   tokenRangeEnd: number;
 }

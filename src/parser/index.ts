@@ -15,15 +15,15 @@ export function parse(tokens: Token[]): Program {
 
     if (currentToken.kind === TokenKind.EOF) { break; }
 
-    let currentStatementParseResult = parseStatement(tokens, currentToken, currentStatementTokenRangeStart);
+    let currentStatementParseResult = parseStatement(tokens, currentStatementTokenRangeStart);
     if (!currentStatementParseResult.errors.length) {
-      ast.statements.push(currentStatementParseResult.node);
+      ast.statements.push(currentStatementParseResult.statement);
     } else {
       ast.errors = ast.errors.concat(currentStatementParseResult.errors);
     }
 
     // Set index behind last semicolon
-    currentStatementTokenRangeStart = currentStatementParseResult.node ?
+    currentStatementTokenRangeStart = currentStatementParseResult.statement ?
       currentStatementParseResult.tokenRangeEnd + Skip.Semicolon :
       tokens.length
     ;

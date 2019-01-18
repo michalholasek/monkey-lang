@@ -1,17 +1,9 @@
 import { Token } from '../../lexer/types';
-import { Expression } from '../ast/types';
-import { AssertionResult, Precedence } from '../types';
+import { ExpressionParseResult, Precedence } from '../types';
 
-import {
-  createAssertionResult,
-  parseExpression
-} from './helpers';
+import { parseExpression } from './helpers';
 
-export function assertExpression(): AssertionResult {
-  return createAssertionResult();
-}
-
-export function parseStatementExpression(tokens: Token[]): Expression {
+export function parseStatementExpression(tokens: Token[]): ExpressionParseResult {
   let cursor = 0;
-  return parseExpression(tokens, cursor, Precedence.Lowest).expression;
+  return parseExpression(tokens, cursor, Precedence.Lowest);
 }
