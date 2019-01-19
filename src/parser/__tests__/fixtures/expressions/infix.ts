@@ -122,21 +122,21 @@ export const Infix = {
             tokens: [{ column: 2, kind: TokenKind.Int, line: 1, literal: '5' }],
             value: 5
           },
-          operator: { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          operator: { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           right: {
             tokens: [{ column: 6, kind: TokenKind.Int, line: 1, literal: '5' }],
             value: 5
           },
           tokens: [
             { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
-            { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+            { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
         kind: StatementKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
-          { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
         ]
       }

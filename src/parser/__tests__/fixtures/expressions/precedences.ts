@@ -391,14 +391,14 @@ export const OperatorPrecedence = {
             tokens: [{ column: 2, kind: TokenKind.Int, line: 1, literal: '5' }],
             value: 5
           },
-          operator: { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          operator: { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           right: {
             tokens: [{ column: 6, kind: TokenKind.Int, line: 1, literal: '4' }],
             value: 4
           },
           tokens: [
             { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
-            { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+            { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
             { column: 6, kind: TokenKind.Int, line: 1, literal: '4' }
           ]
         },
@@ -421,7 +421,7 @@ export const OperatorPrecedence = {
         },
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
-          { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           { column: 6, kind: TokenKind.Int, line: 1, literal: '4' },
           { column: 8, kind: TokenKind.Equal, line: 1, literal: '==' },
           { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
@@ -432,7 +432,7 @@ export const OperatorPrecedence = {
       kind: StatementKind.Expression,
       tokens: [
         { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
-        { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+        { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
         { column: 6, kind: TokenKind.Int, line: 1, literal: '4' },
         { column: 8, kind: TokenKind.Equal, line: 1, literal: '==' },
         { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
@@ -466,14 +466,14 @@ export const OperatorPrecedence = {
             tokens: [{ column: 11, kind: TokenKind.Int, line: 1, literal: '3' }],
             value: 3
           },
-          operator: { column: 13, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          operator: { column: 13, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           right: {
             tokens: [{ column: 15, kind: TokenKind.Int, line: 1, literal: '4' }],
             value: 4
           },
           tokens: [
             { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
-            { column: 13, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+            { column: 13, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
             { column: 15, kind: TokenKind.Int, line: 1, literal: '4' }
           ]
         },
@@ -483,7 +483,7 @@ export const OperatorPrecedence = {
           { column: 6, kind: TokenKind.Int, line: 1, literal: '4' },
           { column: 8, kind: TokenKind.NotEqual, line: 1, literal: '!=' },
           { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
-          { column: 13, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          { column: 13, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           { column: 15, kind: TokenKind.Int, line: 1, literal: '4' }
         ]
       },
@@ -494,7 +494,7 @@ export const OperatorPrecedence = {
         { column: 6, kind: TokenKind.Int, line: 1, literal: '4' },
         { column: 8, kind: TokenKind.NotEqual, line: 1, literal: '!=' },
         { column: 11, kind: TokenKind.Int, line: 1, literal: '3' },
-        { column: 13, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+        { column: 13, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
         { column: 15, kind: TokenKind.Int, line: 1, literal: '4' }
       ]
     }]
@@ -643,14 +643,14 @@ export const OperatorPrecedence = {
             tokens: [{ column: 2, kind: TokenKind.Int, line: 1, literal: '3' }],
             value: 3
           },
-          operator: { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          operator: { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           right: {
             tokens: [{ column: 6, kind: TokenKind.Int, line: 1, literal: '5' }],
             value: 5
           },
           tokens: [
             { column: 2, kind: TokenKind.Int, line: 1, literal: '3' },
-            { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+            { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
@@ -661,7 +661,7 @@ export const OperatorPrecedence = {
         },
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '3' },
-          { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+          { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
           { column: 6, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 8, kind: TokenKind.Equal, line: 1, literal: '==' },
           { column: 11, kind: TokenKind.False, line: 1, literal: 'false' }
@@ -670,7 +670,7 @@ export const OperatorPrecedence = {
       kind: StatementKind.Expression,
       tokens: [
         { column: 2, kind: TokenKind.Int, line: 1, literal: '3' },
-        { column: 4, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+        { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
         { column: 6, kind: TokenKind.Int, line: 1, literal: '5' },
         { column: 8, kind: TokenKind.Equal, line: 1, literal: '==' },
         { column: 11, kind: TokenKind.False, line: 1, literal: 'false' }

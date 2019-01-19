@@ -26,7 +26,7 @@ function createToken(literal: string, column: number, line: number): Token {
       token.kind = TokenKind.Bang;
       break;
     case '>':
-      token.kind = TokenKind.GreatThan;
+      token.kind = TokenKind.GreaterThan;
       break;
     case '<':
       token.kind = TokenKind.LessThan;

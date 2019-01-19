@@ -14,7 +14,7 @@ export enum TokenKind {
   Asterisk,
   Slash,
   LessThan,
-  GreatThan,
+  GreaterThan,
   Equal,
   NotEqual,
 

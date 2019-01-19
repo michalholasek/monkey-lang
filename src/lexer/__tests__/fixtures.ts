@@ -35,7 +35,7 @@ export const Tokens = {
     { column: 6, kind: TokenKind.Slash, line: 1, literal: '/' },
     { column: 8, kind: TokenKind.Asterisk, line: 1, literal: '*' },
     { column: 10, kind: TokenKind.LessThan, line: 1, literal: '<' },
-    { column: 12, kind: TokenKind.GreatThan, line: 1, literal: '>' },
+    { column: 12, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
     { column: 12, kind: TokenKind.EOF, line: 1, literal: '' }
   ],
   Statements: [
