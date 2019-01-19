@@ -53,8 +53,3 @@ export enum StatementKind {
   Return = 22,
   Expression = 100
 }
-
-export interface TokenCoordinates {
-  column: number;
-  line: number;
-}

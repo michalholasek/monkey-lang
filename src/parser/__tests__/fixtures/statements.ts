@@ -4,11 +4,12 @@ import { StatementKind } from '../../ast/types';
 export const Statements = {
   Empty: { statements: [] },
   Error: {
-    InvalidToken: {
-      errors: [
-        { message: 'invalid token(6, 1): expected Identifier, got Let instead' },
-        { message: 'invalid token(10, 1): expected Identifier, got Assign instead' }
-      ],
+    'let let = 0;': {
+      errors: [{ message: 'invalid token(6, 1): expected Identifier, got Let instead' }],
+      statements: []
+    },
+    'return ,;': {
+      errors: [{ message: 'unexpected token(9, 1): got Comma' }],
       statements: []
     }
   },

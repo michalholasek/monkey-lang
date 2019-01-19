@@ -32,9 +32,16 @@ describe('Parser', () => {
     expect(parse([])).toMatchObject(Fixtures.Statements.Empty);
   });
 
-  it('should return an error for invalid statement (1)', () => {
-    const actual = parse(tokenize('let let = 0;'));
-    expect(actual).toMatchObject(Fixtures.Statements.Error.InvalidToken);
+  [
+    'let let = 0;',
+    'return ,;'
+  ].forEach(expression => {
+    it(`should return an error for invalid statement - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Fixtures.Statements.Error[expression]);
+    });
   });
 
   it('should parse given input correctly (let)', () => {
