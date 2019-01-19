@@ -50,14 +50,16 @@ function assertReturnStatement(tokens: Token[], tokenRangeStart: number): Assert
 }
 
 function createAssertionError(errorKind: AssertionErrorKind, actualToken: Token, expectedTokenKind: TokenKind = TokenKind.Illegal): AssertionError {
+  let commonPart = `${errorKind}(${actualToken.column}, ${actualToken.line}):`;
+
   switch (errorKind) {
     case AssertionErrorKind.InvalidToken:
       return {
-        message: `${errorKind}(${actualToken.column}, ${actualToken.line}): expected ${TokenKind[expectedTokenKind]}, got ${TokenKind[actualToken.kind]} instead`
+        message: `${commonPart} expected ${TokenKind[expectedTokenKind]}, got ${TokenKind[actualToken.kind]} instead`
       };
     default:
       return {
-        message: `${errorKind}(${actualToken.column}, ${actualToken.line}): got ${TokenKind[actualToken.kind]}`
+        message: `${commonPart} got ${TokenKind[actualToken.kind]}`
       };
   }
 }
