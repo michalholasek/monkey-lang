@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { AssertionError, Expression, ExpressionValue } from '../ast/types';
+import { AssertionError, Expression, ExpressionValue, ExpressionKind } from '../ast/types';
 import {
   AssertionResult,
   ExpressionParseResult,
@@ -66,6 +66,18 @@ function determineOperatorPrecedence(operator: Token): Precedence {
   }
 
   return precedence || Precedence.Lowest;
+}
+
+function determineExpressionKind(token: Token): ExpressionKind {
+  switch (token.kind) {
+    case TokenKind.Int:
+      return ExpressionKind.Integer;
+    case TokenKind.True:
+    case TokenKind.False:
+      return ExpressionKind.Boolean;
+    default:
+      return ExpressionKind.Illegal;
+  }
 }
 
 function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
@@ -261,6 +273,7 @@ function parseValueExpression(tokens: Token[], cursor: number): ExpressionParseR
   let nextPrecedence = determineOperatorPrecedence(nextToken);
   let expression = createExpression([currentToken]);
   expression.value = parseExpressionValue(currentToken);
+  expression.kind = determineExpressionKind(currentToken);
 
   return {
     expression,

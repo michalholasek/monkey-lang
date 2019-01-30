@@ -15,11 +15,18 @@ export interface Expression {
   consequence?: BlockStatement;
   condition?: Expression;
   function?: Expression;
+  kind?: ExpressionKind;
   left?: Expression;
   operator?: Token;
   right?: Expression;
   tokens: Token[];
   value?: ExpressionValue;
+}
+
+export enum ExpressionKind {
+  Illegal,
+  Integer,
+  Boolean
 }
 
 export type ExpressionValue = number | string | boolean | FunctionLiteral;

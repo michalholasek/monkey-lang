@@ -1,5 +1,12 @@
-import { Expression, Node, NodeKind, Program, Statement } from '../parser/ast/types';
-import { TokenKind } from '../lexer/types';
+import {
+  Expression,
+  ExpressionKind,
+  Node,
+  NodeKind,
+  Program,
+  Statement
+} from '../parser/ast/types';
+
 import { Object, ObjectKind } from './types';
 
 import { createObject } from './helpers';
@@ -17,15 +24,13 @@ export function evaluate(node: Node): Object {
 }
 
 function evaluateExpressionNode(expression: Expression): Object {
-  let tokenKind = expression.tokens[0].kind;
   let objectKind;
 
-  switch (tokenKind) {
-    case TokenKind.Int:
+  switch (expression.kind) {
+    case ExpressionKind.Integer:
       objectKind = ObjectKind.Integer;
       break;
-    case TokenKind.True:
-    case TokenKind.False:
+    case ExpressionKind.Boolean:
       objectKind = ObjectKind.Boolean;
       break;
     default:
