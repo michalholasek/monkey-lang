@@ -17,10 +17,11 @@ export function evaluate(node: Node): Object {
       return evaluateProgramNode(node as Program);
     case NodeKind.Expression:
       const statement = node as Statement;
-      return statement.expression ? evaluateExpressionNode(statement.expression) : createObject(ObjectKind.Null);
-    default:
-      return createObject(ObjectKind.Null);
+      if (statement.expression) {
+        return evaluateExpressionNode(statement.expression);
+      } // Fall through
   }
+  return createObject(ObjectKind.Null);
 }
 
 function evaluateExpressionNode(expression: Expression): Object {
