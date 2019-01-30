@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const Prefix = {
   '!5;': {
@@ -19,7 +19,7 @@ export const Prefix = {
             { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
           { column: 3, kind: TokenKind.Int, line: 1, literal: '5' }
@@ -44,7 +44,7 @@ export const Prefix = {
             { column: 3, kind: TokenKind.Int, line: 1, literal: '15' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Minus, line: 1, literal: '-' },
           { column: 3, kind: TokenKind.Int, line: 1, literal: '15' }
@@ -69,7 +69,7 @@ export const Prefix = {
             { column: 3, kind: TokenKind.True, line: 1, literal: 'true' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
           { column: 3, kind: TokenKind.True, line: 1, literal: 'true' }
@@ -94,7 +94,7 @@ export const Prefix = {
             { column: 3, kind: TokenKind.False, line: 1, literal: 'false' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Bang, line: 1, literal: '!' },
           { column: 3, kind: TokenKind.False, line: 1, literal: 'false' }

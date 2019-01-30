@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const Call = {
   'add(1, 2 * 3, 4 + 5);': {
@@ -59,7 +59,7 @@ export const Call = {
             { column: 21, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'add' },
           { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },

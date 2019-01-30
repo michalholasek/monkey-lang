@@ -2,9 +2,9 @@ import { Token, TokenKind } from '../../lexer/types';
 
 import {
   AssertionError,
+  NodeKind,
   Program,
-  Statement,
-  StatementKind
+  Statement
 } from './types';
 
 import { parseStatementExpression } from '../expression';
@@ -13,6 +13,7 @@ import { determineStatementKind } from '../statement/helpers';
 export function createASTStructure(errors: AssertionError[] = [], statements: Statement[] = []): Program {
   return {
     errors,
+    kind: NodeKind.Program,
     statements
   };
 }
@@ -28,7 +29,7 @@ export function createStatement(tokens: Token[], tokenRangeStart: number, tokenR
     kind: determineStatementKind(startToken.kind)
   };
 
-  if (statement.kind === StatementKind.Let) {
+  if (statement.kind === NodeKind.Let) {
     statement = Object.assign({}, statement, {
       name: getStatementIdentifierToken(statementTokens)
     });

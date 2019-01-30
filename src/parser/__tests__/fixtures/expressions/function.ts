@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const Function = {
   'fn() { x + y; }': {
@@ -36,7 +36,7 @@ export const Function = {
                     { column: 13, kind: TokenKind.Identifier, line: 1, literal: 'y' }
                   ]
                 },
-                kind: StatementKind.Expression,
+                kind: NodeKind.Expression,
                 tokens: [
                   { column: 9, kind: TokenKind.Identifier, line: 1, literal: 'x' },
                   { column: 11, kind: TokenKind.Plus, line: 1, literal: '+' },
@@ -64,7 +64,7 @@ export const Function = {
             ]
           }
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Function, line: 1, literal: 'fn' },
           { column: 4, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
@@ -116,7 +116,7 @@ export const Function = {
                     { column: 17, kind: TokenKind.Identifier, line: 1, literal: 'y' }
                   ]
                 },
-                kind: StatementKind.Expression,
+                kind: NodeKind.Expression,
                 tokens: [
                   { column: 13, kind: TokenKind.Identifier, line: 1, literal: 'x' },
                   { column: 15, kind: TokenKind.Plus, line: 1, literal: '+' },
@@ -150,7 +150,7 @@ export const Function = {
             ]
           }
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Function, line: 1, literal: 'fn' },
           { column: 4, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },

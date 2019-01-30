@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { StatementKind } from '../ast/types';
+import { NodeKind } from '../ast/types';
 import { StatementParseResult } from '../types';
 
 import { createStatement } from '../ast';
@@ -10,7 +10,7 @@ export function createStatementParseResult(tokens: Token[], tokenRangeStart: num
   let tokenRangeEnd = determineStatementTokenRangeEnd(tokens, tokenRangeStart);
   let startToken = tokens[tokenRangeStart];
   let statementKind = determineStatementKind(startToken.kind);
-  let errors = statementKind !== StatementKind.Expression ? assertStatement(tokens, tokenRangeStart).errors : [];
+  let errors = statementKind !== NodeKind.Expression ? assertStatement(tokens, tokenRangeStart).errors : [];
 
   return {
     errors,
@@ -20,11 +20,11 @@ export function createStatementParseResult(tokens: Token[], tokenRangeStart: num
   };
 }
 
-export function determineStatementKind(startTokenKind: TokenKind): StatementKind {
+export function determineStatementKind(startTokenKind: TokenKind): NodeKind {
   switch (startTokenKind) {
-    case TokenKind.Let: return StatementKind.Let;
-    case TokenKind.Return: return StatementKind.Return;
-    default: return StatementKind.Expression;
+    case TokenKind.Let: return NodeKind.Let;
+    case TokenKind.Return: return NodeKind.Return;
+    default: return NodeKind.Expression;
   }
 }
 

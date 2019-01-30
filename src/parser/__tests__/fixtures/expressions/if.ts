@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const If = {
   'if (x < y) { x; }': {
@@ -28,7 +28,7 @@ export const If = {
                 tokens: [{ column: 15, kind: TokenKind.Identifier, line: 1, literal: 'x' }],
                 value: 'x'
               },
-              kind: StatementKind.Expression,
+              kind: NodeKind.Expression,
               tokens: [{ column: 15, kind: TokenKind.Identifier, line: 1, literal: 'x' }]
             }],
             tokens: [
@@ -49,7 +49,7 @@ export const If = {
             { column: 18, kind: TokenKind.RightBrace, line: 1, literal: '}' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.If, line: 1, literal: 'if' },
           { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
@@ -91,7 +91,7 @@ export const If = {
                 tokens: [{ column: 15, kind: TokenKind.Identifier, line: 1, literal: 'x' }],
                 value: 'x'
               },
-              kind: StatementKind.Expression,
+              kind: NodeKind.Expression,
               tokens: [{ column: 15, kind: TokenKind.Identifier, line: 1, literal: 'x' }]
             }],
             tokens: [
@@ -105,7 +105,7 @@ export const If = {
                 tokens: [{ column: 27, kind: TokenKind.Identifier, line: 1, literal: 'y' }],
                 value: 'y'
               },
-              kind: StatementKind.Expression,
+              kind: NodeKind.Expression,
               tokens: [{ column: 27, kind: TokenKind.Identifier, line: 1, literal: 'y' }]
             }],
             tokens: [
@@ -131,7 +131,7 @@ export const If = {
             { column: 30, kind: TokenKind.RightBrace, line: 1, literal: '}' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.If, line: 1, literal: 'if' },
           { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },

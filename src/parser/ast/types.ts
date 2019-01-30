@@ -35,21 +35,25 @@ export interface Identifier {
   literal: string;
 }
 
+export type Node = Program | Statement;
+
 export interface Program {
   errors: AssertionError[];
+  kind: NodeKind;
   statements: Statement[];
 }
 
 export interface Statement {
-  kind?: StatementKind;
+  kind?: NodeKind;
   name?: Identifier;
   tokens?: Token[];
   expression?: Expression;
 }
 
 // Let and Return ordering matches TokenKind
-export enum StatementKind {
+export enum NodeKind {
   Let = 17,
   Return = 22,
-  Expression = 100
+  Expression = 100,
+  Program = 101
 }

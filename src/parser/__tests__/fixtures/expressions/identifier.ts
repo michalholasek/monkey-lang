@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const Identifier = {
   statements: [
@@ -8,7 +8,7 @@ export const Identifier = {
         tokens: [{ column: 2, kind: TokenKind.Identifier, line: 1, literal: 'foobar' }],
         value: 'foobar'
       },
-      kind: StatementKind.Expression,
+      kind: NodeKind.Expression,
       tokens: [{ column: 2, kind: TokenKind.Identifier, line: 1, literal: 'foobar' }]
     }
   ]

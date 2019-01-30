@@ -1,5 +1,5 @@
 import { TokenKind } from '../../../../lexer/types';
-import { StatementKind } from '../../../ast/types';
+import { NodeKind } from '../../../ast/types';
 
 export const Infix = {
   '5 + 5;': {
@@ -21,7 +21,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.Plus, line: 1, literal: '+' },
@@ -49,7 +49,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.Minus, line: 1, literal: '-' },
@@ -77,7 +77,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.Asterisk, line: 1, literal: '*' },
@@ -105,7 +105,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.Slash, line: 1, literal: '/' },
@@ -133,7 +133,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.GreaterThan, line: 1, literal: '>' },
@@ -161,7 +161,7 @@ export const Infix = {
             { column: 6, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.LessThan, line: 1, literal: '<' },
@@ -189,7 +189,7 @@ export const Infix = {
             { column: 7, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.Equal, line: 1, literal: '==' },
@@ -217,7 +217,7 @@ export const Infix = {
             { column: 7, kind: TokenKind.Int, line: 1, literal: '5' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.Int, line: 1, literal: '5' },
           { column: 4, kind: TokenKind.NotEqual, line: 1, literal: '!=' },
@@ -245,7 +245,7 @@ export const Infix = {
             { column: 10, kind: TokenKind.True, line: 1, literal: 'true' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.True, line: 1, literal: 'true' },
           { column: 7, kind: TokenKind.Equal, line: 1, literal: '==' },
@@ -273,7 +273,7 @@ export const Infix = {
             { column: 10, kind: TokenKind.False, line: 1, literal: 'false' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.True, line: 1, literal: 'true' },
           { column: 7, kind: TokenKind.NotEqual, line: 1, literal: '!=' },
@@ -301,7 +301,7 @@ export const Infix = {
             { column: 11, kind: TokenKind.False, line: 1, literal: 'false' }
           ]
         },
-        kind: StatementKind.Expression,
+        kind: NodeKind.Expression,
         tokens: [
           { column: 2, kind: TokenKind.False, line: 1, literal: 'false' },
           { column: 8, kind: TokenKind.Equal, line: 1, literal: '==' },
