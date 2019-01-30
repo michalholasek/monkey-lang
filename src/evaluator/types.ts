@@ -1,21 +1,12 @@
+import { ExpressionValue } from '../parser/ast/types';
+
 export enum ObjectKind {
   Boolean = 'BOOLEAN',
   Integer = 'INTEGER',
   Null = 'NULL'
 }
 
-export type Object = Integer | Boolean | Null;
-
-export interface Boolean {
+export interface Object {
   kind: ObjectKind;
-  value: boolean;
-}
-
-export interface Integer {
-  kind: ObjectKind;
-  value: number;
-}
-
-export interface Null {
-  kind: ObjectKind;
+  value?: ExpressionValue;
 }
