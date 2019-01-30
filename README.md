@@ -19,20 +19,16 @@ excellent [Writing An Interpreter In Go](https://interpreterbook.com/) book.
 ## REPL
 ```
 Welcome to monkey-lang REPL!
-> let value = 5;
-[ { column: 2, kind: 17, line: 1, literal: 'let' },
-  { column: 6, kind: 2, line: 1, literal: 'value' },
-  { column: 12, kind: 4, line: 1, literal: '=' },
-  { column: 14, kind: 3, line: 1, literal: '5' },
-  { column: 15, kind: 15, line: 1, literal: ';' },
-  { column: 15, kind: 1, line: 1, literal: '' } ]
+> 5
+5
+> let let = 5;
+invalid token(6, 1): expected Identifier, got Let instead
 > quit
 Exiting monkey-lang REPL...
 ```
 
-As you can see, REPL's only feature (for now) is running entered code through
-[lexer](https://github.com/michalholasek/monkey-lang/blob/master/src/lexer/index.ts)
-and printing resulting array of [tokens](https://github.com/michalholasek/monkey-lang/blob/master/src/types/token.ts).
+At the moment, REPL has only two features - integer expression evaluation and
+simple statement assertions.
 
 ## License
 MIT
