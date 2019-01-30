@@ -10,6 +10,7 @@
     "object-literal-sort-keys": false,
     "arrow-parens": [true, "ban-single-arg-parens"],
     "max-line-length": false,
+    "ban-types": false,
     "space-before-function-paren": [true, {
       "anonymous": "always"
     }],

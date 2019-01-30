@@ -1,5 +1,5 @@
-import { Object, ObjectKind } from './types';
 import { ExpressionValue } from '../parser/ast/types';
+import { Object, ObjectKind } from './types';
 
 export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Object {
   switch (kind) {

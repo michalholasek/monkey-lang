@@ -1,4 +1,4 @@
-import { Node, NodeKind, Program, Expression, Statement } from '../parser/ast/types';
+import { Expression, Node, NodeKind, Program, Statement } from '../parser/ast/types';
 import { Object, ObjectKind } from './types';
 
 import { createObject } from './helpers';
