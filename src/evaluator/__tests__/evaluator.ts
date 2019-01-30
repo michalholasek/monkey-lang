@@ -18,7 +18,7 @@ describe('Evaluator', () => {
     expect(actual).toMatchObject(Fixtures.Integer);
   });
 
-  ['true', 'false'].forEach(expression => {
+  ['true;', 'false;'].forEach(expression => {
     it(`should evaluate given boolean expression correctly - ${expression}`, () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast);

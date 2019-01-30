@@ -1,11 +1,11 @@
 import { ObjectKind } from '../types';
 
 export const Boolean = {
-  'true': {
+  'true;': {
     kind: ObjectKind.Boolean,
     value: true
   },
-  'false': {
+  'false;': {
     kind: ObjectKind.Boolean,
     value: false
   }

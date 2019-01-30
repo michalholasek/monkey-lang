@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { AssertionError, Expression, ExpressionValue, ExpressionKind } from '../ast/types';
+import { AssertionError, Expression, ExpressionKind, ExpressionValue } from '../ast/types';
 import {
   AssertionResult,
   ExpressionParseResult,
