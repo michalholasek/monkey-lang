@@ -1,7 +1,10 @@
 /* tslint:disable:no-console */
 
 import { createInterface } from 'readline';
+
+import { evaluate } from './evaluator';
 import { tokenize } from './lexer';
+import { parse } from './parser';
 
 const cli = createInterface({
   input: process.stdin,
@@ -10,7 +13,7 @@ const cli = createInterface({
 });
 
 cli.on('line', line => {
-  const input = line.trim();
+  let input = line.trim();
 
   switch (input) {
     case 'quit':
@@ -18,8 +21,19 @@ cli.on('line', line => {
       cli.close();
       break;
     default:
-      const tokens = tokenize(line);
-      console.log(tokens);
+      const program = parse(tokenize(line));
+
+      if (program.errors.length) {
+        program.errors.forEach(error => {
+          console.log(error.message);
+        });
+      }
+
+      const result = evaluate(program);
+      if (result.value) {
+        console.log(result.value);
+      }
+
       cli.prompt();
   }
 }).on('close', () => {
