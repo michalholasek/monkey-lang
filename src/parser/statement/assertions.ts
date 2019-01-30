@@ -20,6 +20,12 @@ function assertLetStatement(tokens: Token[], tokenRangeStart: number): Assertion
   let assignToken = tokens[tokenRangeStart + 2];
   let assertionResult = createAssertionResult();
 
+  if (!identifierToken || !assignToken) {
+    let oefToken = tokens[tokens.length - 1];
+    assertionResult.errors.push(createAssertionError(AssertionErrorKind.UnexpectedToken, oefToken));
+    return assertionResult;
+  }
+
   if (identifierToken.kind !== TokenKind.Identifier) {
     assertionResult.errors.push(createAssertionError(AssertionErrorKind.InvalidToken, identifierToken, TokenKind.Identifier));
   }
