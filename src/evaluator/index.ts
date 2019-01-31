@@ -35,7 +35,7 @@ function evaluateExpressionNode(expression: Expression): Object {
       objectKind = ObjectKind.Boolean;
       break;
     default:
-    objectKind = ObjectKind.Null;
+      objectKind = ObjectKind.Null;
   }
 
   return createObject(objectKind, expression.value);
