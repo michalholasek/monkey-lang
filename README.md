@@ -27,8 +27,8 @@ invalid token(6, 1): expected Identifier, got Let instead
 Exiting monkey-lang REPL...
 ```
 
-At the moment, REPL has only two features - integer expression evaluation and
-simple statement assertions.
+At the moment, REPL has only two features - integer and boolean expression
+evaluation, and simple statement assertions.
 
 ## License
 MIT
