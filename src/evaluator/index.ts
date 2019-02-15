@@ -45,18 +45,32 @@ function evaluateExpressionNode(expression: Expression): Object {
   return createObject(objectKind, expression.value);
 }
 
+function evaluateBangOperatorExpression(right: Expression): Object {
+  let rightValue = evaluateExpressionNode(right);
+  return createObject(ObjectKind.Boolean, !rightValue.value);
+}
+
+function evaluateMinusPrefixOperatorExpression(right: Expression): Object {
+  let rightValue = evaluateExpressionNode(right);
+
+  if (rightValue.kind !== ObjectKind.Integer) return createObject(ObjectKind.Null);
+
+  // @ts-ignore
+  return createObject(ObjectKind.Integer, -rightValue.value);
+}
+
 function evaluatePrefixExpression(expression: Expression): Object {
   let object = createObject(ObjectKind.Null);
-  let right;
 
   if (!expression.left || !expression.left.operator || !expression.right) {
     return object;
   }
 
   switch (expression.left.operator.kind) {
-    case (TokenKind.Bang):
-      right = evaluateExpressionNode(expression.right);
-      return createObject(ObjectKind.Boolean, !right.value);
+    case TokenKind.Bang:
+      return evaluateBangOperatorExpression(expression.right);
+    case TokenKind.Minus:
+      return evaluateMinusPrefixOperatorExpression(expression.right);
     default:
       return object;
   }

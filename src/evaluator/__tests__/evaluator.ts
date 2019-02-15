@@ -13,10 +13,12 @@ const Fixtures = Object.assign({}, {
 
 describe('Evaluator', () => {
 
-  it('should evaluate given integer expression correctly', () => {
-    let ast = parse(tokenize('5'));
-    let actual = evaluate(ast);
-    expect(actual).toMatchObject(Fixtures.Integer);
+  ['5', '-5'].forEach(expression => {
+    it(`should evaluate given integer expression correctly - ${expression}`, () => {
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast);
+      expect(actual).toMatchObject(Fixtures.Integer[expression]);
+    });
   });
 
   ['true;', 'false;'].forEach(expression => {
