@@ -8,7 +8,11 @@ export const Tokens = {
     { column: 5, kind: TokenKind.Bang, line: 1, literal: '!' },
     { column: 6, kind: TokenKind.True, line: 1, literal: 'true' },
     { column: 10, kind: TokenKind.Semicolon, line: 1, literal: ';' },
-    { column: 10, kind: TokenKind.EOF, line: 1, literal: '' }
+    { column: 11, kind: TokenKind.Bang, line: 1, literal: '!' },
+    { column: 12, kind: TokenKind.Bang, line: 1, literal: '!' },
+    { column: 13, kind: TokenKind.True, line: 1, literal: 'true' },
+    { column: 17, kind: TokenKind.Semicolon, line: 1, literal: ';' },
+    { column: 17, kind: TokenKind.EOF, line: 1, literal: '' }
   ],
   Keywords: [
     { column: 2, kind: TokenKind.True, line: 1, literal: 'true' },

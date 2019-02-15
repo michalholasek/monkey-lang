@@ -94,6 +94,11 @@ function isValidLiteral(literal: string): boolean {
   return /[a-z_]/gi.test(literal);
 }
 
+function isValidStickyOperator(literalA: string, literalB: string): boolean {
+  if (literalA === '!' && literalA === literalB) return false;
+  return true;
+}
+
 function isWhiteSpace(literal: string): boolean {
   return /\s/g.test(literal);
 }
@@ -116,7 +121,7 @@ export function tokenize(input: string): Token[] {
       let operatorColumn = currentColumn;
       let operatorLiteral;
 
-      if (isStickyOperator(nextCharacter)) {
+      if (isStickyOperator(nextCharacter) && isValidStickyOperator(currentCharacter, nextCharacter)) {
         operatorLiteral = [currentCharacter, nextCharacter].join('');
         currentColumn++;
         index++;
