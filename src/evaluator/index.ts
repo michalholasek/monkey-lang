@@ -7,9 +7,10 @@ import {
   Statement
 } from '../parser/ast/types';
 
+import { TokenKind } from '../lexer/types';
 import { Object, ObjectKind } from './types';
 
-import { createObject } from './helpers';
+import { createObject, determineExpressionKind } from './helpers';
 
 export function evaluate(node: Node): Object {
   switch (node.kind) {
@@ -25,20 +26,40 @@ export function evaluate(node: Node): Object {
 }
 
 function evaluateExpressionNode(expression: Expression): Object {
+  let expressionKind = determineExpressionKind(expression);
   let objectKind;
 
-  switch (expression.kind) {
+  switch (expressionKind) {
     case ExpressionKind.Integer:
       objectKind = ObjectKind.Integer;
       break;
     case ExpressionKind.Boolean:
       objectKind = ObjectKind.Boolean;
       break;
+    case ExpressionKind.Prefix:
+      return evaluatePrefixExpression(expression);
     default:
       objectKind = ObjectKind.Null;
   }
 
   return createObject(objectKind, expression.value);
+}
+
+function evaluatePrefixExpression(expression: Expression): Object {
+  let object = createObject(ObjectKind.Null);
+  let right;
+
+  if (!expression.left || !expression.left.operator || !expression.right) {
+    return object;
+  }
+
+  switch (expression.left.operator.kind) {
+    case (TokenKind.Bang):
+      right = evaluateExpressionNode(expression.right);
+      return createObject(ObjectKind.Boolean, !right.value);
+    default:
+      return object;
+  }
 }
 
 function evaluateProgramNode(program: Program): Object {

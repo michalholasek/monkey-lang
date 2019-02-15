@@ -1,4 +1,4 @@
-import { ExpressionValue } from '../parser/ast/types';
+import { Expression, ExpressionKind, ExpressionValue } from '../parser/ast/types';
 import { Object, ObjectKind } from './types';
 
 export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Object {
@@ -9,4 +9,11 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     default:
       return { kind: ObjectKind.Null };
   }
+}
+
+export function determineExpressionKind(expression: Expression): ExpressionKind {
+  if (expression.kind) return expression.kind;
+  else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
+
+  return ExpressionKind.Illegal;
 }

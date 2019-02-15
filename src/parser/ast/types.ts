@@ -26,7 +26,8 @@ export interface Expression {
 export enum ExpressionKind {
   Illegal,
   Integer,
-  Boolean
+  Boolean,
+  Prefix
 }
 
 export type ExpressionValue = number | string | boolean | FunctionLiteral;

@@ -3,11 +3,12 @@ import { parse } from '../../parser';
 
 import { evaluate } from '../index';
 
-import { Boolean, Integer } from './fixtures';
+import { Boolean, Integer, Prefix } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
-  Integer
+  Integer,
+  Prefix
 });
 
 describe('Evaluator', () => {
@@ -23,6 +24,21 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast);
       expect(actual).toMatchObject(Fixtures.Boolean[expression]);
+    });
+  });
+
+  [
+    '!true;',
+    '!false;',
+    '!5;',
+    '!!true;',
+    '!!false;',
+    '!!5;'
+  ].forEach(expression => {
+    it(`should evaluate given prefix expression correctly - ${expression}`, () => {
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast);
+      expect(actual).toMatchObject(Fixtures.Prefix[expression]);
     });
   });
 
