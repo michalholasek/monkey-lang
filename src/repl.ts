@@ -30,7 +30,7 @@ cli.on('line', line => {
       }
 
       const result = evaluate(program);
-      if (result.value) {
+      if (result) {
         console.log(result.value);
       }
 
