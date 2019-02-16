@@ -8,6 +8,74 @@ export const Boolean = {
   'false;': {
     kind: ObjectKind.Boolean,
     value: false
+  },
+  '1 < 2': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  '1 > 2': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '1 < 1': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '1 > 1': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '1 == 1': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  '1 != 1': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '1 == 2': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '1 != 2': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  'true == true': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  'false == false': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  'true == false': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  'true != false': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  'false != true': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  '(1 < 2) == true': {
+    kind: ObjectKind.Boolean,
+    value: true
+  },
+  '(1 < 2) == false': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '(1 > 2) == true': {
+    kind: ObjectKind.Boolean,
+    value: false
+  },
+  '(1 > 2) == false': {
+    kind: ObjectKind.Boolean,
+    value: true
   }
 };
 

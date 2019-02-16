@@ -53,20 +53,25 @@ function evaluateBangOperatorExpression(right: Expression): Object {
 }
 
 function evaluateInfixExpression(expression: Expression): Object {
-  let object = createObject(ObjectKind.Null);
-
   if (!expression.left || !expression.operator || !expression.right) {
-    return object;
+    return createObject(ObjectKind.Null);
   }
 
   let left = evaluateExpressionNode(expression.left);
   let right = evaluateExpressionNode(expression.right);
 
-  if (Number.isInteger(left.value as number) && Number.isInteger(right.value as number)) {
-    object = evaluateIntegerInfixExpression(left.value as number, right.value as number, expression.operator);
+  if (typeof left.value === 'number' && typeof right.value === 'number') {
+    return evaluateIntegerInfixExpression(left.value, right.value , expression.operator);
+  } else {
+    switch (expression.operator.kind) {
+      case TokenKind.Equal:
+        return createObject(ObjectKind.Boolean, left.value === right.value);
+      case TokenKind.NotEqual:
+        return createObject(ObjectKind.Boolean, left.value !== right.value);
+      default:
+        return createObject(ObjectKind.Null);
+    }
   }
-
-  return object;
 }
 
 function evaluateIntegerInfixExpression(left: number, right: number, operator: Token): Object {
@@ -79,8 +84,16 @@ function evaluateIntegerInfixExpression(left: number, right: number, operator: T
       return createObject(ObjectKind.Integer, left * right);
     case TokenKind.Slash:
       return createObject(ObjectKind.Integer, left / right);
+    case TokenKind.GreaterThan:
+      return createObject(ObjectKind.Boolean, left > right);
+    case TokenKind.LessThan:
+      return createObject(ObjectKind.Boolean, left < right);
+    case TokenKind.Equal:
+      return createObject(ObjectKind.Boolean, left === right);
+    case TokenKind.NotEqual:
+      return createObject(ObjectKind.Boolean, left !== right);
     default:
-    return createObject(ObjectKind.Null);
+      return createObject(ObjectKind.Null);
   }
 }
 

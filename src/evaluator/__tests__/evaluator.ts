@@ -35,7 +35,27 @@ describe('Evaluator', () => {
     });
   });
 
-  ['true;', 'false;'].forEach(expression => {
+  [
+    'true;',
+    'false;',
+    '1 < 2',
+    '1 > 2',
+    '1 < 1',
+    '1 > 1',
+    '1 == 1',
+    '1 != 1',
+    '1 == 2',
+    '1 != 2',
+    'true == true',
+    'false == false',
+    'true == false',
+    'true != false',
+    'false != true',
+    '(1 < 2) == true',
+    '(1 < 2) == false',
+    '(1 > 2) == true',
+    '(1 > 2) == false'
+  ].forEach(expression => {
     it(`should evaluate given boolean expression correctly - ${expression}`, () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast);
