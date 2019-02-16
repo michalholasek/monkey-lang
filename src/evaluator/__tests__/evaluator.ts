@@ -3,13 +3,14 @@ import { parse } from '../../parser';
 
 import { evaluate } from '../index';
 
-import { Boolean, IfElse, Integer, Prefix } from './fixtures';
+import { Boolean, IfElse, Integer, Prefix, Return } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
   IfElse,
   Integer,
-  Prefix
+  Prefix,
+  Return
 });
 
 describe('Evaluator', () => {
@@ -92,6 +93,20 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast);
       expect(actual).toMatchObject(Fixtures.IfElse[expression]);
+    });
+  });
+
+  [
+    'return 10;',
+    'return 10; 9;',
+    'return 2 * 5; 9;',
+    '9; return 2 * 5; 9;',
+    'if (10 > 1) { if (10 > 1) { return 10; } return 1; }'
+  ].forEach(expression => {
+    it(`should evaluate given return statement correctly - ${expression}`, () => {
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast);
+      expect(actual).toMatchObject(Fixtures.Return[expression]);
     });
   });
 

@@ -5,6 +5,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
   switch (kind) {
     case ObjectKind.Integer:
     case ObjectKind.Boolean:
+    case ObjectKind.Return:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };

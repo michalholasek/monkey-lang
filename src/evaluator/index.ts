@@ -13,15 +13,19 @@ import { Object, ObjectKind } from './types';
 import { createObject, determineExpressionKind } from './helpers';
 
 export function evaluate(node: Node): Object {
+  let statement;
+
   switch (node.kind) {
     case NodeKind.Program:
       let program = node as Program;
       return evaluateStatements(program.statements);
+    case NodeKind.Return:
+      statement = node as Statement;
+      if (statement.expression) return evaluateReturnNode(statement.expression);
+      break;
     case NodeKind.Expression:
-      const statement = node as Statement;
-      if (statement.expression) {
-        return evaluateExpressionNode(statement.expression);
-      } // Fall through
+      statement = node as Statement;
+      if (statement.expression) return evaluateExpressionNode(statement.expression);
   }
   return createObject(ObjectKind.Null);
 }
@@ -115,11 +119,12 @@ function evaluateIntegerInfixExpression(left: number, right: number, operator: T
 
 function evaluateMinusPrefixOperatorExpression(right: Expression): Object {
   let rightValue = evaluateExpressionNode(right);
+  let nullValue = createObject(ObjectKind.Null);
 
-  if (rightValue.kind !== ObjectKind.Integer) return createObject(ObjectKind.Null);
+  if (rightValue.kind !== ObjectKind.Integer) return nullValue;
+  if (rightValue.value) return createObject(ObjectKind.Integer, -rightValue.value);
 
-  // @ts-ignore
-  return createObject(ObjectKind.Integer, -rightValue.value);
+  return nullValue;
 }
 
 function evaluatePrefixExpression(expression: Expression): Object {
@@ -139,12 +144,19 @@ function evaluatePrefixExpression(expression: Expression): Object {
   }
 }
 
+function evaluateReturnNode(expression: Expression): Object {
+  return createObject(ObjectKind.Return, evaluateExpressionNode(expression));
+}
+
 function evaluateStatements(statements: Statement[]): Object {
   let object = createObject(ObjectKind.Null);
 
-  statements.forEach(statement => {
+  for (let statement of statements) {
     object = evaluate(statement);
-  });
+    if (object.kind === ObjectKind.Return) {
+      return object.value as Object;
+    }
+  }
 
   return object;
 }

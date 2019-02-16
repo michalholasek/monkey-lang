@@ -189,3 +189,26 @@ export const Prefix = {
     value: true
   }
 };
+
+export const Return = {
+  'return 10;': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'return 10; 9;': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'return 2 * 5; 9;': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  '9; return 2 * 5; 9;': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'if (10 > 1) { if (10 > 1) { return 10; } return 1; }': {
+    kind: ObjectKind.Integer,
+    value: 10
+  }
+};
