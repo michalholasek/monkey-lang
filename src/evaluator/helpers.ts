@@ -13,6 +13,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
 
 export function determineExpressionKind(expression: Expression): ExpressionKind {
   if (expression.kind) return expression.kind;
+  else if (expression.left && expression.operator && expression.right) return ExpressionKind.Infix;
   else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
 
   return ExpressionKind.Illegal;

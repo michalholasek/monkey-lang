@@ -7,7 +7,7 @@ import {
   Statement
 } from '../parser/ast/types';
 
-import { TokenKind } from '../lexer/types';
+import { Token, TokenKind } from '../lexer/types';
 import { Object, ObjectKind } from './types';
 
 import { createObject, determineExpressionKind } from './helpers';
@@ -38,6 +38,8 @@ function evaluateExpressionNode(expression: Expression): Object {
       break;
     case ExpressionKind.Prefix:
       return evaluatePrefixExpression(expression);
+    case ExpressionKind.Infix:
+      return evaluateInfixExpression(expression);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -48,6 +50,38 @@ function evaluateExpressionNode(expression: Expression): Object {
 function evaluateBangOperatorExpression(right: Expression): Object {
   let rightValue = evaluateExpressionNode(right);
   return createObject(ObjectKind.Boolean, !rightValue.value);
+}
+
+function evaluateInfixExpression(expression: Expression): Object {
+  let object = createObject(ObjectKind.Null);
+
+  if (!expression.left || !expression.operator || !expression.right) {
+    return object;
+  }
+
+  let left = evaluateExpressionNode(expression.left);
+  let right = evaluateExpressionNode(expression.right);
+
+  if (Number.isInteger(left.value as number) && Number.isInteger(right.value as number)) {
+    object = evaluateIntegerInfixExpression(left.value as number, right.value as number, expression.operator);
+  }
+
+  return object;
+}
+
+function evaluateIntegerInfixExpression(left: number, right: number, operator: Token): Object {
+  switch (operator.kind) {
+    case TokenKind.Plus:
+      return createObject(ObjectKind.Integer, left + right);
+    case TokenKind.Minus:
+      return createObject(ObjectKind.Integer, left - right);
+    case TokenKind.Asterisk:
+      return createObject(ObjectKind.Integer, left * right);
+    case TokenKind.Slash:
+      return createObject(ObjectKind.Integer, left / right);
+    default:
+    return createObject(ObjectKind.Null);
+  }
 }
 
 function evaluateMinusPrefixOperatorExpression(right: Expression): Object {
