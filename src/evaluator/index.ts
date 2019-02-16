@@ -15,7 +15,8 @@ import { createObject, determineExpressionKind } from './helpers';
 export function evaluate(node: Node): Object {
   switch (node.kind) {
     case NodeKind.Program:
-      return evaluateProgramNode(node as Program);
+      let program = node as Program;
+      return evaluateStatements(program.statements);
     case NodeKind.Expression:
       const statement = node as Statement;
       if (statement.expression) {
@@ -40,6 +41,8 @@ function evaluateExpressionNode(expression: Expression): Object {
       return evaluatePrefixExpression(expression);
     case ExpressionKind.Infix:
       return evaluateInfixExpression(expression);
+    case ExpressionKind.IfElse:
+      return evaluateIfElseExpression(expression);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -50,6 +53,19 @@ function evaluateExpressionNode(expression: Expression): Object {
 function evaluateBangOperatorExpression(right: Expression): Object {
   let rightValue = evaluateExpressionNode(right);
   return createObject(ObjectKind.Boolean, !rightValue.value);
+}
+
+function evaluateIfElseExpression(expression: Expression): Object {
+  if (!expression.condition || !expression.consequence) return createObject(ObjectKind.Null);
+
+  let condition = evaluateExpressionNode(expression.condition);
+  if (condition.value && expression.consequence.statements) {
+    return evaluateStatements(expression.consequence.statements);
+  } else if (expression.alternative) {
+    return evaluateStatements(expression.alternative.statements);
+  }
+
+  return createObject(ObjectKind.Null);
 }
 
 function evaluateInfixExpression(expression: Expression): Object {
@@ -123,10 +139,10 @@ function evaluatePrefixExpression(expression: Expression): Object {
   }
 }
 
-function evaluateProgramNode(program: Program): Object {
+function evaluateStatements(statements: Statement[]): Object {
   let object = createObject(ObjectKind.Null);
 
-  program.statements.forEach(statement => {
+  statements.forEach(statement => {
     object = evaluate(statement);
   });
 

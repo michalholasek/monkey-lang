@@ -79,6 +79,35 @@ export const Boolean = {
   }
 };
 
+export const IfElse = {
+  'if (true) { 10 }': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'if (false) { 10 }': {
+    kind: ObjectKind.Null
+  },
+  'if (1) { 10 }': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'if (1 < 2) { 10 }': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'if (1 > 2) { 10 }': {
+    kind: ObjectKind.Null
+  },
+  'if (1 > 2) { 10 } else { 20 }': {
+    kind: ObjectKind.Integer,
+    value: 20
+  },
+  'if (1 < 2) { 10 } else { 20 }': {
+    kind: ObjectKind.Integer,
+    value: 10
+  }
+};
+
 export const Integer = {
   '5': {
     kind: ObjectKind.Integer,

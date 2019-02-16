@@ -28,7 +28,8 @@ export enum ExpressionKind {
   Integer,
   Boolean,
   Prefix,
-  Infix
+  Infix,
+  IfElse
 }
 
 export type ExpressionValue = number | string | boolean | FunctionLiteral;
