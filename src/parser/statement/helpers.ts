@@ -50,7 +50,7 @@ function determineStatementTokenRangeEnd(tokens: Token[], start: number): number
 
   for (let index = start; index < tokens.length; index++) {
     currentToken = tokens[index];
-    if (currentToken.kind === TokenKind.Semicolon) {
+    if (currentToken.kind === TokenKind.Semicolon || currentToken.kind === TokenKind.RightBrace) {
       end = index;
       break;
     } else if (currentToken.kind === TokenKind.LeftBrace) {
