@@ -34,7 +34,7 @@ function determineBlockStatementTokenRangeEnd(tokens: Token[], start: number): n
 
   while (index < tokens.length && currentToken && currentToken.kind !== TokenKind.RightBrace) {
     if (currentToken.kind === TokenKind.LeftBrace) {
-      index = determineBlockStatementTokenRangeEnd(tokens, index) + Skip.Brace;
+      index = determineBlockStatementTokenRangeEnd(tokens, index + Skip.Brace) + Skip.Brace;
     } else {
       index++;
     }
