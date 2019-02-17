@@ -58,11 +58,7 @@ function getStatementExpressionTokens(tokens: Token[]): Token[] {
 }
 
 function getStatementIdentifierToken(tokens: Token[]): Token {
-  return tokens
-    .filter(token => token.kind === TokenKind.Identifier)
-    .reduce((_, currentToken) => {
-      return currentToken;
-    });
+  return tokens[1];
 }
 
 function getStatementTokens(tokens: Token[], start: number, end: number): Token[] {
