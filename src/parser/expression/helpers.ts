@@ -73,6 +73,8 @@ function determineExpressionKind(token: Token): ExpressionKind {
   switch (token.kind) {
     case TokenKind.Int:
       return ExpressionKind.Integer;
+    case TokenKind.Identifier:
+      return ExpressionKind.Identifier;
     case TokenKind.True:
     case TokenKind.False:
       return ExpressionKind.Boolean;
