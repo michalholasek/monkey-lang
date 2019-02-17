@@ -32,7 +32,7 @@ cli.on('line', line => {
       }
 
       let result = evaluate(program, env);
-      if (result) {
+      if (result && result.value) {
         console.log(result.value);
       }
 
