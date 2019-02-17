@@ -89,7 +89,7 @@ function evaluateInfixExpression(expression: Expression): Object {
   if (typeof left.value !== typeof right.value) {
     return createObject(
       ObjectKind.Error,
-      createAssertionError(AssertionErrorKind.InvalidToken, expression.right.tokens[0], expression.left.tokens[0].kind)
+      createAssertionError(AssertionErrorKind.InvalidToken, expression.right.tokens[0], expression.left.tokens[0].kind).message
     );
   }
 
@@ -104,7 +104,7 @@ function evaluateInfixExpression(expression: Expression): Object {
       default:
       return createObject(
         ObjectKind.Error,
-        createAssertionError(AssertionErrorKind.UnknownOperator, expression.operator, expression.left.tokens[0].kind)
+        createAssertionError(AssertionErrorKind.UnknownOperator, expression.operator, expression.left.tokens[0].kind).message
       );
     }
   }
@@ -138,7 +138,7 @@ function evaluateMinusPrefixOperatorExpression(right: Expression): Object {
   if (rightValue.kind === ObjectKind.Error) return rightValue;
 
   if (rightValue.kind !== ObjectKind.Integer) {
-    return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.InvalidToken, right.tokens[0], TokenKind.Int));
+    return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.InvalidToken, right.tokens[0], TokenKind.Int).message);
   }
 
   if (rightValue.value) return createObject(ObjectKind.Integer, -rightValue.value);
@@ -157,6 +157,6 @@ function evaluatePrefixExpression(expression: Expression): Object {
     case TokenKind.Minus:
       return evaluateMinusPrefixOperatorExpression(expression.right);
     default:
-      return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.UnknownOperator, expression.left.operator));
+      return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.UnknownOperator, expression.left.operator).message);
   }
 }
