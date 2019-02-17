@@ -55,14 +55,16 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
 }
 
 export function evaluateLetStatement(statement: Statement, env: Environment): Object {
-  if (!statement.expression || !statement.name) return createObject(ObjectKind.Null);
+  let nullObject = createObject(ObjectKind.Null);
+
+  if (!statement.expression || !statement.name) return nullObject;
 
   let expressionValue = evaluateExpression(statement.expression, env);
   if (expressionValue.kind === ObjectKind.Error) return expressionValue;
 
   env.set(statement.name.literal, expressionValue);
 
-  return createObject(ObjectKind.Let, expressionValue);
+  return nullObject;
 }
 
 export function evaluateReturnStatement(expression: Expression, env: Environment): Object {
