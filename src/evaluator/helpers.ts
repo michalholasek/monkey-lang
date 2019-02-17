@@ -6,6 +6,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     case ObjectKind.Integer:
     case ObjectKind.Boolean:
     case ObjectKind.Return:
+    case ObjectKind.Error:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };

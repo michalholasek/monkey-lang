@@ -7,9 +7,11 @@ import {
   Statement
 } from '../parser/ast/types';
 
+import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
 import { Object, ObjectKind } from './types';
 
+import { createAssertionError } from '../common';
 import { createObject, determineExpressionKind } from './helpers';
 
 export function evaluate(node: Node): Object {
@@ -63,6 +65,8 @@ function evaluateIfElseExpression(expression: Expression): Object {
   if (!expression.condition || !expression.consequence) return createObject(ObjectKind.Null);
 
   let condition = evaluateExpressionNode(expression.condition);
+  if (condition.kind === ObjectKind.Error) return condition;
+
   if (condition.value && expression.consequence.statements) {
     return evaluateStatements(expression.consequence.statements);
   } else if (expression.alternative) {
@@ -78,7 +82,17 @@ function evaluateInfixExpression(expression: Expression): Object {
   }
 
   let left = evaluateExpressionNode(expression.left);
+  if (left.kind === ObjectKind.Error) return left;
+
   let right = evaluateExpressionNode(expression.right);
+  if (right.kind === ObjectKind.Error) return right;
+
+  if (typeof left.value !== typeof right.value) {
+    return createObject(
+      ObjectKind.Error,
+      createAssertionError(AssertionErrorKind.InvalidToken, expression.right.tokens[0], expression.left.tokens[0].kind)
+    );
+  }
 
   if (typeof left.value === 'number' && typeof right.value === 'number') {
     return evaluateIntegerInfixExpression(left.value, right.value , expression.operator);
@@ -89,7 +103,10 @@ function evaluateInfixExpression(expression: Expression): Object {
       case TokenKind.NotEqual:
         return createObject(ObjectKind.Boolean, left.value !== right.value);
       default:
-        return createObject(ObjectKind.Null);
+      return createObject(
+        ObjectKind.Error,
+        createAssertionError(AssertionErrorKind.UnknownOperator, expression.operator, expression.left.tokens[0].kind)
+      );
     }
   }
 }
@@ -119,19 +136,21 @@ function evaluateIntegerInfixExpression(left: number, right: number, operator: T
 
 function evaluateMinusPrefixOperatorExpression(right: Expression): Object {
   let rightValue = evaluateExpressionNode(right);
-  let nullValue = createObject(ObjectKind.Null);
+  if (rightValue.kind === ObjectKind.Error) return rightValue;
 
-  if (rightValue.kind !== ObjectKind.Integer) return nullValue;
+  if (rightValue.kind !== ObjectKind.Integer) {
+    let actualToken = right.tokens[0];
+    return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.InvalidToken, actualToken, TokenKind.Int));
+  }
+
   if (rightValue.value) return createObject(ObjectKind.Integer, -rightValue.value);
 
-  return nullValue;
+  return createObject(ObjectKind.Null);
 }
 
 function evaluatePrefixExpression(expression: Expression): Object {
-  let object = createObject(ObjectKind.Null);
-
   if (!expression.left || !expression.left.operator || !expression.right) {
-    return object;
+    return createObject(ObjectKind.Null);
   }
 
   switch (expression.left.operator.kind) {
@@ -140,7 +159,7 @@ function evaluatePrefixExpression(expression: Expression): Object {
     case TokenKind.Minus:
       return evaluateMinusPrefixOperatorExpression(expression.right);
     default:
-      return object;
+      return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.UnknownOperator, expression.left.operator));
   }
 }
 
@@ -153,9 +172,8 @@ function evaluateStatements(statements: Statement[]): Object {
 
   for (let statement of statements) {
     object = evaluate(statement);
-    if (object.kind === ObjectKind.Return) {
-      return object.value as Object;
-    }
+    if (object.kind === ObjectKind.Error) return object;
+    else if (object.kind === ObjectKind.Return) return object.value as Object;
   }
 
   return object;

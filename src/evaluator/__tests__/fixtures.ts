@@ -108,6 +108,45 @@ export const IfElse = {
   }
 };
 
+export const Illegal = {
+  '5 + true;': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'invalid token(6, 1): expected Int, got True instead'
+    }
+  },
+  '5 + true; 5;': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'invalid token(6, 1): expected Int, got True instead'
+    }
+  },
+  '-true;': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'invalid token(3, 1): expected Int, got True instead'
+    }
+  },
+  'true + false;': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'unknown operator(7, 1): Plus operator is invalid for True'
+    }
+  },
+  '5; true + false; 5': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'unknown operator(10, 1): Plus operator is invalid for True'
+    }
+  },
+  'if (10 > 1) { true + false; }': {
+    kind: ObjectKind.Error,
+    value: {
+      message: 'unknown operator(21, 1): Plus operator is invalid for True'
+    }
+  }
+};
+
 export const Integer = {
   '5': {
     kind: ObjectKind.Integer,

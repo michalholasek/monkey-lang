@@ -1,10 +1,6 @@
+import { AssertionError } from '../common/types';
 import { Token } from '../lexer/types';
-import { AssertionError, Expression, Statement } from './ast/types';
-
-export enum AssertionErrorKind {
-  InvalidToken = 'invalid token',
-  UnexpectedToken = 'unexpected token'
-}
+import { Expression, Statement } from './ast/types';
 
 export interface AssertionResult {
   errors: AssertionError[];

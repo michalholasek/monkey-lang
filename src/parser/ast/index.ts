@@ -1,7 +1,7 @@
+import { AssertionError } from '../../common/types';
 import { Token, TokenKind } from '../../lexer/types';
 
 import {
-  AssertionError,
   NodeKind,
   Program,
   Statement

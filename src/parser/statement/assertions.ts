@@ -1,6 +1,8 @@
+import { AssertionError, AssertionErrorKind } from '../../common/types';
 import { Token, TokenKind } from '../../lexer/types';
-import { AssertionError } from '../ast/types';
-import { AssertionErrorKind, AssertionResult } from '../types';
+import { AssertionResult } from '../types';
+
+import { createAssertionError } from '../../common';
 
 export function assertStatement(tokens: Token[], tokenRangeStart: number): AssertionResult {
   let startToken = tokens[tokenRangeStart];
@@ -52,21 +54,6 @@ function assertReturnStatement(tokens: Token[], tokenRangeStart: number): Assert
     default:
       assertionResult.errors.push(createAssertionError(AssertionErrorKind.UnexpectedToken, nextToken));
       return assertionResult;
-  }
-}
-
-function createAssertionError(errorKind: AssertionErrorKind, actualToken: Token, expectedTokenKind: TokenKind = TokenKind.Illegal): AssertionError {
-  let commonPart = `${errorKind}(${actualToken.column}, ${actualToken.line}):`;
-
-  switch (errorKind) {
-    case AssertionErrorKind.InvalidToken:
-      return {
-        message: `${commonPart} expected ${TokenKind[expectedTokenKind]}, got ${TokenKind[actualToken.kind]} instead`
-      };
-    default:
-      return {
-        message: `${commonPart} got ${TokenKind[actualToken.kind]}`
-      };
   }
 }
 

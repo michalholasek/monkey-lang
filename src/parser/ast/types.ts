@@ -1,9 +1,6 @@
+import { AssertionError } from '../../common/types';
 import { Object } from '../../evaluator/types';
 import { Token, TokenKind } from '../../lexer/types';
-
-export interface AssertionError {
-  message: string;
-}
 
 interface BlockStatement {
   statements: Statement[];
@@ -33,7 +30,7 @@ export enum ExpressionKind {
   IfElse
 }
 
-export type ExpressionValue = number | string | boolean | FunctionLiteral | Object;
+export type ExpressionValue = number | string | boolean | FunctionLiteral | Object | AssertionError;
 
 export interface FunctionLiteral {
   body: BlockStatement;

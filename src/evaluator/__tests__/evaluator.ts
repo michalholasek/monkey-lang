@@ -3,11 +3,12 @@ import { parse } from '../../parser';
 
 import { evaluate } from '../index';
 
-import { Boolean, IfElse, Integer, Prefix, Return } from './fixtures';
+import { Boolean, IfElse, Illegal, Integer, Prefix, Return } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
   IfElse,
+  Illegal,
   Integer,
   Prefix,
   Return
@@ -107,6 +108,21 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast);
       expect(actual).toMatchObject(Fixtures.Return[expression]);
+    });
+  });
+
+  [
+    '5 + true;',
+    '5 + true; 5;',
+    '-true;',
+    'true + false;',
+    '5; true + false; 5',
+    'if (10 > 1) { true + false; }'
+  ].forEach(expression => {
+    it(`should return error message for illegal expression - ${expression}`, () => {
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast);
+      expect(actual).toMatchObject(Fixtures.Illegal[expression]);
     });
   });
 
