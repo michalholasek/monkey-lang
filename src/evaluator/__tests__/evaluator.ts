@@ -1,15 +1,16 @@
 import { tokenize } from '../../lexer';
 import { parse } from '../../parser';
 
-import { evaluate } from '../index';
+import { createEnvironment, evaluate } from '../index';
 
-import { Boolean, IfElse, Illegal, Integer, Prefix, Return } from './fixtures';
+import { Boolean, IfElse, Illegal, Integer, Let, Prefix, Return } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
   IfElse,
   Illegal,
   Integer,
+  Let,
   Prefix,
   Return
 });
@@ -32,8 +33,9 @@ describe('Evaluator', () => {
     '(5 + 10 * 2 + 15 / 3) * 2 + -10'
   ].forEach(expression => {
     it(`should evaluate given integer expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Integer[expression]);
     });
   });
@@ -60,8 +62,9 @@ describe('Evaluator', () => {
     '(1 > 2) == false'
   ].forEach(expression => {
     it(`should evaluate given boolean expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Boolean[expression]);
     });
   });
@@ -75,8 +78,9 @@ describe('Evaluator', () => {
     '!!5;'
   ].forEach(expression => {
     it(`should evaluate given prefix expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Prefix[expression]);
     });
   });
@@ -91,8 +95,9 @@ describe('Evaluator', () => {
     'if (1 < 2) { 10 } else { 20 }'
   ].forEach(expression => {
     it(`should evaluate given if-else expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.IfElse[expression]);
     });
   });
@@ -105,8 +110,9 @@ describe('Evaluator', () => {
     'if (10 > 1) { if (10 > 1) { return 10; } return 1; }'
   ].forEach(expression => {
     it(`should evaluate given return statement correctly - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Return[expression]);
     });
   });
@@ -117,12 +123,28 @@ describe('Evaluator', () => {
     '-true;',
     'true + false;',
     '5; true + false; 5',
-    'if (10 > 1) { true + false; }'
+    'if (10 > 1) { true + false; }',
+    'foobar'
   ].forEach(expression => {
     it(`should return error message for illegal expression - ${expression}`, () => {
+      let env = createEnvironment();
       let ast = parse(tokenize(expression));
-      let actual = evaluate(ast);
+      let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Illegal[expression]);
+    });
+  });
+
+  [
+    'let a = 5; a;',
+    'let a = 5 * 5; a;',
+    'let a = 5; let b = a; b;',
+    'let a = 5; let b = a; let c = a + b + 5; c;'
+  ].forEach(expression => {
+    it(`should evaluate given let statement correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.Let[expression]);
     });
   });
 

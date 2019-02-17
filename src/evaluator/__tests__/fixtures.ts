@@ -132,6 +132,10 @@ export const Illegal = {
   'if (10 > 1) { true + false; }': {
     kind: ObjectKind.Error,
     value: 'unknown operator(21, 1): Plus operator is invalid for True'
+  },
+  'foobar': {
+    kind: ObjectKind.Error,
+    value: 'invalid identifier(2, 1): foobar identifier not found'
   }
 };
 
@@ -187,6 +191,25 @@ export const Integer = {
   '(5 + 10 * 2 + 15 / 3) * 2 + -10': {
     kind: ObjectKind.Integer,
     value: 50
+  }
+};
+
+export const Let = {
+  'let a = 5; a;': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  'let a = 5 * 5; a;': {
+    kind: ObjectKind.Integer,
+    value: 25
+  },
+  'let a = 5; let b = a; b;': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  'let a = 5; let b = a; let c = a + b + 5; c;': {
+    kind: ObjectKind.Integer,
+    value: 15
   }
 };
 

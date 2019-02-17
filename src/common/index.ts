@@ -5,11 +5,15 @@ export function createAssertionError(errorKind: AssertionErrorKind, actualToken:
   let commonPart = `${errorKind}(${actualToken.column}, ${actualToken.line}):`;
 
   switch (errorKind) {
+    case AssertionErrorKind.InvalidIdentifier:
+      return {
+        message: `${commonPart} ${actualToken.literal} identifier not found`
+      };
     case AssertionErrorKind.InvalidToken:
       return {
         message: `${commonPart} expected ${TokenKind[expectedTokenKind]}, got ${TokenKind[actualToken.kind]} instead`
       };
-      case AssertionErrorKind.UnknownOperator:
+    case AssertionErrorKind.UnknownOperator:
       return {
         message: `${commonPart} ${TokenKind[actualToken.kind]} operator is invalid for ${TokenKind[expectedTokenKind]}`
       };

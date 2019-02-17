@@ -2,11 +2,13 @@
 
 import { createInterface } from 'readline';
 
-import { evaluate } from './evaluator';
+import { createEnvironment, evaluate } from './evaluator';
 import { tokenize } from './lexer';
 import { parse } from './parser';
 
-const cli = createInterface({
+let env = createEnvironment();
+
+let cli = createInterface({
   input: process.stdin,
   output: process.stdout,
   prompt: '> '
@@ -21,7 +23,7 @@ cli.on('line', line => {
       cli.close();
       break;
     default:
-      const program = parse(tokenize(line));
+      let program = parse(tokenize(line));
 
       if (program.errors.length) {
         program.errors.forEach(error => {
@@ -29,7 +31,7 @@ cli.on('line', line => {
         });
       }
 
-      const result = evaluate(program);
+      let result = evaluate(program, env);
       if (result) {
         console.log(result.value);
       }
