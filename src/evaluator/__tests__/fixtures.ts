@@ -1,3 +1,5 @@
+import { TokenKind } from '../../lexer/types';
+import { NodeKind } from '../../parser/ast/types';
 import { ObjectKind } from '../types';
 
 export const Boolean = {
@@ -76,6 +78,85 @@ export const Boolean = {
   '(1 > 2) == false': {
     kind: ObjectKind.Boolean,
     value: true
+  }
+};
+
+export const Function = {
+  'fn(x) { x + 2; };': {
+    kind: ObjectKind.Function,
+    value: {
+      body: {
+        statements: [{
+          expression: {
+            left: {
+              tokens: [{ column: 10, kind: TokenKind.Identifier, line: 1, literal: 'x' }],
+              value: 'x'
+            },
+            operator: { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              tokens: [{ column: 14, kind: TokenKind.Int, line: 1, literal: '2' }],
+              value: 2
+            },
+            tokens: [
+              { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'x' },
+              { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 14, kind: TokenKind.Int, line: 1, literal: '2' }
+            ]
+          },
+          kind: NodeKind.Expression,
+          tokens: [
+            { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'x' },
+            { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 14, kind: TokenKind.Int, line: 1, literal: '2' }
+          ]
+        }],
+        tokens: [
+          { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'x' },
+          { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 14, kind: TokenKind.Int, line: 1, literal: '2' },
+          { column: 15, kind: TokenKind.Semicolon, line: 1, literal: ';' }
+        ]
+      },
+      parameters: [
+        { column: 5, kind: TokenKind.Identifier, line: 1, literal: 'x' }
+      ],
+      tokens: [
+        { column: 2, kind: TokenKind.Function, line: 1, literal: 'fn' },
+        { column: 4, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+        { column: 5, kind: TokenKind.Identifier, line: 1, literal: 'x' },
+        { column: 6, kind: TokenKind.RightParenthesis, line: 1, literal: ')' },
+        { column: 8, kind: TokenKind.LeftBrace, line: 1, literal: '{' },
+        { column: 10, kind: TokenKind.Identifier, line: 1, literal: 'x' },
+        { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+        { column: 14, kind: TokenKind.Int, line: 1, literal: '2' },
+        { column: 15, kind: TokenKind.Semicolon, line: 1, literal: ';' },
+        { column: 17, kind: TokenKind.RightBrace, line: 1, literal: '}' }
+      ]
+    }
+  },
+  'let identity = fn(x) { x; }; identity(5);': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  'let identity = fn(x) { return x; }; identity(5);': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  'let double = fn(x) { x * 2; }; double(5);': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'let add = fn(x, y) { x + y; }; add(5, 5);': {
+    kind: ObjectKind.Integer,
+    value: 10
+  },
+  'let add = fn(x, y) { x + y; }; add(5 + 5, add(5, 5));': {
+    kind: ObjectKind.Integer,
+    value: 20
+  },
+  'fn(x) { x; }(5);': {
+    kind: ObjectKind.Integer,
+    value: 5
   }
 };
 

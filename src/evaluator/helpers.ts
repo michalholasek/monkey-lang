@@ -1,10 +1,10 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
-import { Expression, ExpressionKind, ExpressionValue, Statement } from '../parser/ast/types';
+import { Expression, ExpressionKind, ExpressionValue, Identifier, Statement } from '../parser/ast/types';
 import { Environment, Object, ObjectKind } from './types';
 
 import { createAssertionError } from '../common';
-import { evaluateStatements } from './index';
+import { createEnclosedEnvironment, evaluateStatements } from './index';
 
 export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Object {
   switch (kind) {
@@ -13,6 +13,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     case ObjectKind.Let:
     case ObjectKind.Return:
     case ObjectKind.Error:
+    case ObjectKind.Function:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };
@@ -24,6 +25,8 @@ export function determineExpressionKind(expression: Expression): ExpressionKind 
   else if (expression.left && expression.operator && expression.right) return ExpressionKind.Infix;
   else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
   else if (expression.condition) return ExpressionKind.IfElse;
+  else if (expression.arguments) return ExpressionKind.Call;
+  else if (expression.value) return ExpressionKind.Function;
 
   return ExpressionKind.Illegal;
 }
@@ -39,6 +42,9 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
     case ExpressionKind.Boolean:
       objectKind = ObjectKind.Boolean;
       break;
+    case ExpressionKind.Function:
+      objectKind = ObjectKind.Function;
+      break;
     case ExpressionKind.Identifier:
       return evaluateIdentifier(expression, env);
     case ExpressionKind.Prefix:
@@ -47,6 +53,8 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       return evaluateInfixExpression(expression, env);
     case ExpressionKind.IfElse:
       return evaluateIfElseExpression(expression, env);
+    case ExpressionKind.Call:
+      return evaluateCallExpression(expression, env);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -71,9 +79,33 @@ export function evaluateReturnStatement(expression: Expression, env: Environment
   return createObject(ObjectKind.Return, evaluateExpression(expression, env));
 }
 
+function evaluateArguments(args: Expression[], env: Environment): Object[] {
+  let evaluatedArguments = [];
+
+  for (let arg of args) {
+    evaluatedArguments.push(evaluateExpression(arg, env));
+  }
+
+  return evaluatedArguments;
+}
+
 function evaluateBangOperatorExpression(right: Expression, env: Environment): Object {
   let rightValue = evaluateExpression(right, env);
   return createObject(ObjectKind.Boolean, !rightValue.value);
+}
+
+function evaluateCallExpression(expression: Expression, env: Environment): Object {
+  let fn;
+  let args;
+
+  if (expression.identifier) fn = env.get(expression.identifier.literal);
+  else fn = expression;
+
+  if (expression.arguments) {
+    args = evaluateArguments(expression.arguments, env);
+  }
+
+  return applyFunction(fn.value as Object, args, env);
 }
 
 function evaluateIdentifier(expression: Expression, env: Environment): Object {
@@ -101,6 +133,15 @@ function evaluateIfElseExpression(expression: Expression, env: Environment): Obj
   } else if (expression.alternative) {
     return evaluateStatements(expression.alternative.statements, env);
   }
+
+  return createObject(ObjectKind.Null);
+}
+
+function applyFunction(fn: Object, args: Object[] | undefined, outer: Environment): Object {
+  let env;
+
+  if (fn.parameters && args) env = extendEnvironment(fn.parameters, args, outer);
+  if (fn.body) return evaluateStatements(fn.body.statements, env || outer);
 
   return createObject(ObjectKind.Null);
 }
@@ -189,4 +230,14 @@ function evaluatePrefixExpression(expression: Expression, env: Environment): Obj
     default:
       return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.UnknownOperator, expression.left.operator).message);
   }
+}
+
+function extendEnvironment(params: Identifier[], args: Object[], outer: Environment): Environment {
+  let env = createEnclosedEnvironment(outer);
+
+  for (let i = 0; i < params.length; i++) {
+    env.set(params[i].literal, args[i]);
+  }
+
+  return env;
 }

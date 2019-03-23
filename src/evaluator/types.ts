@@ -1,8 +1,9 @@
-import { ExpressionValue } from '../parser/ast/types';
+import { BlockStatement, ExpressionValue, Identifier } from '../parser/ast/types';
 
 export enum ObjectKind {
   Boolean = 'BOOLEAN',
   Error = 'ERROR',
+  Function = 'FUNCTION',
   Integer = 'INTEGER',
   Let = 'LET',
   Null = 'NULL',
@@ -10,7 +11,10 @@ export enum ObjectKind {
 }
 
 export interface Object {
+  body?: BlockStatement;
+  env?: Environment;
   kind: ObjectKind;
+  parameters?: Identifier[];
   value?: ExpressionValue;
 }
 

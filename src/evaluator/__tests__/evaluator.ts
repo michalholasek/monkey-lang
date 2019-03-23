@@ -3,10 +3,11 @@ import { parse } from '../../parser';
 
 import { createEnvironment, evaluate } from '../index';
 
-import { Boolean, IfElse, Illegal, Integer, Let, Prefix, Return } from './fixtures';
+import { Boolean, Function, IfElse, Illegal, Integer, Let, Prefix, Return } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
+  Function,
   IfElse,
   Illegal,
   Integer,
@@ -145,6 +146,23 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Let[expression]);
+    });
+  });
+
+  [
+    'fn(x) { x + 2; };',
+    'let identity = fn(x) { x; }; identity(5);',
+    'let identity = fn(x) { return x; }; identity(5);',
+    'let double = fn(x) { x * 2; }; double(5);',
+    'let add = fn(x, y) { x + y; }; add(5, 5);',
+    'let add = fn(x, y) { x + y; }; add(5 + 5, add(5, 5));',
+    'fn(x) { x; }(5);'
+  ].forEach(expression => {
+    it(`should evaluate given function expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.Function[expression]);
     });
   });
 

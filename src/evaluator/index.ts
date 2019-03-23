@@ -21,6 +21,20 @@ export function createEnvironment(): Environment {
   };
 }
 
+export function createEnclosedEnvironment(outer: Environment): Environment {
+  let env = createEnvironment();
+
+  return {
+    get(key) {
+      let value = env.get(key);
+      return value ? value : outer.get(key);
+    },
+    set(key, object) {
+      return env.set(key, object);
+    }
+  };
+}
+
 export function evaluate(node: Node, env: Environment): Object {
   let statement;
 
