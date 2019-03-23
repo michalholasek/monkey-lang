@@ -44,6 +44,7 @@ export const Call = {
               ]
             }
           ],
+          identifier: { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'add' },
           tokens: [
             { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'add' },
             { column: 5, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },

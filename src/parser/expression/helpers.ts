@@ -142,6 +142,9 @@ function parseCallExpression(tokens: Token[], cursor: number, left: Expression):
   let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Identifier, index + Include.Parenthesis)));
   expression.arguments = args;
 
+  let identifier = expression.tokens[0];
+  if (identifier.kind === TokenKind.Identifier) expression.identifier = identifier;
+
   let nextToken = tokens[index + Skip.Parenthesis];
 
   return {
