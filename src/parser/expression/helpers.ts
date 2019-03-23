@@ -115,10 +115,12 @@ function parseFunctionExpression(tokens: Token[], cursor: number): ExpressionPar
     tokens: functionExpressionTokens
   };
 
+  let nextToken = tokens[bodyParseResult.cursor + Skip.Brace];
+
   return {
     expression,
-    cursor: bodyParseResult.cursor,
-    nextPrecedence: Precedence.Lowest
+    cursor: bodyParseResult.cursor + Skip.Brace,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
   };
 }
 
@@ -144,6 +146,9 @@ function parseCallExpression(tokens: Token[], cursor: number, left: Expression):
 
   let identifier = expression.tokens[0];
   if (identifier.kind === TokenKind.Identifier) expression.identifier = identifier;
+
+  // Immediately executed function expression
+  if (left.value) expression.value = left.value;
 
   let nextToken = tokens[index + Skip.Parenthesis];
 

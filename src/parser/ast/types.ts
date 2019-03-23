@@ -2,7 +2,7 @@ import { AssertionError } from '../../common/types';
 import { Object } from '../../evaluator/types';
 import { Token, TokenKind } from '../../lexer/types';
 
-interface BlockStatement {
+export interface BlockStatement {
   statements: Statement[];
   tokens: Token[];
 }
@@ -13,6 +13,7 @@ export interface Expression {
   consequence?: BlockStatement;
   condition?: Expression;
   function?: Expression;
+  identifier?: Token;
   kind?: ExpressionKind;
   left?: Expression;
   operator?: Token;
@@ -28,7 +29,9 @@ export enum ExpressionKind {
   Prefix,
   Infix,
   IfElse,
-  Identifier
+  Identifier,
+  Function,
+  Call
 }
 
 export type ExpressionValue = number | string | boolean | FunctionLiteral | Object | AssertionError;
