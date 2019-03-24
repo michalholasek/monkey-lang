@@ -16,7 +16,7 @@ export function createEnvironment(): Environment {
       return store[key];
     },
     set(key, object) {
-      return store[key] = object;
+      store[key] = object;
     }
   };
 }
@@ -30,7 +30,7 @@ export function createEnclosedEnvironment(outer: Environment): Environment {
       return value ? value : outer.get(key);
     },
     set(key, object) {
-      return env.set(key, object);
+      env.set(key, object);
     }
   };
 }
