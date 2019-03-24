@@ -14,6 +14,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     case ObjectKind.Return:
     case ObjectKind.Error:
     case ObjectKind.Function:
+    case ObjectKind.String:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };
@@ -41,6 +42,9 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       break;
     case ExpressionKind.Boolean:
       objectKind = ObjectKind.Boolean;
+      break;
+    case ExpressionKind.String:
+      objectKind = ObjectKind.String;
       break;
     case ExpressionKind.Function:
       return evaluateFunctionExpression(expression, env);

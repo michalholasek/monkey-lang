@@ -3,7 +3,7 @@ import { parse } from '../../parser';
 
 import { createEnvironment, evaluate } from '../index';
 
-import { Boolean, Call, IfElse, Illegal, Integer, Let, Prefix, Return } from './fixtures';
+import { Boolean, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
@@ -13,7 +13,8 @@ const Fixtures = Object.assign({}, {
   Integer,
   Let,
   Prefix,
-  Return
+  Return,
+  String
 });
 
 describe('Evaluator', () => {
@@ -67,6 +68,17 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Boolean[expression]);
+    });
+  });
+
+  [
+    '"foo bar"'
+  ].forEach(expression => {
+    it(`should evaluate given string expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.String[expression]);
     });
   });
 

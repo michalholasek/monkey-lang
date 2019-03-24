@@ -348,3 +348,10 @@ export const Return = {
     value: 10
   }
 };
+
+export const String = {
+  '"foo bar"': {
+    kind: ObjectKind.String,
+    value: 'foo bar'
+  }
+};

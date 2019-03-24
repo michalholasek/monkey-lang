@@ -7,7 +7,8 @@ export enum ObjectKind {
   Integer = 'INTEGER',
   Let = 'LET',
   Null = 'NULL',
-  Return = 'RETURN_VALUE'
+  Return = 'RETURN_VALUE',
+  String = 'STRING'
 }
 
 export interface Object {
