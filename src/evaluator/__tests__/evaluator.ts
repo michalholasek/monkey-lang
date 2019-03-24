@@ -72,7 +72,8 @@ describe('Evaluator', () => {
   });
 
   [
-    '"foo bar"'
+    '"foo bar"',
+    '"foo" + "bar"'
   ].forEach(expression => {
     it(`should evaluate given string expression correctly - ${expression}`, () => {
       let env = createEnvironment();

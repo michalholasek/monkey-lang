@@ -180,6 +180,8 @@ function evaluateInfixExpression(expression: Expression, env: Environment): Obje
 
   if (typeof left.value === 'number' && typeof right.value === 'number') {
     return evaluateIntegerInfixExpression(left.value, right.value , expression.operator);
+  } else if (typeof left.value === 'string' && typeof right.value === 'string') {
+    return evaluateStringInfixExpression(left.value, right.value , expression.operator);
   } else {
     switch (expression.operator.kind) {
       case TokenKind.Equal:
@@ -187,10 +189,10 @@ function evaluateInfixExpression(expression: Expression, env: Environment): Obje
       case TokenKind.NotEqual:
         return createObject(ObjectKind.Boolean, left.value !== right.value);
       default:
-      return createObject(
-        ObjectKind.Error,
-        createAssertionError(AssertionErrorKind.UnknownOperator, expression.operator, expression.left.tokens[0].kind).message
-      );
+        return createObject(
+          ObjectKind.Error,
+          createAssertionError(AssertionErrorKind.UnknownOperator, expression.operator, expression.left.tokens[0].kind).message
+        );
     }
   }
 }
@@ -243,6 +245,18 @@ function evaluatePrefixExpression(expression: Expression, env: Environment): Obj
       return evaluateMinusPrefixOperatorExpression(expression.right, env);
     default:
       return createObject(ObjectKind.Error, createAssertionError(AssertionErrorKind.UnknownOperator, expression.left.operator).message);
+  }
+}
+
+function evaluateStringInfixExpression(left: string, right: string, operator: Token): Object {
+  switch (operator.kind) {
+    case TokenKind.Plus:
+      return createObject(ObjectKind.String, [left, right].join(''));
+    default:
+      return createObject(
+        ObjectKind.Error,
+        createAssertionError(AssertionErrorKind.UnknownOperator, operator, TokenKind.String).message
+      );
   }
 }
 

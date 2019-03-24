@@ -353,5 +353,9 @@ export const String = {
   '"foo bar"': {
     kind: ObjectKind.String,
     value: 'foo bar'
+  },
+  '"foo" + "bar"': {
+    kind: ObjectKind.String,
+    value: 'foobar'
   }
 };
