@@ -9,6 +9,7 @@ import { Infix } from './fixtures/expressions/infix';
 import { Integer } from './fixtures/expressions/integer';
 import { OperatorPrecedence } from './fixtures/expressions/precedences';
 import { Prefix } from './fixtures/expressions/prefix';
+import { String } from './fixtures/expressions/string';
 
 import { Statements } from './fixtures/statements';
 
@@ -21,7 +22,8 @@ const Fixtures = Object.assign({}, {
     Infix,
     Integer,
     OperatorPrecedence,
-    Prefix
+    Prefix,
+    String
   },
   Statements
 });
@@ -181,6 +183,17 @@ describe('Parser', () => {
       const actual = parse(tokens);
 
       expect(actual).toMatchObject(Fixtures.Expressions.Call[expression]);
+    });
+  });
+
+  [
+    '"foo bar"'
+  ].forEach(expression => {
+    it(`should parse given string expression correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Fixtures.Expressions.String[expression]);
     });
   });
 

@@ -52,7 +52,8 @@ const ParsingFunctions: { [index: number]: ParsingFunction } = {
   18: parseValueExpression,    // TokenKind.True
   19: parseValueExpression,    // TokenKind.False
   20: parseIfExpression,       // TokenKind.If
-  23: parseGroupedExpression   // TokenKind.LeftParenthesis
+  23: parseGroupedExpression,  // TokenKind.LeftParenthesis
+  27: parseValueExpression     // TokenKind.String
 };
 
 function createExpression(tokens: Token[]): Expression {
@@ -78,6 +79,8 @@ function determineExpressionKind(token: Token): ExpressionKind {
     case TokenKind.True:
     case TokenKind.False:
       return ExpressionKind.Boolean;
+    case TokenKind.String:
+      return ExpressionKind.String;
     default:
       return ExpressionKind.Illegal;
   }
@@ -272,6 +275,7 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     case TokenKind.LeftParenthesis:
     case TokenKind.If:
     case TokenKind.Function:
+    case TokenKind.String:
       return ParsingFunctions[currentToken.kind](tokens, cursor);
     default:
       return expandPrefixExpression(tokens, cursor);

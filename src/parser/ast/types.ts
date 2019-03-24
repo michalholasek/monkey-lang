@@ -31,7 +31,8 @@ export enum ExpressionKind {
   IfElse,
   Identifier,
   Function,
-  Call
+  Call,
+  String
 }
 
 export type ExpressionValue = number | string | boolean | FunctionLiteral | Object | AssertionError;
