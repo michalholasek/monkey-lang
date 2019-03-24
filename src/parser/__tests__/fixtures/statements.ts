@@ -93,6 +93,28 @@ export const Statements = {
           { column: 8, kind: TokenKind.Return, line: 4, literal: 'return' },
           { column: 15, kind: TokenKind.Int, line: 4, literal: '993322' }
         ]
+      },
+      {
+        expression: {
+          tokens: [{ column: 15, kind: TokenKind.False, line: 5, literal: 'false' }],
+          value: false
+        },
+        kind: NodeKind.Return,
+        tokens: [
+          { column: 8, kind: TokenKind.Return, line: 5, literal: 'return' },
+          { column: 15, kind: TokenKind.False, line: 5, literal: 'false' }
+        ]
+      },
+      {
+        expression: {
+          tokens: [{ column: 15, kind: TokenKind.String, line: 6, literal: 'Hello!' }],
+          value: 'Hello!'
+        },
+        kind: NodeKind.Return,
+        tokens: [
+          { column: 8, kind: TokenKind.Return, line: 6, literal: 'return' },
+          { column: 15, kind: TokenKind.String, line: 6, literal: 'Hello!' }
+        ]
       }
     ]
   }

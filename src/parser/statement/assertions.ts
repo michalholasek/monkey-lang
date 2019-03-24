@@ -45,6 +45,9 @@ function assertReturnStatement(tokens: Token[], tokenRangeStart: number): Assert
 
   switch (nextToken.kind) {
     case TokenKind.Int:
+    case TokenKind.True:
+    case TokenKind.False:
+    case TokenKind.String:
     case TokenKind.Identifier:
     case TokenKind.Function:
     case TokenKind.LeftBrace:

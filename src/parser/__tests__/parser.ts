@@ -62,6 +62,8 @@ describe('Parser', () => {
       return 5;
       return 10;
       return 993322;
+      return false;
+      return "Hello!";
     `);
     const actual = parse(tokens);
 
