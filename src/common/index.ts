@@ -23,3 +23,8 @@ export function createAssertionError(errorKind: AssertionErrorKind, actualToken:
       };
   }
 }
+
+export function isValidValue(value: any): boolean {
+  if (!value && value !== false && value !== 0) return false;
+  return true;
+}

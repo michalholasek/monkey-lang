@@ -6,6 +6,8 @@ import { createEnvironment, evaluate } from './evaluator';
 import { tokenize } from './lexer';
 import { parse } from './parser';
 
+import { isValidValue } from './common';
+
 let env = createEnvironment();
 
 let cli = createInterface({
@@ -32,7 +34,7 @@ cli.on('line', line => {
       }
 
       let result = evaluate(program, env);
-      if (result && result.value) {
+      if (result && isValidValue(result.value)) {
         console.log(result.value);
       }
 
