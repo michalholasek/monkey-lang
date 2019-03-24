@@ -91,5 +91,9 @@ export const Tokens = {
     { column: 14, kind: TokenKind.Int, line: 3, literal: '9' },
     { column: 15, kind: TokenKind.Semicolon, line: 3, literal: ';' },
     { column: 5, kind: TokenKind.EOF, line: 4, literal: '' }
+  ],
+  String: [
+    { column: 2, kind: TokenKind.String, line: 1, literal: 'foo bar' },
+    { column: 10, kind: TokenKind.EOF, line: 1, literal: '' }
   ]
 };

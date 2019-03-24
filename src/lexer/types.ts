@@ -1,3 +1,16 @@
+export interface StringTokenizeOptions {
+  characters: string[];
+  column: number;
+  index: number;
+  line: number;
+}
+
+export interface StringTokenizeResult {
+  column: number;
+  index: number;
+  token: Token;
+}
+
 export enum TokenKind {
   Illegal,
   EOF,
@@ -34,7 +47,9 @@ export enum TokenKind {
   LeftParenthesis,
   RightParenthesis,
   LeftBrace,
-  RightBrace
+  RightBrace,
+
+  String
 }
 
 export interface Token {

@@ -1,4 +1,4 @@
-import { Keywords, Token, TokenKind } from './types';
+import { Keywords, StringTokenizeOptions, StringTokenizeResult, Token, TokenKind } from './types';
 
 function createToken(literal: string, column: number, line: number): Token {
   let token: Token = { column, kind: TokenKind.Illegal, line, literal };
@@ -56,7 +56,10 @@ function createToken(literal: string, column: number, line: number): Token {
       token.kind = TokenKind.EOF;
       break;
     default:
-      if (isValidLiteral(literal)) {
+      if (isString(literal)) {
+        token.kind = TokenKind.String;
+        token.literal = token.literal.replace(/"/g, '');
+      } else if (isValidLiteral(literal)) {
         token.kind = determineValidLiteralTokenKind(literal);
       } else if (isNumber(literal)) {
         token.kind = TokenKind.Int;
@@ -90,6 +93,14 @@ function isNumber(literal: string): boolean {
   return /[0-9]/g.test(literal);
 }
 
+function isQuote(literal: string): boolean {
+  return /"/g.test(literal);
+}
+
+function isString(literal: string): boolean {
+  return literal.indexOf('"') === 0;
+}
+
 function isValidLiteral(literal: string): boolean {
   return /[a-z_]/gi.test(literal);
 }
@@ -103,6 +114,34 @@ function isWhiteSpace(literal: string): boolean {
   return /\s/g.test(literal);
 }
 
+function tokenizeStringLiteral(opts: StringTokenizeOptions): StringTokenizeResult {
+  let { characters, column, line, index } = opts;
+  let currentCharacter = characters[index];
+  let currentColumn = column;
+  let buffer = [];
+
+  buffer.push(currentCharacter);
+
+  index++;
+  currentCharacter = characters[index];
+  currentColumn++;
+
+  while (!isQuote(currentCharacter) && index < characters.length) {
+    buffer.push(currentCharacter);
+    index++;
+    currentColumn++;
+    currentCharacter = characters[index];
+  }
+
+  buffer.push(currentCharacter);
+
+  return {
+    column: currentColumn,
+    index,
+    token: createToken(buffer.join(''), column, line)
+  };
+}
+
 export function tokenize(input: string): Token[] {
   const characters: string[] = input.split('');
   let index: number = 0;
@@ -114,7 +153,12 @@ export function tokenize(input: string): Token[] {
   while (index < characters.length) {
     let currentCharacter = characters[index];
 
-    if (isLetter(currentCharacter) || isNumber(currentCharacter)) {
+    if (isQuote(currentCharacter)) {
+      let stringTokenizeResult = tokenizeStringLiteral({ characters, column: currentColumn, line: currentLine, index });
+      currentColumn = stringTokenizeResult.column;
+      index = stringTokenizeResult.index;
+      tokens.push(stringTokenizeResult.token);
+    } else if (isLetter(currentCharacter) || isNumber(currentCharacter)) {
       buffer.push(currentCharacter);
     } else if (isStickyOperator(currentCharacter)) {
       let nextCharacter = characters[index + 1];

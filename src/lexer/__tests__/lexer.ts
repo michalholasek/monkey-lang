@@ -1,8 +1,6 @@
 import { tokenize } from '../index';
 import { Tokens } from './fixtures';
 
-import { Token } from '../types';
-
 describe('Lexer', () => {
   it('should tokenize given input correctly (1)', () => {
     const actual = tokenize('=+(){},;');
@@ -58,6 +56,14 @@ describe('Lexer', () => {
     const actual = tokenize('!5;!true;!!true;');
 
     Tokens.PrefixOperator.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
+  it('should tokenize given input correctly (7)', () => {
+    const actual = tokenize('"foo bar"');
+
+    Tokens.String.forEach((item, index) => {
       expect(actual[index]).toEqual(item);
     });
   });
