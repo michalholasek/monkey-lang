@@ -43,8 +43,7 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       objectKind = ObjectKind.Boolean;
       break;
     case ExpressionKind.Function:
-      objectKind = ObjectKind.Function;
-      break;
+      return evaluateFunctionExpression(expression, env);
     case ExpressionKind.Identifier:
       return evaluateIdentifier(expression, env);
     case ExpressionKind.Prefix:
@@ -79,6 +78,16 @@ export function evaluateReturnStatement(expression: Expression, env: Environment
   return createObject(ObjectKind.Return, evaluateExpression(expression, env));
 }
 
+function applyFunction(fn: Object, args: Object[] | undefined): Object {
+  let { body, parameters } = fn.value as Object;
+  let env = fn.env;
+
+  if (env && parameters && args) env = encloseEnvironment(parameters, args, env);
+  if (env && body) return evaluateStatements(body.statements, env);
+
+  return createObject(ObjectKind.Null);
+}
+
 function evaluateArguments(args: Expression[], env: Environment): Object[] {
   let evaluatedArguments = [];
 
@@ -101,11 +110,21 @@ function evaluateCallExpression(expression: Expression, env: Environment): Objec
   if (expression.identifier) fn = env.get(expression.identifier.literal);
   else fn = expression;
 
+  fn = fn as Object;
+  if (!fn.env) fn.env = env;
+
   if (expression.arguments) {
     args = evaluateArguments(expression.arguments, env);
   }
 
-  return applyFunction(fn.value as Object, args, env);
+  return applyFunction(fn as Object, args);
+}
+
+function evaluateFunctionExpression(expression: Expression, env: Environment): Object {
+  let fn = createObject(ObjectKind.Function, expression.value);
+  fn.env = env;
+
+  return fn;
 }
 
 function evaluateIdentifier(expression: Expression, env: Environment): Object {
@@ -133,15 +152,6 @@ function evaluateIfElseExpression(expression: Expression, env: Environment): Obj
   } else if (expression.alternative) {
     return evaluateStatements(expression.alternative.statements, env);
   }
-
-  return createObject(ObjectKind.Null);
-}
-
-function applyFunction(fn: Object, args: Object[] | undefined, outer: Environment): Object {
-  let env;
-
-  if (fn.parameters && args) env = extendEnvironment(fn.parameters, args, outer);
-  if (fn.body) return evaluateStatements(fn.body.statements, env || outer);
 
   return createObject(ObjectKind.Null);
 }
@@ -232,7 +242,7 @@ function evaluatePrefixExpression(expression: Expression, env: Environment): Obj
   }
 }
 
-function extendEnvironment(params: Identifier[], args: Object[], outer: Environment): Environment {
+function encloseEnvironment(params: Identifier[], args: Object[], outer: Environment): Environment {
   let env = createEnclosedEnvironment(outer);
 
   for (let i = 0; i < params.length; i++) {

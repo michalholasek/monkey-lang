@@ -81,7 +81,7 @@ export const Boolean = {
   }
 };
 
-export const Function = {
+export const Call = {
   'fn(x) { x + 2; };': {
     kind: ObjectKind.Function,
     value: {
@@ -157,7 +157,12 @@ export const Function = {
   'fn(x) { x; }(5);': {
     kind: ObjectKind.Integer,
     value: 5
+  },
+  'let newAdder = fn(x) { fn(y) { x + y }; }; let addTwo = newAdder(2); addTwo(2);': {
+    kind: ObjectKind.Integer,
+    value: 4
   }
+
 };
 
 export const IfElse = {
