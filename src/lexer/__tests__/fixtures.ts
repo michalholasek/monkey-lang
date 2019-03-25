@@ -95,5 +95,14 @@ export const Tokens = {
   String: [
     { column: 2, kind: TokenKind.String, line: 1, literal: 'foo bar' },
     { column: 10, kind: TokenKind.EOF, line: 1, literal: '' }
+  ],
+  Array: [
+    { column: 2, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+    { column: 3, kind: TokenKind.Int, line: 1, literal: '1' },
+    { column: 4, kind: TokenKind.Comma, line: 1, literal: ',' },
+    { column: 6, kind: TokenKind.Int, line: 1, literal: '2' },
+    { column: 7, kind: TokenKind.RightBracket, line: 1, literal: ']' },
+    { column: 8, kind: TokenKind.Semicolon, line: 1, literal: ';' },
+    { column: 8, kind: TokenKind.EOF, line: 1, literal: '' }
   ]
 };

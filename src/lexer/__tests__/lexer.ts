@@ -68,4 +68,12 @@ describe('Lexer', () => {
     });
   });
 
+  it('should tokenize given array expression correctly', () => {
+    const actual = tokenize('[1, 2];');
+
+    Tokens.Array.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
 });

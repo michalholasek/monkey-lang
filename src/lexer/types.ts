@@ -49,7 +49,10 @@ export enum TokenKind {
   LeftBrace,
   RightBrace,
 
-  String
+  String,
+
+  LeftBracket,
+  RightBracket
 }
 
 export interface Token {
