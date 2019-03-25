@@ -3,6 +3,7 @@ export interface AssertionError {
 }
 
 export enum AssertionErrorKind {
+  InvalidArgument = 'invalid argument',
   InvalidIdentifier = 'invalid identifier',
   InvalidToken = 'invalid token',
   UnexpectedToken = 'unexpected token',

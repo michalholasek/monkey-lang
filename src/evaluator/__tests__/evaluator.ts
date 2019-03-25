@@ -3,10 +3,11 @@ import { parse } from '../../parser';
 
 import { createEnvironment, evaluate } from '../index';
 
-import { Boolean, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
+import { Boolean, BuiltIn, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Boolean,
+  BuiltIn,
   Call,
   IfElse,
   Illegal,
@@ -177,6 +178,21 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Call[expression]);
+    });
+  });
+
+  [
+    'len("");',
+    'len("four");',
+    'len("hello world");',
+    'len(1);',
+    'len("one", "two");'
+  ].forEach(expression => {
+    it(`should evaluate given build-in expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.BuiltIn.Len[expression]);
     });
   });
 

@@ -24,6 +24,12 @@ export function createAssertionError(errorKind: AssertionErrorKind, actualToken:
   }
 }
 
+export function createCustomAssertionError(errorKind: AssertionErrorKind, message: string, column: number, line: number): AssertionError {
+  return {
+    message: `${errorKind}(${column}, ${line}): ${message}`
+  };
+}
+
 export function isValidValue(value: any): boolean {
   if (!value && value !== false && value !== 0) return false;
   return true;

@@ -81,6 +81,31 @@ export const Boolean = {
   }
 };
 
+export const BuiltIn = {
+  Len: {
+    'len("");': {
+      kind: ObjectKind.Integer,
+      value: 0
+    },
+    'len("four");': {
+      kind: ObjectKind.Integer,
+      value: 4
+    },
+    'len("hello world");': {
+      kind: ObjectKind.Integer,
+      value: 11
+    },
+    'len(1);': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(6, 1): expected String, got Int instead'
+    },
+    'len("one", "two");': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(18, 1): unexpected number of arguments'
+    }
+  }
+};
+
 export const Call = {
   'fn(x) { x + 2; };': {
     kind: ObjectKind.Function,

@@ -4,6 +4,7 @@ import { Expression, ExpressionKind, ExpressionValue, Identifier, Statement } fr
 import { Environment, Object, ObjectKind } from './types';
 
 import { createAssertionError } from '../common';
+import { BuiltIns } from './builtins';
 import { createEnclosedEnvironment, evaluateStatements } from './index';
 
 export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Object {
@@ -110,9 +111,10 @@ function evaluateBangOperatorExpression(right: Expression, env: Environment): Ob
 function evaluateCallExpression(expression: Expression, env: Environment): Object {
   let fn;
   let args;
-
-  if (expression.identifier) fn = env.get(expression.identifier.literal);
-  else fn = expression;
+  if (expression.identifier) {
+    fn = env.get(expression.identifier.literal);
+    fn = fn ? fn : evaluateIdentifier(expression, env);
+  } else fn = expression;
 
   fn = fn as Object;
   if (!fn.env) fn.env = env;
@@ -121,7 +123,15 @@ function evaluateCallExpression(expression: Expression, env: Environment): Objec
     args = evaluateArguments(expression.arguments, env);
   }
 
-  return applyFunction(fn as Object, args);
+  switch (fn.kind) {
+    case ObjectKind.BuiltIn:
+      if (fn.fn) return fn.fn(expression, args);
+      break;
+    default:
+      return applyFunction(fn as Object, args);
+  }
+
+  return createObject(ObjectKind.Null);
 }
 
 function evaluateFunctionExpression(expression: Expression, env: Environment): Object {
@@ -135,14 +145,15 @@ function evaluateIdentifier(expression: Expression, env: Environment): Object {
   if (!expression.value) return createObject(ObjectKind.Null);
 
   let identifierValue = env.get(expression.value as string);
-  if (!identifierValue || !identifierValue.value) {
-    return createObject(
-      ObjectKind.Error,
-      createAssertionError(AssertionErrorKind.InvalidIdentifier, expression.tokens[0]).message
-    );
-  }
+  if (identifierValue) return identifierValue;
 
-  return identifierValue;
+  let builtIn = BuiltIns[expression.value as string];
+  if (builtIn) return builtIn;
+
+  return createObject(
+    ObjectKind.Error,
+    createAssertionError(AssertionErrorKind.InvalidIdentifier, expression.tokens[0]).message
+  );
 }
 
 function evaluateIfElseExpression(expression: Expression, env: Environment): Object {
