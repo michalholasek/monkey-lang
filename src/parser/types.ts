@@ -31,6 +31,12 @@ export interface ExpressionParseResult {
   nextPrecedence: Precedence;
 }
 
+export interface ExpressionListParseResult {
+  cursor: number;
+  expressions: Expression[];
+  nextPrecedence: Precedence;
+}
+
 export type ParsingFunction = (tokens: Token[], cursor: number) => ExpressionParseResult;
 
 export enum Precedence {

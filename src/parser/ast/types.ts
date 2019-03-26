@@ -35,7 +35,12 @@ export enum ExpressionKind {
   String
 }
 
-export type ExpressionValue = number | string | boolean | FunctionLiteral | Object | AssertionError;
+export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | AssertionError;
+
+export interface ArrayLiteral {
+  elements: Expression[];
+  tokens: Token[];
+}
 
 export interface FunctionLiteral {
   body: BlockStatement;

@@ -3,6 +3,7 @@ import { Token, TokenKind } from '../../lexer/types';
 import { Expression, ExpressionKind, ExpressionValue } from '../ast/types';
 import {
   AssertionResult,
+  ExpressionListParseResult,
   ExpressionParseResult,
   FunctionParametersParseResult,
   ParsingFunction,
@@ -53,7 +54,8 @@ const ParsingFunctions: { [index: number]: ParsingFunction } = {
   19: parseValueExpression,    // TokenKind.False
   20: parseIfExpression,       // TokenKind.If
   23: parseGroupedExpression,  // TokenKind.LeftParenthesis
-  27: parseValueExpression     // TokenKind.String
+  27: parseValueExpression,    // TokenKind.String
+  28: parseArrayExpression     // TokenKind.LeftBracket
 };
 
 function createExpression(tokens: Token[]): Expression {
@@ -103,6 +105,63 @@ function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionPars
   };
 }
 
+function parseExpressionList(tokens: Token[], cursor: number, end: TokenKind): ExpressionListParseResult {
+  let currentToken = tokens[cursor];
+  let index = cursor;
+  let expressions = [];
+  let expressionParseResult;
+  let nextToken;
+
+  while (index < tokens.length && currentToken.kind !== end) {
+    if (currentToken.kind !== TokenKind.Comma) {
+      expressionParseResult = parseExpression(tokens, index, Precedence.Lowest);
+      expressions.push(expressionParseResult.expression);
+      index = expressionParseResult.cursor;
+    } else {
+      index++;
+    }
+    currentToken = tokens[index];
+  }
+
+  nextToken = tokens[index + 1];
+
+  return {
+    cursor: index + 1,
+    expressions,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
+  };
+}
+
+function parseArrayExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let currentToken = tokens[cursor + Skip.Bracket];
+  let nextToken = tokens[cursor + Skip.Bracket + 1];
+  let expression = createExpression([]);
+
+  if (currentToken && currentToken.kind === TokenKind.RightBracket) {
+    return {
+      cursor,
+      expression,
+      nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
+    };
+  }
+
+  let expressionListParseResult = parseExpressionList(tokens, cursor + Skip.Bracket, TokenKind.RightBracket);
+
+  expression.tokens = tokens.slice(cursor, expressionListParseResult.cursor);
+  expression.value = {
+    elements: expressionListParseResult.expressions,
+    tokens: expression.tokens
+  };
+
+  nextToken = tokens[expressionListParseResult.cursor];
+
+  return {
+    cursor: expressionListParseResult.cursor,
+    expression,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
+  };
+}
+
 function parseFunctionExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let parametersParseResult = parseFunctionParameters(tokens, cursor + Skip.Function + Skip.Parenthesis);
   let bodyParseResult = parseBlockStatement(tokens, parametersParseResult.cursor + Skip.Parenthesis + Skip.Brace);
@@ -128,24 +187,10 @@ function parseFunctionExpression(tokens: Token[], cursor: number): ExpressionPar
 }
 
 function parseCallExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
-  let args: Expression[] = [];
-  let index = cursor;
-  let currentToken = tokens[cursor];
-  let argumentParseResult;
+  let argumentListParseResult = parseExpressionList(tokens, cursor, TokenKind.RightParenthesis);
 
-  while (index < tokens.length && currentToken.kind !== TokenKind.RightParenthesis) {
-    if (currentToken.kind !== TokenKind.Comma) {
-      argumentParseResult = parseExpression(tokens, index, Precedence.Lowest);
-      args.push(argumentParseResult.expression);
-      index = argumentParseResult.cursor;
-    } else {
-      index++;
-    }
-    currentToken = tokens[index];
-  }
-
-  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Identifier, index + Include.Parenthesis)));
-  expression.arguments = args;
+  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Identifier, argumentListParseResult.cursor)));
+  expression.arguments = argumentListParseResult.expressions;
 
   let identifier = expression.tokens[0];
   if (identifier.kind === TokenKind.Identifier) expression.identifier = identifier;
@@ -153,11 +198,11 @@ function parseCallExpression(tokens: Token[], cursor: number, left: Expression):
   // Immediately executed function expression
   if (left.value) expression.value = left.value;
 
-  let nextToken = tokens[index + Skip.Parenthesis];
+  let nextToken = tokens[argumentListParseResult.cursor];
 
   return {
     expression,
-    cursor: index + Skip.Parenthesis,
+    cursor: argumentListParseResult.cursor,
     nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
   };
 }
@@ -276,6 +321,7 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     case TokenKind.If:
     case TokenKind.Function:
     case TokenKind.String:
+    case TokenKind.LeftBracket:
       return ParsingFunctions[currentToken.kind](tokens, cursor);
     default:
       return expandPrefixExpression(tokens, cursor);
