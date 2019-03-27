@@ -33,10 +33,11 @@ export enum ExpressionKind {
   Identifier,
   Function,
   Call,
-  String
+  String,
+  Array
 }
 
-export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | AssertionError;
+export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | Object[] | AssertionError;
 
 export interface ArrayLiteral {
   elements: Expression[];

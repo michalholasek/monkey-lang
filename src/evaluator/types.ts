@@ -1,15 +1,16 @@
 import { BlockStatement, Expression, ExpressionValue, Identifier } from '../parser/ast/types';
 
 export enum ObjectKind {
+  Array = 'ARRAY',
   Boolean = 'BOOLEAN',
+  BuiltIn = 'BUILT_IN',
   Error = 'ERROR',
   Function = 'FUNCTION',
   Integer = 'INTEGER',
   Let = 'LET',
   Null = 'NULL',
   Return = 'RETURN_VALUE',
-  String = 'STRING',
-  BuiltIn = 'BUILT_IN'
+  String = 'STRING'
 }
 
 export interface Object {

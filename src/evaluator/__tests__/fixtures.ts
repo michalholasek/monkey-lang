@@ -2,6 +2,26 @@ import { TokenKind } from '../../lexer/types';
 import { NodeKind } from '../../parser/ast/types';
 import { ObjectKind } from '../types';
 
+export const Array = {
+  '[1, 2 * 2, 3 + 3]': {
+    kind: ObjectKind.Array,
+    value: [
+      {
+        kind: ObjectKind.Integer,
+        value: 1
+      },
+      {
+        kind: ObjectKind.Integer,
+        value: 4
+      },
+      {
+        kind: ObjectKind.Integer,
+        value: 6
+      }
+    ]
+  }
+};
+
 export const Boolean = {
   'true;': {
     kind: ObjectKind.Boolean,

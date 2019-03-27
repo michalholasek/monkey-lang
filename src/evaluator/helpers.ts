@@ -1,6 +1,14 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
-import { Expression, ExpressionKind, ExpressionValue, Identifier, Statement } from '../parser/ast/types';
+import {
+  ArrayLiteral,
+  Expression,
+  ExpressionKind,
+  ExpressionValue,
+  FunctionLiteral,
+  Identifier,
+  Statement
+} from '../parser/ast/types';
 import { Environment, Object, ObjectKind } from './types';
 
 import { createAssertionError } from '../common';
@@ -16,6 +24,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     case ObjectKind.Error:
     case ObjectKind.Function:
     case ObjectKind.String:
+    case ObjectKind.Array:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };
@@ -28,7 +37,10 @@ export function determineExpressionKind(expression: Expression): ExpressionKind 
   else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
   else if (expression.condition) return ExpressionKind.IfElse;
   else if (expression.arguments) return ExpressionKind.Call;
-  else if (expression.value) return ExpressionKind.Function;
+  else if (expression.value) {
+    let value = expression.value as FunctionLiteral;
+    return value.body ? ExpressionKind.Function : ExpressionKind.Array;
+  }
 
   return ExpressionKind.Illegal;
 }
@@ -59,6 +71,8 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       return evaluateIfElseExpression(expression, env);
     case ExpressionKind.Call:
       return evaluateCallExpression(expression, env);
+    case ExpressionKind.Array:
+      return evaluateArrayExpresion(expression, env);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -93,14 +107,19 @@ function applyFunction(fn: Object, args: Object[] | undefined): Object {
   return createObject(ObjectKind.Null);
 }
 
-function evaluateArguments(args: Expression[], env: Environment): Object[] {
-  let evaluatedArguments = [];
+function evaluateExpressionList(expressions: Expression[], env: Environment): Object[] {
+  let evaluatedExpressions = [];
 
-  for (let arg of args) {
-    evaluatedArguments.push(evaluateExpression(arg, env));
+  for (let arg of expressions) {
+    evaluatedExpressions.push(evaluateExpression(arg, env));
   }
 
-  return evaluatedArguments;
+  return evaluatedExpressions;
+}
+
+function evaluateArrayExpresion(array: Expression, env: Environment): Object {
+  let arrayLiteral = array.value as ArrayLiteral;
+  return createObject(ObjectKind.Array, evaluateExpressionList(arrayLiteral.elements, env));
 }
 
 function evaluateBangOperatorExpression(right: Expression, env: Environment): Object {
@@ -120,7 +139,7 @@ function evaluateCallExpression(expression: Expression, env: Environment): Objec
   if (!fn.env) fn.env = env;
 
   if (expression.arguments) {
-    args = evaluateArguments(expression.arguments, env);
+    args = evaluateExpressionList(expression.arguments, env);
   }
 
   switch (fn.kind) {

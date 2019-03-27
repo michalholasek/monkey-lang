@@ -3,9 +3,10 @@ import { parse } from '../../parser';
 
 import { createEnvironment, evaluate } from '../index';
 
-import { Boolean, BuiltIn, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
+import { Array, Boolean, BuiltIn, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
 
 const Fixtures = Object.assign({}, {
+  Array,
   Boolean,
   BuiltIn,
   Call,
@@ -193,6 +194,17 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.BuiltIn.Len[expression]);
+    });
+  });
+
+  [
+    '[1, 2 * 2, 3 + 3]'
+  ].forEach(expression => {
+    it(`should evaluate given array expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.Array[expression]);
     });
   });
 
