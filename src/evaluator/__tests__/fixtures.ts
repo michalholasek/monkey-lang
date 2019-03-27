@@ -19,6 +19,44 @@ export const Array = {
         value: 6
       }
     ]
+  },
+  '[1, 2, 3][0]': {
+    kind: ObjectKind.Integer,
+    value: 1
+  },
+  '[1, 2, 3][1]': {
+    kind: ObjectKind.Integer,
+    value: 2
+  },
+  '[1, 2, 3][2]': {
+    kind: ObjectKind.Integer,
+    value: 3
+  },
+  'let i = 0; [1][i];': {
+    kind: ObjectKind.Integer,
+    value: 1
+  },
+  '[1, 2, 3][1 + 1];': {
+    kind: ObjectKind.Integer,
+    value: 3
+  },
+  'let myArray = [1, 2, 3]; myArray[2];': {
+    kind: ObjectKind.Integer,
+    value: 3
+  },
+  'let myArray = [1, 2, 3]; myArray[0] + myArray[1] + myArray[2];': {
+    kind: ObjectKind.Integer,
+    value: 6
+  },
+  'let myArray = [1, 2, 3]; let i = myArray[0]; myArray[i];': {
+    kind: ObjectKind.Integer,
+    value: 2
+  },
+  '[1, 2, 3][3]': {
+    kind: ObjectKind.Null
+  },
+  '[1, 2, 3][-1]': {
+    kind: ObjectKind.Null
   }
 };
 

@@ -37,6 +37,7 @@ export function determineExpressionKind(expression: Expression): ExpressionKind 
   else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
   else if (expression.condition) return ExpressionKind.IfElse;
   else if (expression.arguments) return ExpressionKind.Call;
+  else if (expression.index) return ExpressionKind.Index;
   else if (expression.value) {
     let value = expression.value as FunctionLiteral;
     return value.body ? ExpressionKind.Function : ExpressionKind.Array;
@@ -62,7 +63,7 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
     case ExpressionKind.Function:
       return evaluateFunctionExpression(expression, env);
     case ExpressionKind.Identifier:
-      return evaluateIdentifier(expression, env);
+      return evaluateIdentifierExpression(expression, env);
     case ExpressionKind.Prefix:
       return evaluatePrefixExpression(expression, env);
     case ExpressionKind.Infix:
@@ -73,6 +74,8 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       return evaluateCallExpression(expression, env);
     case ExpressionKind.Array:
       return evaluateArrayExpresion(expression, env);
+    case ExpressionKind.Index:
+      return evaluateIndexExpresion(expression, env);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -132,7 +135,7 @@ function evaluateCallExpression(expression: Expression, env: Environment): Objec
   let args;
   if (expression.identifier) {
     fn = env.get(expression.identifier.literal);
-    fn = fn ? fn : evaluateIdentifier(expression, env);
+    fn = fn ? fn : evaluateIdentifierExpression(expression, env);
   } else fn = expression;
 
   fn = fn as Object;
@@ -160,7 +163,7 @@ function evaluateFunctionExpression(expression: Expression, env: Environment): O
   return fn;
 }
 
-function evaluateIdentifier(expression: Expression, env: Environment): Object {
+function evaluateIdentifierExpression(expression: Expression, env: Environment): Object {
   if (!expression.value) return createObject(ObjectKind.Null);
 
   let identifierValue = env.get(expression.value as string);
@@ -188,6 +191,19 @@ function evaluateIfElseExpression(expression: Expression, env: Environment): Obj
   }
 
   return createObject(ObjectKind.Null);
+}
+
+function evaluateIndexExpresion(expression: Expression, env: Environment): Object {
+  let nullObject = createObject(ObjectKind.Null);
+
+  if (!expression.left || !expression.index) return nullObject;
+
+  let array = evaluateExpression(expression.left, env).value as Object[];
+  let index = evaluateExpression(expression.index, env).value as number;
+
+  if (!array.length || (!index && index !== 0) || index < 0 || index > array.length - 1) return nullObject;
+
+  return array[index];
 }
 
 function evaluateInfixExpression(expression: Expression, env: Environment): Object {

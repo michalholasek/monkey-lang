@@ -34,7 +34,8 @@ export enum ExpressionKind {
   Function,
   Call,
   String,
-  Array
+  Array,
+  Index
 }
 
 export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | Object[] | AssertionError;
