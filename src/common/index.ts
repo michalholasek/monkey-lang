@@ -1,3 +1,6 @@
+/* tslint:disable:no-console */
+
+import { Object, ObjectKind } from '../evaluator/types';
 import { Token, TokenKind } from '../lexer/types';
 import { AssertionError, AssertionErrorKind } from './types';
 
@@ -33,4 +36,14 @@ export function createCustomAssertionError(errorKind: AssertionErrorKind, messag
 export function isValidValue(value: any): boolean {
   if (!value && value !== false && value !== 0) return false;
   return true;
+}
+
+export function print(result: Object): void {
+  if (result.kind === ObjectKind.Array) {
+    let elements = result.value as Object[];
+    let values = elements.map(element => element.value).join(', ');
+    console.log(`[${values}]`);
+  } else {
+    console.log(result.value);
+  }
 }

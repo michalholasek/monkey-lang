@@ -6,7 +6,7 @@ import { createEnvironment, evaluate } from './evaluator';
 import { tokenize } from './lexer';
 import { parse } from './parser';
 
-import { isValidValue } from './common';
+import { isValidValue, print } from './common';
 
 let env = createEnvironment();
 
@@ -35,7 +35,7 @@ cli.on('line', line => {
 
       let result = evaluate(program, env);
       if (result && isValidValue(result.value)) {
-        console.log(result.value);
+        print(result);
       }
 
       cli.prompt();
