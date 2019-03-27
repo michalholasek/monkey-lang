@@ -203,7 +203,8 @@ describe('Parser', () => {
 
   [
     '[]',
-    '[1, 2 * 2, 3 + 3]'
+    '[1, 2 * 2, 3 + 3]',
+    'myArray[1 + 1]'
   ].forEach(expression => {
     it(`should parse given array expression correctly - ${expression}`, () => {
       const tokens = tokenize(expression);

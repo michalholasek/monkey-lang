@@ -14,6 +14,7 @@ export interface Expression {
   condition?: Expression;
   function?: Expression;
   identifier?: Token;
+  index?: Expression;
   kind?: ExpressionKind;
   left?: Expression;
   operator?: Token;

@@ -46,5 +46,6 @@ export enum Precedence {
   Sum,
   Product,
   Prefix,
-  Call
+  Call,
+  Index
 }

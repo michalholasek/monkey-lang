@@ -43,7 +43,8 @@ export const OperatorPrecedences: { [index: number]: Precedence } = {
    6: Precedence.Sum,         // TokenKind.Minus
    8: Precedence.Product,     // TokenKind.Asterisk
    9: Precedence.Product,     // TokenKind.Slash
-  23: Precedence.Call         // TokenKind.LeftParenthesis
+  23: Precedence.Call,        // TokenKind.LeftParenthesis
+  28: Precedence.Index        // TokenKind.LeftBracket
 };
 
 const ParsingFunctions: { [index: number]: ParsingFunction } = {
@@ -285,6 +286,21 @@ function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResu
   };
 }
 
+function parseIndexExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
+  let indexExpressionParseResult = parseExpression(tokens, cursor, Precedence.Lowest);
+  let lastExpressionTokenIndex = cursor - Include.Bracket + indexExpressionParseResult.expression.tokens.length + Include.Bracket + 1;
+  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Bracket, lastExpressionTokenIndex)));
+
+  expression.left = left;
+  expression.index = indexExpressionParseResult.expression;
+
+  return {
+    expression,
+    cursor: indexExpressionParseResult.cursor,
+    nextPrecedence: indexExpressionParseResult.nextPrecedence
+  };
+}
+
 function parseInfixExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let operator = tokens[cursor];
   let currentPrecedence = determineOperatorPrecedence(operator);
@@ -293,6 +309,9 @@ function parseInfixExpression(tokens: Token[], cursor: number, left: Expression)
 
   if (operator.kind === TokenKind.LeftParenthesis) { // Call expression
     rightExpressionParseResult = parseCallExpression(tokens, cursor + Skip.Parenthesis, left);
+    expression = rightExpressionParseResult.expression;
+  } else if (operator.kind === TokenKind.LeftBracket) { // Index expression
+    rightExpressionParseResult = parseIndexExpression(tokens, cursor + Skip.Bracket, left);
     expression = rightExpressionParseResult.expression;
   } else {
     rightExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, currentPrecedence);

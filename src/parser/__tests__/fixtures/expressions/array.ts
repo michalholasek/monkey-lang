@@ -90,5 +90,50 @@ export const Array = {
         ]
       }
     ]
+  },
+  'myArray[1 + 1]': {
+    statements: [
+      {
+        expression: {
+          left: {
+            tokens: [{ column: 2, kind: TokenKind.Identifier, line: 1, literal: 'myArray' }],
+            value: 'myArray'
+          },
+          index: {
+            left: {
+              tokens: [{ column: 10, kind: TokenKind.Int, line: 1, literal: '1' }],
+              value: 1
+            },
+            operator: { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+            right: {
+              tokens: [{ column: 14, kind: TokenKind.Int, line: 1, literal: '1' }],
+              value: 1
+            },
+            tokens: [
+              { column: 10, kind: TokenKind.Int, line: 1, literal: '1' },
+              { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+              { column: 14, kind: TokenKind.Int, line: 1, literal: '1' }
+            ]
+          },
+          tokens: [
+            { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'myArray' },
+            { column: 9, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+            { column: 10, kind: TokenKind.Int, line: 1, literal: '1' },
+            { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+            { column: 14, kind: TokenKind.Int, line: 1, literal: '1' },
+            { column: 15, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+          ]
+        },
+        kind: NodeKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'myArray' },
+          { column: 9, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+          { column: 10, kind: TokenKind.Int, line: 1, literal: '1' },
+          { column: 12, kind: TokenKind.Plus, line: 1, literal: '+' },
+          { column: 14, kind: TokenKind.Int, line: 1, literal: '1' },
+          { column: 15, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+        ]
+      }
+    ]
   }
 };
