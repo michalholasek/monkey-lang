@@ -294,10 +294,12 @@ function parseIndexExpression(tokens: Token[], cursor: number, left: Expression)
   expression.left = left;
   expression.index = indexExpressionParseResult.expression;
 
+  let nextToken = tokens[indexExpressionParseResult.cursor + Skip.Bracket];
+
   return {
     expression,
-    cursor: indexExpressionParseResult.cursor,
-    nextPrecedence: indexExpressionParseResult.nextPrecedence
+    cursor: indexExpressionParseResult.cursor + Skip.Bracket,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
   };
 }
 
