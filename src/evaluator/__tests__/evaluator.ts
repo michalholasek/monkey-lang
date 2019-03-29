@@ -183,21 +183,39 @@ describe('Evaluator', () => {
   });
 
   [
-    'len("");',
-    'len("four");',
-    'len("hello world");',
-    'len(1);',
-    'len("one", "two");'
-  ].forEach(expression => {
+    { name: 'Len', expression: 'len("");' },
+    { name: 'Len', expression: 'len("four");' },
+    { name: 'Len', expression: 'len("hello world");' },
+    { name: 'Len', expression: 'len(1);' },
+    { name: 'Len', expression: 'len("one", "two");' },
+    { name: 'Len', expression: 'len([1, 2]);' },
+    { name: 'First', expression: 'first();' },
+    { name: 'First', expression: 'first("");' },
+    { name: 'First', expression: 'first([]);' },
+    { name: 'First', expression: 'first([1, 2, 3]);' },
+    { name: 'Last', expression: 'last();' },
+    { name: 'Last', expression: 'last("");' },
+    { name: 'Last', expression: 'last([]);' },
+    { name: 'Last', expression: 'last([1, 2, 3]);' },
+    { name: 'Rest', expression: 'rest();' },
+    { name: 'Rest', expression: 'rest("");' },
+    { name: 'Rest', expression: 'rest([]);' },
+    { name: 'Rest', expression: 'rest([1, 2, 3]);' },
+    { name: 'Push', expression: 'push();' },
+    { name: 'Push', expression: 'push("", 1);' },
+    { name: 'Push', expression: 'push([]);' },
+    { name: 'Push', expression: 'push([1, 2], 3);' }
+  ].forEach(({ name, expression })=> {
     it(`should evaluate given build-in expression correctly - ${expression}`, () => {
       let env = createEnvironment();
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
-      expect(actual).toMatchObject(Fixtures.BuiltIn.Len[expression]);
+      expect(actual).toMatchObject(Fixtures.BuiltIn[name][expression]);
     });
   });
 
   [
+    '[]',
     '[1, 2 * 2, 3 + 3]',
     '[1, 2, 3][0]',
     '[1, 2, 3][1]',

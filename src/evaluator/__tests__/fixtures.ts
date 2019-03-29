@@ -3,6 +3,10 @@ import { NodeKind } from '../../parser/ast/types';
 import { ObjectKind } from '../types';
 
 export const Array = {
+  '[]': {
+    kind: ObjectKind.Array,
+    value: []
+  },
   '[1, 2 * 2, 3 + 3]': {
     kind: ObjectKind.Array,
     value: [
@@ -140,6 +144,40 @@ export const Boolean = {
 };
 
 export const BuiltIn = {
+  First: {
+    'first();': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(8, 1): unexpected number of arguments'
+    },
+    'first("");': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(8, 1): expected Array, got String instead'
+    },
+    'first([]);': {
+      kind: ObjectKind.Null
+    },
+    'first([1, 2, 3]);': {
+      kind: ObjectKind.Integer,
+      value: 1
+    }
+  },
+  Last: {
+    'last();': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): unexpected number of arguments'
+    },
+    'last("");': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): expected Array, got String instead'
+    },
+    'last([]);': {
+      kind: ObjectKind.Null
+    },
+    'last([1, 2, 3]);': {
+      kind: ObjectKind.Integer,
+      value: 3
+    }
+  },
   Len: {
     'len("");': {
       kind: ObjectKind.Integer,
@@ -160,6 +198,67 @@ export const BuiltIn = {
     'len("one", "two");': {
       kind: ObjectKind.Error,
       value: 'invalid argument(18, 1): unexpected number of arguments'
+    },
+    'len([1, 2]);': {
+      kind: ObjectKind.Integer,
+      value: 2
+    }
+  },
+  Push: {
+    'push();': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): unexpected number of arguments'
+    },
+    'push("", 1);': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): expected Array, got String instead'
+    },
+    'push([]);': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(9, 1): unexpected number of arguments'
+    },
+    'push([1, 2], 3);': {
+      kind: ObjectKind.Array,
+      value: [
+        {
+          kind: ObjectKind.Integer,
+          value: 1
+        },
+        {
+          kind: ObjectKind.Integer,
+          value: 2
+        },
+        {
+          kind: ObjectKind.Integer,
+          value: 3
+        }
+      ]
+    }
+  },
+  Rest: {
+    'rest();': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): unexpected number of arguments'
+    },
+    'rest("");': {
+      kind: ObjectKind.Error,
+      value: 'invalid argument(7, 1): expected Array, got String instead'
+    },
+    'rest([]);': {
+      kind: ObjectKind.Null
+    },
+    'rest([1, 2, 3]);': {
+      kind: ObjectKind.Array,
+      value: [
+        {
+          kind: ObjectKind.Integer,
+          value: 2
+        },
+        {
+          kind: ObjectKind.Integer,
+          value: 3
+        }
+      ]
     }
   }
 };
