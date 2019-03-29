@@ -180,7 +180,8 @@ describe('Parser', () => {
 
   [
     'add(1, 2 * 3, 4 + 5);',
-    'fn(x) { x; }(5);'
+    'fn(x) { x; }(5);',
+    'fortyTwo([]);'
   ].forEach(expression => {
     it(`should parse given function call expression correctly - ${expression}`, () => {
       const tokens = tokenize(expression);

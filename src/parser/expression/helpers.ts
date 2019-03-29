@@ -140,7 +140,7 @@ function parseArrayExpression(tokens: Token[], cursor: number): ExpressionParseR
 
   if (currentToken && currentToken.kind === TokenKind.RightBracket) {
     return {
-      cursor,
+      cursor: cursor + Skip.Bracket + Skip.Bracket,
       expression,
       nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
     };

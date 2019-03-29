@@ -135,5 +135,34 @@ export const Call = {
         ]
       }
     ]
+  },
+  'fortyTwo([]);': {
+    statements: [
+      {
+        expression: {
+          arguments: [
+            {
+              tokens: []
+            }
+          ],
+          identifier: { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'fortyTwo' },
+          tokens: [
+            { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'fortyTwo' },
+            { column: 10, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+            { column: 11, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+            { column: 12, kind: TokenKind.RightBracket, line: 1, literal: ']' },
+            { column: 13, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+          ]
+        },
+        kind: NodeKind.Expression,
+        tokens: [
+          { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'fortyTwo' },
+          { column: 10, kind: TokenKind.LeftParenthesis, line: 1, literal: '(' },
+          { column: 11, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+          { column: 12, kind: TokenKind.RightBracket, line: 1, literal: ']' },
+          { column: 13, kind: TokenKind.RightParenthesis, line: 1, literal: ')' }
+        ]
+      }
+    ]
   }
 };
