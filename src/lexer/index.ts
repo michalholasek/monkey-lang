@@ -58,6 +58,9 @@ function createToken(literal: string, column: number, line: number): Token {
     case ']':
       token.kind = TokenKind.RightBracket;
       break;
+    case ':':
+      token.kind = TokenKind.Colon;
+      break;
     case '':
       token.kind = TokenKind.EOF;
       break;

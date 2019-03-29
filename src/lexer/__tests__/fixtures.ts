@@ -104,5 +104,12 @@ export const Tokens = {
     { column: 7, kind: TokenKind.RightBracket, line: 1, literal: ']' },
     { column: 8, kind: TokenKind.Semicolon, line: 1, literal: ';' },
     { column: 8, kind: TokenKind.EOF, line: 1, literal: '' }
+  ],
+  Hash: [
+    { column: 2, kind: TokenKind.LeftBrace, line: 1, literal: '{' },
+    { column: 4, kind: TokenKind.String, line: 1, literal: 'foo' },
+    { column: 9, kind: TokenKind.Colon, line: 1, literal: ':' },
+    { column: 11, kind: TokenKind.String, line: 1, literal: 'bar' },
+    { column: 17, kind: TokenKind.RightBrace, line: 1, literal: '}' }
   ]
 };

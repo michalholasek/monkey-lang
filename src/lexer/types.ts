@@ -52,7 +52,9 @@ export enum TokenKind {
   String,
 
   LeftBracket,
-  RightBracket
+  RightBracket,
+
+  Colon
 }
 
 export interface Token {

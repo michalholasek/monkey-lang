@@ -76,4 +76,12 @@ describe('Lexer', () => {
     });
   });
 
+  it('should tokenize given hash expression correctly', () => {
+    const actual = tokenize('{ "foo": "bar" }');
+
+    Tokens.Hash.forEach((item, index) => {
+      expect(actual[index]).toEqual(item);
+    });
+  });
+
 });
