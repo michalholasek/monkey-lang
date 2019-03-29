@@ -18,6 +18,7 @@ export interface Expression {
   kind?: ExpressionKind;
   left?: Expression;
   operator?: Token;
+  pairs?: HashLiteralPair[];
   right?: Expression;
   tokens: Token[];
   value?: ExpressionValue;
@@ -35,7 +36,8 @@ export enum ExpressionKind {
   Call,
   String,
   Array,
-  Index
+  Index,
+  Hash
 }
 
 export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | Object[] | AssertionError;
@@ -77,4 +79,9 @@ export enum NodeKind {
   Return = 22,
   Expression = 100,
   Program = 101
+}
+
+interface HashLiteralPair {
+  key: Expression;
+  value: Expression;
 }

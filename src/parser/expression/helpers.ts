@@ -55,6 +55,7 @@ const ParsingFunctions: { [index: number]: ParsingFunction } = {
   19: parseValueExpression,    // TokenKind.False
   20: parseIfExpression,       // TokenKind.If
   23: parseGroupedExpression,  // TokenKind.LeftParenthesis
+  25: parseHashExpression,     // TokenKind.LeftBrace
   27: parseValueExpression,    // TokenKind.String
   28: parseArrayExpression     // TokenKind.LeftBracket
 };
@@ -258,6 +259,61 @@ function parseGroupedExpression(tokens: Token[], cursor: number): ExpressionPars
   return expressionParseResult;
 }
 
+function parseHashExpression(tokens: Token[], cursor: number): ExpressionParseResult {
+  let currentToken = tokens[cursor + Skip.Brace];
+  let nextToken = tokens[cursor + Skip.Brace + 1];
+  let expression = createExpression([]);
+  let pairs = [];
+  let index = cursor + 1;
+  let skip = false;
+
+  if (currentToken && currentToken.kind === TokenKind.RightBrace) {
+    expression.pairs = [];
+    expression.tokens = tokens.slice(cursor, cursor + Include.Bracket + 1);
+
+    return {
+      cursor: cursor + Skip.Bracket + Skip.Bracket,
+      expression,
+      nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
+    };
+  }
+
+  while (index < tokens.length && currentToken.kind !== TokenKind.RightBrace) {
+    if (skip) {
+      index++;
+      continue;
+    }
+
+    let keyExpressionParseResult = parseExpression(tokens, index, Precedence.Lowest);
+    index = keyExpressionParseResult.cursor;
+    nextToken = tokens[index];
+
+    if (nextToken && nextToken.kind !== TokenKind.Colon) {
+      skip = true;
+      index++;
+      continue;
+    }
+
+    index++;
+    let valueExpressionParseResult = parseExpression(tokens, index, Precedence.Lowest);
+    index = valueExpressionParseResult.cursor;
+
+    pairs.push({ key: keyExpressionParseResult.expression, value: valueExpressionParseResult.expression });
+
+    index = index + Skip.Comma;
+    currentToken = tokens[index];
+  }
+
+  expression.pairs = pairs;
+  expression.tokens = tokens.slice(cursor, index + Include.Brace);
+
+  return {
+    cursor: index,
+    expression,
+    nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
+  };
+}
+
 function parseIfExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let conditionParseResult = parseExpression(tokens, cursor + Skip.If, Precedence.Lowest);
   let consequenceParseResult = parseBlockStatement(tokens, conditionParseResult.cursor + Skip.Brace);
@@ -349,6 +405,7 @@ function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParse
     case TokenKind.Function:
     case TokenKind.String:
     case TokenKind.LeftBracket:
+    case TokenKind.LeftBrace:
       return ParsingFunctions[currentToken.kind](tokens, cursor);
     default:
       return expandPrefixExpression(tokens, cursor);

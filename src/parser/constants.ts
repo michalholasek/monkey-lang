@@ -8,6 +8,7 @@ export const Include = {
 export const Skip = {
   Brace: 1,
   Bracket: 1,
+  Comma: 1,
   Else: 1,
   Function: 1,
   If: 1,

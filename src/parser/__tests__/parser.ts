@@ -4,6 +4,7 @@ import { parse } from '../index';
 import { Array } from './fixtures/expressions/array';
 import { Call } from './fixtures/expressions/call';
 import { Function } from './fixtures/expressions/function';
+import { Hash } from './fixtures/expressions/hash';
 import { Identifier } from './fixtures/expressions/identifier';
 import { If } from './fixtures/expressions/if';
 import { Infix } from './fixtures/expressions/infix';
@@ -19,6 +20,7 @@ const Fixtures = Object.assign({}, {
     Array,
     Call,
     Function,
+    Hash,
     Identifier,
     If,
     Infix,
@@ -212,6 +214,18 @@ describe('Parser', () => {
       const actual = parse(tokens);
 
       expect(actual).toMatchObject(Fixtures.Expressions.Array[expression]);
+    });
+  });
+
+  [
+    '{}',
+    '{ "one": 1, "two": 2, "three": 3 }'
+  ].forEach(expression => {
+    it(`should parse given hash expression correctly - ${expression}`, () => {
+      const tokens = tokenize(expression);
+      const actual = parse(tokens);
+
+      expect(actual).toMatchObject(Fixtures.Expressions.Hash[expression]);
     });
   });
 
