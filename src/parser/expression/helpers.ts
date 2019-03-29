@@ -371,25 +371,24 @@ function parseInfixExpression(tokens: Token[], cursor: number, left: Expression)
   let rightExpressionParseResult;
   let expression;
 
-  if (operator.kind === TokenKind.LeftParenthesis) { // Call expression
-    rightExpressionParseResult = parseCallExpression(tokens, cursor + Skip.Parenthesis, left);
-    expression = rightExpressionParseResult.expression;
-  } else if (operator.kind === TokenKind.LeftBracket) { // Index expression
-    rightExpressionParseResult = parseIndexExpression(tokens, cursor + Skip.Bracket, left);
-    expression = rightExpressionParseResult.expression;
-  } else {
-    rightExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, currentPrecedence);
-    expression = createExpression(left.tokens.concat([operator]).concat(rightExpressionParseResult.expression.tokens));
-    expression.left = left;
-    expression.operator = operator;
-    expression.right = rightExpressionParseResult.expression;
-  }
+  switch (operator.kind) {
+    case TokenKind.LeftParenthesis:
+      return parseCallExpression(tokens, cursor + Skip.Parenthesis, left);
+    case TokenKind.LeftBracket:
+      return parseIndexExpression(tokens, cursor + Skip.Bracket, left);
+    default:
+      rightExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, currentPrecedence);
+      expression = createExpression(left.tokens.concat([operator]).concat(rightExpressionParseResult.expression.tokens));
+      expression.left = left;
+      expression.operator = operator;
+      expression.right = rightExpressionParseResult.expression;
 
-  return {
-    expression,
-    cursor: rightExpressionParseResult.cursor,
-    nextPrecedence: rightExpressionParseResult.nextPrecedence
-  };
+      return {
+        expression,
+        cursor: rightExpressionParseResult.cursor,
+        nextPrecedence: rightExpressionParseResult.nextPrecedence
+      };
+  }
 }
 
 function parsePrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
