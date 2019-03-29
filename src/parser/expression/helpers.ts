@@ -139,6 +139,12 @@ function parseArrayExpression(tokens: Token[], cursor: number): ExpressionParseR
   let expression = createExpression([]);
 
   if (currentToken && currentToken.kind === TokenKind.RightBracket) {
+    expression.tokens = tokens.slice(cursor, cursor + Include.Bracket + Include.Bracket);
+    expression.value = {
+      elements: [],
+      tokens: expression.tokens
+    };
+
     return {
       cursor: cursor + Skip.Bracket + Skip.Bracket,
       expression,

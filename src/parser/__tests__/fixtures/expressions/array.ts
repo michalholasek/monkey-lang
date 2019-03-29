@@ -6,7 +6,17 @@ export const Array = {
     statements: [
       {
         expression: {
-          tokens: []
+          tokens: [
+            { column: 2, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+            { column: 3, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+          ],
+          value: {
+            elements: [],
+            tokens: [
+              { column: 2, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+              { column: 3, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+            ]
+          }
         },
         kind: NodeKind.Expression,
         tokens: [

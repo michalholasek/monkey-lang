@@ -142,7 +142,17 @@ export const Call = {
         expression: {
           arguments: [
             {
-              tokens: []
+              tokens: [
+                { column: 11, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+                { column: 12, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+              ],
+              value: {
+                elements: [],
+                tokens: [
+                  { column: 11, kind: TokenKind.LeftBracket, line: 1, literal: '[' },
+                  { column: 12, kind: TokenKind.RightBracket, line: 1, literal: ']' }
+                ]
+              }
             }
           ],
           identifier: { column: 2, kind: TokenKind.Identifier, line: 1, literal: 'fortyTwo' },
