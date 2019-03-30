@@ -6,7 +6,6 @@ import {
   ExpressionKind,
   ExpressionValue,
   FunctionLiteral,
-  Identifier,
   Statement
 } from '../parser/ast/types';
 import { Environment, Object, ObjectKind } from './types';
@@ -306,7 +305,7 @@ function evaluateStringInfixExpression(left: string, right: string, operator: To
   }
 }
 
-function encloseEnvironment(params: Identifier[], args: Object[], outer: Environment): Environment {
+function encloseEnvironment(params: Token[], args: Object[], outer: Environment): Environment {
   let env = createEnclosedEnvironment(outer);
 
   for (let i = 0; i < params.length; i++) {

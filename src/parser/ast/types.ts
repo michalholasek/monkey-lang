@@ -1,6 +1,6 @@
 import { AssertionError } from '../../common/types';
 import { Object } from '../../evaluator/types';
-import { Token, TokenKind } from '../../lexer/types';
+import { Token } from '../../lexer/types';
 
 export interface BlockStatement {
   statements: Statement[];
@@ -53,11 +53,6 @@ export interface FunctionLiteral {
   tokens: Token[];
 }
 
-export interface Identifier {
-  kind: TokenKind;
-  literal: string;
-}
-
 export type Node = Program | Statement;
 
 export interface Program {
@@ -68,7 +63,7 @@ export interface Program {
 
 export interface Statement {
   kind?: NodeKind;
-  name?: Identifier;
+  name?: Token;
   tokens?: Token[];
   expression?: Expression;
 }

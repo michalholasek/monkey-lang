@@ -1,4 +1,5 @@
-import { BlockStatement, Expression, ExpressionValue, Identifier } from '../parser/ast/types';
+import { Token } from '../lexer/types';
+import { BlockStatement, Expression, ExpressionValue } from '../parser/ast/types';
 
 export enum ObjectKind {
   Array = 'ARRAY',
@@ -18,7 +19,7 @@ export interface Object {
   env?: Environment;
   fn?: (expression: Expression, args: Object[] | undefined) => Object;
   kind: ObjectKind;
-  parameters?: Identifier[];
+  parameters?: Token[];
   value?: ExpressionValue;
 }
 
