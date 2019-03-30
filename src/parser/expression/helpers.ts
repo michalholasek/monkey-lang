@@ -16,11 +16,11 @@ export function createAssertionResult(errors: AssertionError[] = []): AssertionR
   };
 }
 
-export function createExpression(tokens: Token[]): Expression {
-  return { tokens };
+export function createExpression(kind: ExpressionKind, tokens: Token[]): Expression {
+  return { kind, tokens };
 }
 
-export function determineExpressionKind(token: Token): ExpressionKind {
+export function determineValueExpressionKind(token: Token): ExpressionKind {
   switch (token.kind) {
     case TokenKind.Int:
       return ExpressionKind.Integer;

@@ -1,5 +1,5 @@
 import { Token } from '../../lexer/types';
-import { Expression } from '../ast/types';
+import { Expression, ExpressionKind } from '../ast/types';
 import { ExpressionParseResult, Precedence } from '../types';
 
 import { Include, Skip } from '../constants';
@@ -9,7 +9,7 @@ import { parseExpression } from './index';
 export function parseIndexExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let indexExpressionParseResult = parseExpression(tokens, cursor, Precedence.Lowest);
   let lastExpressionTokenIndex = cursor - Include.Bracket + indexExpressionParseResult.expression.tokens.length + Include.Bracket + 1;
-  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Bracket, lastExpressionTokenIndex)));
+  let expression = createExpression(ExpressionKind.Index, left.tokens.concat(tokens.slice(cursor - Include.Bracket, lastExpressionTokenIndex)));
 
   expression.left = left;
   expression.index = indexExpressionParseResult.expression;

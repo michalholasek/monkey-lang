@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { Expression } from '../ast/types';
+import { Expression, ExpressionKind } from '../ast/types';
 import { ExpressionParseResult } from '../types';
 
 import { Skip } from '../constants';
@@ -21,7 +21,7 @@ export function parseInfixExpression(tokens: Token[], cursor: number, left: Expr
       return parseIndexExpression(tokens, cursor + Skip.Bracket, left);
     default:
       rightExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, currentPrecedence);
-      expression = createExpression(left.tokens.concat([operator]).concat(rightExpressionParseResult.expression.tokens));
+      expression = createExpression(ExpressionKind.Infix, left.tokens.concat([operator]).concat(rightExpressionParseResult.expression.tokens));
       expression.left = left;
       expression.operator = operator;
       expression.right = rightExpressionParseResult.expression;

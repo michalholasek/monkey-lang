@@ -2,15 +2,14 @@ import { Token, TokenKind } from '../../lexer/types';
 import { ExpressionValue } from '../ast/types';
 import { ExpressionParseResult } from '../types';
 
-import { createExpression, determineExpressionKind, determineOperatorPrecedence } from './helpers';
+import { createExpression, determineOperatorPrecedence, determineValueExpressionKind } from './helpers';
 
 export function parseValueExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let currentToken = tokens[cursor];
   let nextToken = tokens[cursor + 1];
   let nextPrecedence = determineOperatorPrecedence(nextToken);
-  let expression = createExpression([currentToken]);
+  let expression = createExpression(determineValueExpressionKind(currentToken), [currentToken]);
   expression.value = parseExpressionValue(currentToken);
-  expression.kind = determineExpressionKind(currentToken);
 
   return {
     expression,

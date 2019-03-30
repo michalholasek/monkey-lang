@@ -1,4 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
+import { ExpressionKind } from '../ast/types';
 import { ExpressionParseResult, FunctionParametersParseResult, Precedence } from '../types';
 
 import { Include, Skip } from '../constants';
@@ -9,7 +10,7 @@ export function parseFunctionExpression(tokens: Token[], cursor: number): Expres
   let parametersParseResult = parseFunctionParameters(tokens, cursor + Skip.Function + Skip.Parenthesis);
   let bodyParseResult = parseBlockStatement(tokens, parametersParseResult.cursor + Skip.Parenthesis + Skip.Brace);
   let functionExpressionTokens = tokens.slice(cursor, bodyParseResult.cursor + Include.Brace);
-  let expression = createExpression(functionExpressionTokens);
+  let expression = createExpression(ExpressionKind.Function, functionExpressionTokens);
 
   expression.value = {
     body: {

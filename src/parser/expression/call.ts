@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { Expression } from '../ast/types';
+import { Expression, ExpressionKind } from '../ast/types';
 import { ExpressionParseResult, Precedence } from '../types';
 
 import { Include } from '../constants';
@@ -8,8 +8,7 @@ import { parseExpressionList } from './list';
 
 export function parseCallExpression(tokens: Token[], cursor: number, left: Expression): ExpressionParseResult {
   let argumentListParseResult = parseExpressionList(tokens, cursor, TokenKind.RightParenthesis);
-
-  let expression = createExpression(left.tokens.concat(tokens.slice(cursor - Include.Identifier, argumentListParseResult.cursor)));
+  let expression = createExpression(ExpressionKind.Call, left.tokens.concat(tokens.slice(cursor - Include.Identifier, argumentListParseResult.cursor)));
   expression.arguments = argumentListParseResult.expressions;
 
   let identifier = expression.tokens[0];

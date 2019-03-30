@@ -1,13 +1,6 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
-import {
-  ArrayLiteral,
-  Expression,
-  ExpressionKind,
-  ExpressionValue,
-  FunctionLiteral,
-  Statement
-} from '../parser/ast/types';
+import { ArrayLiteral, Expression, ExpressionKind, ExpressionValue, Statement } from '../parser/ast/types';
 import { Environment, Object, ObjectKind } from './types';
 
 import { createAssertionError } from '../common';
@@ -30,26 +23,10 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
   }
 }
 
-export function determineExpressionKind(expression: Expression): ExpressionKind {
-  if (expression.kind) return expression.kind;
-  else if (expression.left && expression.operator && expression.right) return ExpressionKind.Infix;
-  else if (expression.left && expression.left.operator) return ExpressionKind.Prefix;
-  else if (expression.condition) return ExpressionKind.IfElse;
-  else if (expression.arguments) return ExpressionKind.Call;
-  else if (expression.index) return ExpressionKind.Index;
-  else if (expression.value) {
-    let value = expression.value as FunctionLiteral;
-    return value.body ? ExpressionKind.Function : ExpressionKind.Array;
-  }
-
-  return ExpressionKind.Illegal;
-}
-
 export function evaluateExpression(expression: Expression, env: Environment): Object {
-  let expressionKind = determineExpressionKind(expression);
   let objectKind;
 
-  switch (expressionKind) {
+  switch (expression.kind) {
     case ExpressionKind.Integer:
       objectKind = ObjectKind.Integer;
       break;

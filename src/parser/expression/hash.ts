@@ -1,6 +1,7 @@
 import { Token, TokenKind } from '../../lexer/types';
 import { ExpressionParseResult, Precedence } from '../types';
 
+import { ExpressionKind } from '../ast/types';
 import { Include, Skip } from '../constants';
 import { createExpression, determineOperatorPrecedence } from './helpers';
 import { parseExpression } from './index';
@@ -8,7 +9,7 @@ import { parseExpression } from './index';
 export function parseHashExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let currentToken = tokens[cursor + Skip.Brace];
   let nextToken = tokens[cursor + Skip.Brace + 1];
-  let expression = createExpression([]);
+  let expression = createExpression(ExpressionKind.Hash, []);
   let pairs = [];
   let index = cursor + 1;
   let skip = false;
