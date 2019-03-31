@@ -33,11 +33,6 @@ export function createCustomAssertionError(errorKind: AssertionErrorKind, messag
   };
 }
 
-export function isValidValue(value: any): boolean {
-  if (!value && value !== false && value !== 0) return false;
-  return true;
-}
-
 export function print(result: Object): void {
   switch (result.kind) {
     case ObjectKind.Array:
@@ -47,6 +42,8 @@ export function print(result: Object): void {
     case ObjectKind.Puts:
       let objects = result.value as Object[];
       return objects.forEach(object => console.log(object.value));
+    case ObjectKind.Null:
+      return console.log(null);
     default:
       console.log(result.value);
   }
