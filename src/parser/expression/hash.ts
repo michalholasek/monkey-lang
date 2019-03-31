@@ -58,6 +58,8 @@ export function parseHashExpression(tokens: Token[], cursor: number): Expression
   expression.pairs = pairs;
   expression.tokens = tokens.slice(cursor, index + Include.Brace);
 
+  nextToken = tokens[index + Skip.Brace];
+
   return {
     cursor: index + Skip.Brace,
     expression,

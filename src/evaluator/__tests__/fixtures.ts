@@ -349,35 +349,67 @@ export const Call = {
 
 };
 
-export const Hash = [{
-  kind: ObjectKind.Hash,
-  value: {
-    [createHash('sha256').update('one').digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 1
-    },
-    [createHash('sha256').update('two').digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 2
-    },
-    [createHash('sha256').update('three').digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 3
-    },
-    [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 4
-    },
-    [createHash('sha256').update('true').digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 5
-    },
-    [createHash('sha256').update('false').digest('hex')]: {
-      kind: ObjectKind.Integer,
-      value: 6
+export const Hash = {
+  'let two = "two"; { "one": 10 - 9, two: 1 + 1, "thr" + "ee": 6 / 2, 4: 4, true: 5, false: 6 };': {
+    kind: ObjectKind.Hash,
+    value: {
+      [createHash('sha256').update('one').digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 1
+      },
+      [createHash('sha256').update('two').digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 2
+      },
+      [createHash('sha256').update('three').digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 3
+      },
+      [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 4
+      },
+      [createHash('sha256').update('true').digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 5
+      },
+      [createHash('sha256').update('false').digest('hex')]: {
+        kind: ObjectKind.Integer,
+        value: 6
+      }
     }
+  },
+  '{ "foo": 5 }["foo"]': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  '{ "foo": 5 }["bar"]': {
+    kind: ObjectKind.Null
+  },
+  'let key = "foo"; { "foo": 5 }[key]': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  '{}["foo"]': {
+    kind: ObjectKind.Null
+  },
+  '{ 5: 5 }[5]': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  '{ true: 5 }[true]': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  '{ false: 5 }[false]': {
+    kind: ObjectKind.Integer,
+    value: 5
+  },
+  '{ "name": "Monkey" }[fn(x) { x }];': {
+    kind: ObjectKind.Error,
+    value: 'invalid index(23, 1): got Function'
   }
-}];
+};
 
 export const IfElse = {
   'if (true) { 10 }': {

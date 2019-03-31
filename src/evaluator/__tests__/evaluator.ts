@@ -251,21 +251,21 @@ describe('Evaluator', () => {
   });
 
   [
-    `let two = "two";
-    {
-      "one": 10 - 9,
-      two: 1 + 1,
-      "thr" + "ee": 6 / 2,
-      4: 4,
-      true: 5,
-      false: 6
-    };`
-  ].forEach((expression, index) => {
+    'let two = "two"; { "one": 10 - 9, two: 1 + 1, "thr" + "ee": 6 / 2, 4: 4, true: 5, false: 6 };',
+    '{ "foo": 5 }["foo"]',
+    '{ "foo": 5 }["bar"]',
+    'let key = "foo"; { "foo": 5 }[key]',
+    '{}["foo"]',
+    '{ 5: 5 }[5]',
+    '{ true: 5 }[true]',
+    '{ false: 5 }[false]',
+    '{ "name": "Monkey" }[fn(x) { x }];'
+  ].forEach(expression => {
     it(`should evaluate given hash expression correctly - ${expression}`, () => {
       let env = createEnvironment();
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
-      expect(actual).toMatchObject(Fixtures.Hash[index]);
+      expect(actual).toMatchObject(Fixtures.Hash[expression]);
     });
   });
 

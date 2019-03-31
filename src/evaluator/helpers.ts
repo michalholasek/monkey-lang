@@ -3,7 +3,7 @@ import { Token, TokenKind } from '../lexer/types';
 import { ArrayLiteral, Expression, ExpressionKind, Statement } from '../parser/ast/types';
 import { Environment, HashPairValue, Object, ObjectKind, ObjectValue } from './types';
 
-import { createAssertionError } from '../common';
+import { createAssertionError, createCustomAssertionError } from '../common';
 import { BuiltIns } from './builtins';
 import { createEnclosedEnvironment, evaluateStatements } from './index';
 
@@ -108,19 +108,30 @@ function createKey(key: Object): string {
   return createHash('sha256').update(seed).digest('hex');
 }
 
-function evaluateExpressionList(expressions: Expression[], env: Environment): Object[] {
-  let evaluatedExpressions = [];
+function encloseEnvironment(params: Token[], args: Object[], outer: Environment): Environment {
+  let env = createEnclosedEnvironment(outer);
 
-  for (let arg of expressions) {
-    evaluatedExpressions.push(evaluateExpression(arg, env));
+  for (let i = 0; i < params.length; i++) {
+    env.set(params[i].literal, args[i]);
   }
 
-  return evaluatedExpressions;
+  return env;
 }
 
 function evaluateArrayExpresion(array: Expression, env: Environment): Object {
   let arrayLiteral = array.value as ArrayLiteral;
   return createObject(ObjectKind.Array, evaluateExpressionList(arrayLiteral.elements, env));
+}
+
+function evaluateArrayIndexExpresion(array: Object, index: Object): Object {
+  let arrayValue = array.value as Object[];
+  let indexValue = index.value as number;
+
+  if (!arrayValue.length || (!index && index !== 0) || indexValue < 0 || indexValue > arrayValue.length - 1) {
+    return createObject(ObjectKind.Null);
+  }
+
+  return arrayValue[indexValue];
 }
 
 function evaluateBangOperatorExpression(right: Expression, env: Environment): Object {
@@ -154,6 +165,16 @@ function evaluateCallExpression(expression: Expression, env: Environment): Objec
   return createObject(ObjectKind.Null);
 }
 
+function evaluateExpressionList(expressions: Expression[], env: Environment): Object[] {
+  let evaluatedExpressions = [];
+
+  for (let arg of expressions) {
+    evaluatedExpressions.push(evaluateExpression(arg, env));
+  }
+
+  return evaluatedExpressions;
+}
+
 function evaluateFunctionExpression(expression: Expression, env: Environment): Object {
   let fn = createObject(ObjectKind.Function, expression.value);
   fn.env = env;
@@ -176,6 +197,28 @@ function evaluateHashExpresion(expression: Expression, env: Environment): Object
   }
 
   return createObject(ObjectKind.Hash, hash);
+}
+
+function evaluateHashIndexExpresion(expression: Expression, hash: Object, index: Object): Object {
+  let nullObject = createObject(ObjectKind.Null);
+  let pair = hash.value as HashPairValue;
+
+  if (!expression.index) return nullObject;
+
+  if (index.kind !== ObjectKind.Integer && index.kind !== ObjectKind.String && index.kind !== ObjectKind.Boolean) {
+    let indexToken = expression.index.tokens[0];
+    return createObject(
+      ObjectKind.Error,
+      createCustomAssertionError(
+        AssertionErrorKind.InvalidIndex,
+        `got ${TokenKind[indexToken.kind]}`,
+        indexToken.column,
+        indexToken.line
+      ).message
+    );
+  }
+
+  return pair[createKey(index)] || nullObject;
 }
 
 function evaluateIdentifierExpression(expression: Expression, env: Environment): Object {
@@ -213,12 +256,15 @@ function evaluateIndexExpresion(expression: Expression, env: Environment): Objec
 
   if (!expression.left || !expression.index) return nullObject;
 
-  let array = evaluateExpression(expression.left, env).value as Object[];
-  let index = evaluateExpression(expression.index, env).value as number;
+  let left = evaluateExpression(expression.left, env);
+  let index = evaluateExpression(expression.index, env);
 
-  if (!array.length || (!index && index !== 0) || index < 0 || index > array.length - 1) return nullObject;
-
-  return array[index];
+  switch (left.kind) {
+    case ObjectKind.Hash:
+      return evaluateHashIndexExpresion(expression, left, index);
+    default:
+      return evaluateArrayIndexExpresion(left, index);
+  }
 }
 
 function evaluateInfixExpression(expression: Expression, env: Environment): Object {
@@ -319,14 +365,4 @@ function evaluateStringInfixExpression(left: string, right: string, operator: To
         createAssertionError(AssertionErrorKind.UnknownOperator, operator, TokenKind.String).message
       );
   }
-}
-
-function encloseEnvironment(params: Token[], args: Object[], outer: Environment): Environment {
-  let env = createEnclosedEnvironment(outer);
-
-  for (let i = 0; i < params.length; i++) {
-    env.set(params[i].literal, args[i]);
-  }
-
-  return env;
 }
