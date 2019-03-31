@@ -44,18 +44,22 @@ export function parseHashExpression(tokens: Token[], cursor: number): Expression
     index++;
     let valueExpressionParseResult = parseExpression(tokens, index, Precedence.Lowest);
     index = valueExpressionParseResult.cursor;
+    nextToken = tokens[index];
+
+    if (nextToken && nextToken.kind === TokenKind.Comma) {
+      index = index + Skip.Comma;
+    }
+
+    currentToken = tokens[index];
 
     pairs.push({ key: keyExpressionParseResult.expression, value: valueExpressionParseResult.expression });
-
-    index = index + Skip.Comma;
-    currentToken = tokens[index];
   }
 
   expression.pairs = pairs;
   expression.tokens = tokens.slice(cursor, index + Include.Brace);
 
   return {
-    cursor: index,
+    cursor: index + Skip.Brace,
     expression,
     nextPrecedence: nextToken ? determineOperatorPrecedence(nextToken) : Precedence.Lowest
   };
