@@ -23,6 +23,10 @@ export const BuiltIns: { [key: string]: Object } = {
     kind: ObjectKind.BuiltIn,
     fn: push
   },
+  puts: {
+    kind: ObjectKind.BuiltIn,
+    fn: puts
+  },
   rest: {
     kind: ObjectKind.BuiltIn,
     fn: rest
@@ -176,6 +180,10 @@ function push(expression: Expression, args: Object[] | undefined): Object {
   let array = originalArray.value as Object[];
 
   return array.length ? createObject(ObjectKind.Array, array.concat([newElement])) : nullObject;
+}
+
+function puts(_: Expression, args: Object[] | undefined): Object {
+  return createObject(ObjectKind.Puts, args);
 }
 
 function rest(expression: Expression, args: Object[] | undefined): Object {

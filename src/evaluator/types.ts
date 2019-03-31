@@ -31,7 +31,8 @@ export enum ObjectKind {
   Null = 'NULL',
   Return = 'RETURN_VALUE',
   String = 'STRING',
-  Hash = 'HASH'
+  Hash = 'HASH',
+  Puts = 'PUTS'
 }
 
 export type ObjectValue = number

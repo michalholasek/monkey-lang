@@ -20,6 +20,7 @@ export function createObject(kind: ObjectKind, value: ObjectValue = 0): Object {
     case ObjectKind.String:
     case ObjectKind.Array:
     case ObjectKind.Hash:
+    case ObjectKind.Puts:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };

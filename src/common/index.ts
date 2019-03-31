@@ -39,11 +39,15 @@ export function isValidValue(value: any): boolean {
 }
 
 export function print(result: Object): void {
-  if (result.kind === ObjectKind.Array) {
-    let elements = result.value as Object[];
-    let values = elements.map(element => element.value).join(', ');
-    console.log(`[${values}]`);
-  } else {
-    console.log(result.value);
+  switch (result.kind) {
+    case ObjectKind.Array:
+      let elements = result.value as Object[];
+      let values = elements.map(element => element.value).join(', ');
+      return console.log(`[${values}]`);
+    case ObjectKind.Puts:
+      let objects = result.value as Object[];
+      return objects.forEach(object => console.log(object.value));
+    default:
+      console.log(result.value);
   }
 }
