@@ -1,5 +1,4 @@
 import { AssertionError } from '../../common/types';
-import { Object } from '../../evaluator/types';
 import { Token } from '../../lexer/types';
 
 export interface BlockStatement {
@@ -40,7 +39,7 @@ export enum ExpressionKind {
   Hash
 }
 
-export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral | Object | Object[] | AssertionError;
+export type ExpressionValue = number | string | boolean | ArrayLiteral | FunctionLiteral;
 
 export interface ArrayLiteral {
   elements: Expression[];

@@ -1,13 +1,15 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
-import { ArrayLiteral, Expression, ExpressionKind, ExpressionValue, Statement } from '../parser/ast/types';
-import { Environment, Object, ObjectKind } from './types';
+import { ArrayLiteral, Expression, ExpressionKind, Statement } from '../parser/ast/types';
+import { Environment, HashPairValue, Object, ObjectKind, ObjectValue } from './types';
 
 import { createAssertionError } from '../common';
 import { BuiltIns } from './builtins';
 import { createEnclosedEnvironment, evaluateStatements } from './index';
 
-export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Object {
+import { createHash } from 'crypto';
+
+export function createObject(kind: ObjectKind, value: ObjectValue = 0): Object {
   switch (kind) {
     case ObjectKind.Integer:
     case ObjectKind.Boolean:
@@ -17,6 +19,7 @@ export function createObject(kind: ObjectKind, value: ExpressionValue = 0): Obje
     case ObjectKind.Function:
     case ObjectKind.String:
     case ObjectKind.Array:
+    case ObjectKind.Hash:
       return { kind, value };
     default:
       return { kind: ObjectKind.Null };
@@ -52,6 +55,8 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
       return evaluateArrayExpresion(expression, env);
     case ExpressionKind.Index:
       return evaluateIndexExpresion(expression, env);
+    case ExpressionKind.Hash:
+      return evaluateHashExpresion(expression, env);
     default:
       objectKind = ObjectKind.Null;
   }
@@ -84,6 +89,23 @@ function applyFunction(fn: Object, args: Object[] | undefined): Object {
   if (env && body) return evaluateStatements(body.statements, env);
 
   return createObject(ObjectKind.Null);
+}
+
+function createKey(key: Object): string {
+  let seed: string | Buffer;
+
+  switch (key.kind) {
+    case ObjectKind.Integer:
+      seed = Buffer.from([key.value as number]);
+      break;
+    case ObjectKind.Boolean:
+      seed = key.value === true ? 'true': 'false';
+      break;
+    default:
+      seed = key.value as string;
+  }
+
+  return createHash('sha256').update(seed).digest('hex');
 }
 
 function evaluateExpressionList(expressions: Expression[], env: Environment): Object[] {
@@ -137,6 +159,23 @@ function evaluateFunctionExpression(expression: Expression, env: Environment): O
   fn.env = env;
 
   return fn;
+}
+
+function evaluateHashExpresion(expression: Expression, env: Environment): Object {
+  let hash: HashPairValue = {};
+  let key;
+  let value;
+
+  if (!expression.pairs) return createObject(ObjectKind.Null);
+
+  for (let pair of expression.pairs) {
+    key = evaluateExpression(pair.key, env);
+    value = evaluateExpression(pair.value, env);
+
+    hash[createKey(key)] = value;
+  }
+
+  return createObject(ObjectKind.Hash, hash);
 }
 
 function evaluateIdentifierExpression(expression: Expression, env: Environment): Object {

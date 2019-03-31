@@ -3,13 +3,27 @@ import { parse } from '../../parser';
 
 import { createEnvironment, evaluate } from '../index';
 
-import { Array, Boolean, BuiltIn, Call, IfElse, Illegal, Integer, Let, Prefix, Return, String } from './fixtures';
+import {
+  Array,
+  Boolean,
+  BuiltIn,
+  Call,
+  Hash,
+  IfElse,
+  Illegal,
+  Integer,
+  Let,
+  Prefix,
+  Return,
+  String
+} from './fixtures';
 
 const Fixtures = Object.assign({}, {
   Array,
   Boolean,
   BuiltIn,
   Call,
+  Hash,
   IfElse,
   Illegal,
   Integer,
@@ -233,6 +247,25 @@ describe('Evaluator', () => {
       let ast = parse(tokenize(expression));
       let actual = evaluate(ast, env);
       expect(actual).toMatchObject(Fixtures.Array[expression]);
+    });
+  });
+
+  [
+    `let two = "two";
+    {
+      "one": 10 - 9,
+      two: 1 + 1,
+      "thr" + "ee": 6 / 2,
+      4: 4,
+      true: 5,
+      false: 6
+    };`
+  ].forEach((expression, index) => {
+    it(`should evaluate given hash expression correctly - ${expression}`, () => {
+      let env = createEnvironment();
+      let ast = parse(tokenize(expression));
+      let actual = evaluate(ast, env);
+      expect(actual).toMatchObject(Fixtures.Hash[index]);
     });
   });
 

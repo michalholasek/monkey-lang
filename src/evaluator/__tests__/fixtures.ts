@@ -2,6 +2,8 @@ import { TokenKind } from '../../lexer/types';
 import { NodeKind } from '../../parser/ast/types';
 import { ObjectKind } from '../types';
 
+import { createHash } from 'crypto';
+
 export const Array = {
   '[]': {
     kind: ObjectKind.Array,
@@ -346,6 +348,36 @@ export const Call = {
   }
 
 };
+
+export const Hash = [{
+  kind: ObjectKind.Hash,
+  value: {
+    [createHash('sha256').update('one').digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 1
+    },
+    [createHash('sha256').update('two').digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 2
+    },
+    [createHash('sha256').update('three').digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 3
+    },
+    [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 4
+    },
+    [createHash('sha256').update('true').digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 5
+    },
+    [createHash('sha256').update('false').digest('hex')]: {
+      kind: ObjectKind.Integer,
+      value: 6
+    }
+  }
+}];
 
 export const IfElse = {
   'if (true) { 10 }': {

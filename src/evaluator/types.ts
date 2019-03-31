@@ -1,5 +1,24 @@
+import { AssertionError } from '../common/types';
 import { Token } from '../lexer/types';
-import { BlockStatement, Expression, ExpressionValue } from '../parser/ast/types';
+import { ArrayLiteral, BlockStatement, Expression, FunctionLiteral } from '../parser/ast/types';
+
+export interface Environment {
+  get: (key: string) => Object;
+  set: (key: string, object: Object) => void;
+}
+
+export interface HashPairValue {
+  [key: string]: Object;
+}
+
+export interface Object {
+  body?: BlockStatement;
+  env?: Environment;
+  fn?: (expression: Expression, args: Object[] | undefined) => Object;
+  kind: ObjectKind;
+  parameters?: Token[];
+  value?: ObjectValue;
+}
 
 export enum ObjectKind {
   Array = 'ARRAY',
@@ -11,19 +30,16 @@ export enum ObjectKind {
   Let = 'LET',
   Null = 'NULL',
   Return = 'RETURN_VALUE',
-  String = 'STRING'
+  String = 'STRING',
+  Hash = 'HASH'
 }
 
-export interface Object {
-  body?: BlockStatement;
-  env?: Environment;
-  fn?: (expression: Expression, args: Object[] | undefined) => Object;
-  kind: ObjectKind;
-  parameters?: Token[];
-  value?: ExpressionValue;
-}
-
-export interface Environment {
-  get: (key: string) => Object;
-  set: (key: string, object: Object) => void;
-}
+export type ObjectValue = number
+  | string
+  | boolean
+  | Object
+  | Object[]
+  | FunctionLiteral
+  | ArrayLiteral
+  | HashPairValue
+  | AssertionError;
