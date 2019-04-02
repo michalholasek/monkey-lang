@@ -1,11 +1,11 @@
-export interface StringTokenizeOptions {
+export interface TokenizationOptions {
   characters: string[];
   column: number;
   index: number;
   line: number;
 }
 
-export interface StringTokenizeResult {
+export interface TokenizationResult {
   column: number;
   index: number;
   token: Token;
