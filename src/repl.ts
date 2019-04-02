@@ -21,6 +21,43 @@ let cli = createInterface({
   prompt: '> '
 });
 
+function stringify(result: Object): string {
+  switch (result.kind) {
+    case ObjectKind.Array:
+      let elements = result.value as Object[];
+      return `[${elements.map(element => element.value).join(', ')}]\n`;
+    case ObjectKind.Hash:
+      let pairs = result.value as HashLiteral;
+      return `{ ${Object.keys(pairs.keys)
+        .map(key => `${pairs.keys[key].value}: ${pairs.values[key].value}`)
+        .join(', ')
+      } }\n`;
+    case ObjectKind.Puts:
+      let objects = result.value as Object[];
+      return objects.map(object => `${object.value}\n`).join('');
+    case ObjectKind.Null:
+      return 'null\n';
+    default:
+      return `${result.value}\n`;
+  }
+}
+
+function print(command: string): void {
+  let env = createEnvironment();
+  let program = parse(tokenize(command));
+
+  if (program.errors.length) {
+    program.errors.forEach(error => {
+      process.stdout.write(error.message);
+    });
+  }
+
+  let result = evaluate(program, env);
+  if (result) {
+    process.stdout.write(stringify(result));
+  }
+}
+
 cli.on('line', line => {
   let command = input.join('');
 
@@ -43,41 +80,3 @@ cli.on('line', line => {
   process.stdout.write('Exiting monkey-lang REPL...\n');
   process.exit(0);
 });
-
-function print(command: string): void {
-  let env = createEnvironment();
-  let program = parse(tokenize(command));
-
-  if (program.errors.length) {
-    program.errors.forEach(error => {
-      process.stdout.write(error.message);
-    });
-  }
-
-  let result = evaluate(program, env);
-  if (result) {
-    write(result);
-  }
-}
-
-function write(result: Object): boolean | void {
-  switch (result.kind) {
-    case ObjectKind.Array:
-      let elements = result.value as Object[];
-      return process.stdout.write(`[${elements.map(element => element.value).join(', ')}]\n`);
-    case ObjectKind.Hash:
-      let pairs = result.value as HashLiteral;
-      return process.stdout.write(`{ ${
-        Object.keys(pairs.keys)
-          .map(key => `${pairs.keys[key].value}: ${pairs.values[key].value}`)
-          .join(', ')
-      } }\n`);
-    case ObjectKind.Puts:
-      let objects = result.value as Object[];
-      return objects.forEach(object => process.stdout.write(`${object.value}\n`));
-    case ObjectKind.Null:
-      return process.stdout.write('null\n');
-    default:
-      process.stdout.write(`${result.value}\n`);
-  }
-}
