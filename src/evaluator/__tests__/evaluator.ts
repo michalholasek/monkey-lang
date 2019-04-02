@@ -1,7 +1,8 @@
 import { tokenize } from '../../lexer';
 import { parse } from '../../parser';
 
-import { createEnvironment, evaluate } from '../index';
+import { createEnvironment } from '../helpers';
+import { evaluate } from '../index';
 
 import {
   Array,

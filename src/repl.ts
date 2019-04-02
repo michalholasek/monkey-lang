@@ -2,7 +2,8 @@ import { HashLiteral, Object, ObjectKind } from './evaluator/types';
 
 import { createInterface } from 'readline';
 
-import { createEnvironment, evaluate } from './evaluator';
+import { evaluate } from './evaluator';
+import { createEnvironment } from './evaluator/helpers';
 import { tokenize } from './lexer';
 import { parse } from './parser';
 

@@ -1,39 +1,25 @@
-import { Node, NodeKind, Program, Statement } from '../parser/ast/types';
+import {
+  ArrayExpression,
+  Expression,
+  ExpressionKind,
+  Node,
+  NodeKind,
+  Program,
+  Statement
+} from '../parser/ast/types';
 import { Environment, Object, ObjectKind } from './types';
 
-import {
-  createObject,
-  evaluateExpression,
-  evaluateLetStatement,
-  evaluateReturnStatement
-} from './helpers';
+import { evaluateArrayExpresion } from './array';
+import { evaluateCallExpression } from './call';
+import { evaluateFunctionExpression } from './function';
+import { evaluateHashExpresion } from './hash';
+import { evaluateIdentifierExpression } from './identifier';
+import { evaluateIfElseExpression } from './if';
+import { evaluateIndexExpresion } from './indexes';
+import { evaluateInfixExpression } from './infix';
+import { evaluatePrefixExpression } from './prefix';
 
-export function createEnvironment(): Environment {
-  let store: { [key: string]: Object } = {};
-
-  return {
-    get(key) {
-      return store[key];
-    },
-    set(key, object) {
-      store[key] = object;
-    }
-  };
-}
-
-export function createEnclosedEnvironment(outer: Environment): Environment {
-  let env = createEnvironment();
-
-  return {
-    get(key) {
-      let value = env.get(key);
-      return value ? value : outer.get(key);
-    },
-    set(key, object) {
-      env.set(key, object);
-    }
-  };
-}
+import { createObject } from './helpers';
 
 export function evaluate(node: Node, env: Environment): Object {
   let statement;
@@ -55,6 +41,61 @@ export function evaluate(node: Node, env: Environment): Object {
   }
 
   return createObject(ObjectKind.Null);
+}
+
+export function evaluateExpression(expression: Expression, env: Environment): Object {
+  let objectKind;
+
+  switch (expression.kind) {
+    case ExpressionKind.Integer:
+      objectKind = ObjectKind.Integer;
+      break;
+    case ExpressionKind.Boolean:
+      objectKind = ObjectKind.Boolean;
+      break;
+    case ExpressionKind.String:
+      objectKind = ObjectKind.String;
+      break;
+    case ExpressionKind.Function:
+      return evaluateFunctionExpression(expression, env);
+    case ExpressionKind.Identifier:
+      return evaluateIdentifierExpression(expression, env);
+    case ExpressionKind.Prefix:
+      return evaluatePrefixExpression(expression, env);
+    case ExpressionKind.Infix:
+      return evaluateInfixExpression(expression, env);
+    case ExpressionKind.IfElse:
+      return evaluateIfElseExpression(expression, env);
+    case ExpressionKind.Call:
+      return evaluateCallExpression(expression, env);
+    case ExpressionKind.Array:
+      return evaluateArrayExpresion(expression as ArrayExpression, env);
+    case ExpressionKind.Index:
+      return evaluateIndexExpresion(expression, env);
+    case ExpressionKind.Hash:
+      return evaluateHashExpresion(expression, env);
+    default:
+      objectKind = ObjectKind.Null;
+  }
+
+  return createObject(objectKind, expression.value);
+}
+
+export function evaluateLetStatement(statement: Statement, env: Environment): Object {
+  let nullObject = createObject(ObjectKind.Null);
+
+  if (!statement.expression || !statement.name) return nullObject;
+
+  let expressionValue = evaluateExpression(statement.expression, env);
+  if (expressionValue.kind === ObjectKind.Error) return expressionValue;
+
+  env.set(statement.name.literal, expressionValue);
+
+  return nullObject;
+}
+
+export function evaluateReturnStatement(expression: Expression, env: Environment): Object {
+  return createObject(ObjectKind.Return, evaluateExpression(expression, env));
 }
 
 export function evaluateStatements(statements: Statement[], env: Environment): Object {
