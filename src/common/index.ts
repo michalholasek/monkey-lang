@@ -1,6 +1,3 @@
-/* tslint:disable:no-console */
-
-import { Object, ObjectKind } from '../evaluator/types';
 import { Token, TokenKind } from '../lexer/types';
 import { AssertionError, AssertionErrorKind } from './types';
 
@@ -31,20 +28,4 @@ export function createCustomAssertionError(errorKind: AssertionErrorKind, messag
   return {
     message: `${errorKind}(${column}, ${line}): ${message}`
   };
-}
-
-export function print(result: Object): void {
-  switch (result.kind) {
-    case ObjectKind.Array:
-      let elements = result.value as Object[];
-      let values = elements.map(element => element.value).join(', ');
-      return console.log(`[${values}]`);
-    case ObjectKind.Puts:
-      let objects = result.value as Object[];
-      return objects.forEach(object => console.log(object.value));
-    case ObjectKind.Null:
-      return console.log(null);
-    default:
-      console.log(result.value);
-  }
 }
