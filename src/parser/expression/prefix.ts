@@ -1,7 +1,7 @@
 import { Token, TokenKind } from '../../lexer/types';
 import { ExpressionParseResult, Precedence } from '../types';
 
-import { ExpressionKind } from '../ast/types';
+import { ExpressionKind, InfixExpression, PrefixExpression } from '../ast/types';
 import { Skip } from '../constants';
 import { createExpression, ParsingFunctions } from './helpers';
 import { parseExpression } from './index';
@@ -28,11 +28,14 @@ export function parsePrefixExpression(tokens: Token[], cursor: number): Expressi
 
 function expandPrefixExpression(tokens: Token[], cursor: number): ExpressionParseResult {
   let operator = tokens[cursor];
-  let left = createExpression(ExpressionKind.Prefix, [operator]);
+  let expression: PrefixExpression;
+  let left: InfixExpression;
+
+  left = createExpression(ExpressionKind.Prefix, [operator]);
   left.operator = operator;
 
   let prefixExpressionParseResult = parseExpression(tokens, cursor + Skip.Operator, Precedence.Prefix);
-  let expression = createExpression(ExpressionKind.Prefix, left.tokens.concat(prefixExpressionParseResult.expression.tokens));
+  expression = createExpression(ExpressionKind.Prefix, left.tokens.concat(prefixExpressionParseResult.expression.tokens));
   expression.left = left;
   expression.right = prefixExpressionParseResult.expression;
 

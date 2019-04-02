@@ -1,6 +1,17 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
-import { ArrayLiteral, Expression, ExpressionKind, Statement } from '../parser/ast/types';
+import {
+  ArrayExpression,
+  CallExpression,
+  Expression,
+  ExpressionKind,
+  HashExpression,
+  IfElseExpression,
+  IndexExpression,
+  InfixExpression,
+  PrefixExpression,
+  Statement
+} from '../parser/ast/types';
 import { Environment, HashLiteral, Object, ObjectKind, ObjectValue } from './types';
 
 import { createAssertionError, createCustomAssertionError } from '../common';
@@ -53,7 +64,7 @@ export function evaluateExpression(expression: Expression, env: Environment): Ob
     case ExpressionKind.Call:
       return evaluateCallExpression(expression, env);
     case ExpressionKind.Array:
-      return evaluateArrayExpresion(expression, env);
+      return evaluateArrayExpresion(expression as ArrayExpression, env);
     case ExpressionKind.Index:
       return evaluateIndexExpresion(expression, env);
     case ExpressionKind.Hash:
@@ -119,8 +130,8 @@ function encloseEnvironment(params: Token[], args: Object[], outer: Environment)
   return env;
 }
 
-function evaluateArrayExpresion(array: Expression, env: Environment): Object {
-  let arrayLiteral = array.value as ArrayLiteral;
+function evaluateArrayExpresion(array: ArrayExpression, env: Environment): Object {
+  let arrayLiteral = array.value as ArrayExpression;
   return createObject(ObjectKind.Array, evaluateExpressionList(arrayLiteral.elements, env));
 }
 
@@ -140,7 +151,7 @@ function evaluateBangOperatorExpression(right: Expression, env: Environment): Ob
   return createObject(ObjectKind.Boolean, !rightValue.value);
 }
 
-function evaluateCallExpression(expression: Expression, env: Environment): Object {
+function evaluateCallExpression(expression: CallExpression, env: Environment): Object {
   let fn;
   let args;
   if (expression.identifier) {
@@ -183,7 +194,7 @@ function evaluateFunctionExpression(expression: Expression, env: Environment): O
   return fn;
 }
 
-function evaluateHashExpresion(expression: Expression, env: Environment): Object {
+function evaluateHashExpresion(expression: HashExpression, env: Environment): Object {
   let hash: HashLiteral = { keys: {}, values: {} };
   let key;
   let value;
@@ -201,7 +212,7 @@ function evaluateHashExpresion(expression: Expression, env: Environment): Object
   return createObject(ObjectKind.Hash, hash);
 }
 
-function evaluateHashIndexExpresion(expression: Expression, hash: Object, index: Object): Object {
+function evaluateHashIndexExpresion(expression: IndexExpression, hash: Object, index: Object): Object {
   let nullObject = createObject(ObjectKind.Null);
   let pair = hash.value as HashLiteral;
 
@@ -238,7 +249,7 @@ function evaluateIdentifierExpression(expression: Expression, env: Environment):
   );
 }
 
-function evaluateIfElseExpression(expression: Expression, env: Environment): Object {
+function evaluateIfElseExpression(expression: IfElseExpression, env: Environment): Object {
   if (!expression.condition || !expression.consequence) return createObject(ObjectKind.Null);
 
   let condition = evaluateExpression(expression.condition, env);
@@ -253,7 +264,7 @@ function evaluateIfElseExpression(expression: Expression, env: Environment): Obj
   return createObject(ObjectKind.Null);
 }
 
-function evaluateIndexExpresion(expression: Expression, env: Environment): Object {
+function evaluateIndexExpresion(expression: IndexExpression, env: Environment): Object {
   let nullObject = createObject(ObjectKind.Null);
 
   if (!expression.left || !expression.index) return nullObject;
@@ -269,7 +280,7 @@ function evaluateIndexExpresion(expression: Expression, env: Environment): Objec
   }
 }
 
-function evaluateInfixExpression(expression: Expression, env: Environment): Object {
+function evaluateInfixExpression(expression: InfixExpression, env: Environment): Object {
   if (!expression.left || !expression.operator || !expression.right) {
     return createObject(ObjectKind.Null);
   }
@@ -342,7 +353,7 @@ function evaluateMinusPrefixOperatorExpression(right: Expression, env: Environme
   return createObject(ObjectKind.Null);
 }
 
-function evaluatePrefixExpression(expression: Expression, env: Environment): Object {
+function evaluatePrefixExpression(expression: PrefixExpression, env: Environment): Object {
   if (!expression.left || !expression.left.operator || !expression.right) {
     return createObject(ObjectKind.Null);
   }

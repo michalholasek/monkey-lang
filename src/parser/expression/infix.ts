@@ -1,5 +1,5 @@
 import { Token, TokenKind } from '../../lexer/types';
-import { Expression, ExpressionKind } from '../ast/types';
+import { Expression, ExpressionKind, InfixExpression } from '../ast/types';
 import { ExpressionParseResult } from '../types';
 
 import { Skip } from '../constants';
@@ -12,7 +12,7 @@ export function parseInfixExpression(tokens: Token[], cursor: number, left: Expr
   let operator = tokens[cursor];
   let currentPrecedence = determineOperatorPrecedence(operator);
   let rightExpressionParseResult;
-  let expression;
+  let expression: InfixExpression;
 
   switch (operator.kind) {
     case TokenKind.LeftParenthesis:

@@ -1,6 +1,6 @@
 import { AssertionError } from '../common/types';
 import { Token } from '../lexer/types';
-import { ArrayLiteral, BlockStatement, Expression, FunctionLiteral } from '../parser/ast/types';
+import { ArrayExpression, BlockStatement, Expression, FunctionExpression } from '../parser/ast/types';
 
 export interface Environment {
   get: (key: string) => Object;
@@ -41,7 +41,7 @@ export type ObjectValue = number
   | boolean
   | Object
   | Object[]
-  | FunctionLiteral
-  | ArrayLiteral
+  | FunctionExpression
+  | ArrayExpression
   | HashLiteral
   | AssertionError;

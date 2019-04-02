@@ -1,7 +1,7 @@
 import { Token, TokenKind } from '../../lexer/types';
 import { ExpressionParseResult, Precedence } from '../types';
 
-import { ExpressionKind } from '../ast/types';
+import { ExpressionKind, IfElseExpression } from '../ast/types';
 import { Include, Skip } from '../constants';
 import { parseBlockStatement } from '../statement';
 import { createExpression } from './helpers';
@@ -11,6 +11,7 @@ export function parseIfExpression(tokens: Token[], cursor: number): ExpressionPa
   let conditionParseResult = parseExpression(tokens, cursor + Skip.If, Precedence.Lowest);
   let consequenceParseResult = parseBlockStatement(tokens, conditionParseResult.cursor + Skip.Brace);
   let alternativeParseResult;
+  let expression: IfElseExpression;
 
   let possibleElseToken = tokens[consequenceParseResult.cursor + 1];
 
@@ -20,7 +21,7 @@ export function parseIfExpression(tokens: Token[], cursor: number): ExpressionPa
 
   let ifExpressionParseResultCursor = alternativeParseResult ? alternativeParseResult.cursor : consequenceParseResult.cursor;
 
-  let expression = createExpression(ExpressionKind.IfElse, tokens.slice(cursor, ifExpressionParseResultCursor + Include.Brace));
+  expression = createExpression(ExpressionKind.IfElse, tokens.slice(cursor, ifExpressionParseResultCursor + Include.Brace));
   expression.condition = conditionParseResult.expression;
   expression.consequence = {
     statements: consequenceParseResult.statements,
