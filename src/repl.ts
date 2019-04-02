@@ -13,6 +13,7 @@ export default {
   }
 };
 
+let env = createEnvironment();
 let input: string[] = [];
 
 let cli = createInterface({
@@ -43,7 +44,6 @@ function stringify(result: Object): string {
 }
 
 function print(command: string): void {
-  let env = createEnvironment();
   let program = parse(tokenize(command));
 
   if (program.errors.length) {
@@ -61,7 +61,12 @@ function print(command: string): void {
 cli.on('line', line => {
   let command = input.join('');
 
-  if (line !== '') return input.push(line);
+  if (line !== '') {
+    input.push(line);
+    cli.setPrompt('');
+    cli.prompt();
+    return;
+  }
 
   // Move cursor one line up
   process.stdout.write('\x1b[1A');
@@ -74,6 +79,7 @@ cli.on('line', line => {
     default:
       print(command);
       input = [];
+      cli.setPrompt('> ');
       cli.prompt();
   }
 }).on('close', () => {
