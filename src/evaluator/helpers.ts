@@ -1,7 +1,7 @@
 import { AssertionErrorKind } from '../common/types';
 import { Token, TokenKind } from '../lexer/types';
 import { ArrayLiteral, Expression, ExpressionKind, Statement } from '../parser/ast/types';
-import { Environment, HashPairValue, Object, ObjectKind, ObjectValue } from './types';
+import { Environment, HashLiteral, Object, ObjectKind, ObjectValue } from './types';
 
 import { createAssertionError, createCustomAssertionError } from '../common';
 import { BuiltIns } from './builtins';
@@ -184,7 +184,7 @@ function evaluateFunctionExpression(expression: Expression, env: Environment): O
 }
 
 function evaluateHashExpresion(expression: Expression, env: Environment): Object {
-  let hash: HashPairValue = {};
+  let hash: HashLiteral = { keys: {}, values: {} };
   let key;
   let value;
 
@@ -194,7 +194,8 @@ function evaluateHashExpresion(expression: Expression, env: Environment): Object
     key = evaluateExpression(pair.key, env);
     value = evaluateExpression(pair.value, env);
 
-    hash[createKey(key)] = value;
+    hash.keys[createKey(key)] = key;
+    hash.values[createKey(key)] = value;
   }
 
   return createObject(ObjectKind.Hash, hash);
@@ -202,7 +203,7 @@ function evaluateHashExpresion(expression: Expression, env: Environment): Object
 
 function evaluateHashIndexExpresion(expression: Expression, hash: Object, index: Object): Object {
   let nullObject = createObject(ObjectKind.Null);
-  let pair = hash.value as HashPairValue;
+  let pair = hash.value as HashLiteral;
 
   if (!expression.index) return nullObject;
 
@@ -219,7 +220,7 @@ function evaluateHashIndexExpresion(expression: Expression, hash: Object, index:
     );
   }
 
-  return pair[createKey(index)] || nullObject;
+  return pair.values[createKey(index)] || nullObject;
 }
 
 function evaluateIdentifierExpression(expression: Expression, env: Environment): Object {

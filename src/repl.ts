@@ -1,4 +1,4 @@
-import { Object, ObjectKind } from './evaluator/types';
+import { HashLiteral, Object, ObjectKind } from './evaluator/types';
 
 import { createInterface } from 'readline';
 
@@ -64,8 +64,14 @@ function write(result: Object): boolean | void {
   switch (result.kind) {
     case ObjectKind.Array:
       let elements = result.value as Object[];
-      let values = elements.map(element => element.value).join(', ');
-      return process.stdout.write(`[${values}]\n`);
+      return process.stdout.write(`[${elements.map(element => element.value).join(', ')}]\n`);
+    case ObjectKind.Hash:
+      let pairs = result.value as HashLiteral;
+      return process.stdout.write(`{ ${
+        Object.keys(pairs.keys)
+          .map(key => `${pairs.keys[key].value}: ${pairs.values[key].value}`)
+          .join(', ')
+      } }\n`);
     case ObjectKind.Puts:
       let objects = result.value as Object[];
       return objects.forEach(object => process.stdout.write(`${object.value}\n`));

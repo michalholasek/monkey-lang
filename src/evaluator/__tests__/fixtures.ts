@@ -353,29 +353,57 @@ export const Hash = {
   'let two = "two"; { "one": 10 - 9, two: 1 + 1, "thr" + "ee": 6 / 2, 4: 4, true: 5, false: 6 };': {
     kind: ObjectKind.Hash,
     value: {
-      [createHash('sha256').update('one').digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 1
+      keys: {
+        [createHash('sha256').update('one').digest('hex')]: {
+          kind: ObjectKind.String,
+          value: 'one'
+        },
+        [createHash('sha256').update('two').digest('hex')]: {
+          kind: ObjectKind.String,
+          value: 'two'
+        },
+        [createHash('sha256').update('three').digest('hex')]: {
+          kind: ObjectKind.String,
+          value: 'three'
+        },
+        [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 4
+        },
+        [createHash('sha256').update('true').digest('hex')]: {
+          kind: ObjectKind.Boolean,
+          value: true
+        },
+        [createHash('sha256').update('false').digest('hex')]: {
+          kind: ObjectKind.Boolean,
+          value: false
+        }
       },
-      [createHash('sha256').update('two').digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 2
-      },
-      [createHash('sha256').update('three').digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 3
-      },
-      [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 4
-      },
-      [createHash('sha256').update('true').digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 5
-      },
-      [createHash('sha256').update('false').digest('hex')]: {
-        kind: ObjectKind.Integer,
-        value: 6
+      values: {
+        [createHash('sha256').update('one').digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 1
+        },
+        [createHash('sha256').update('two').digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 2
+        },
+        [createHash('sha256').update('three').digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 3
+        },
+        [createHash('sha256').update(Buffer.from([4])).digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 4
+        },
+        [createHash('sha256').update('true').digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 5
+        },
+        [createHash('sha256').update('false').digest('hex')]: {
+          kind: ObjectKind.Integer,
+          value: 6
+        }
       }
     }
   },

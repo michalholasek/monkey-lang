@@ -7,8 +7,9 @@ export interface Environment {
   set: (key: string, object: Object) => void;
 }
 
-export interface HashPairValue {
-  [key: string]: Object;
+export interface HashLiteral {
+  keys: { [key: string]: Object };
+  values: { [key: string]: Object };
 }
 
 export interface Object {
@@ -42,5 +43,5 @@ export type ObjectValue = number
   | Object[]
   | FunctionLiteral
   | ArrayLiteral
-  | HashPairValue
+  | HashLiteral
   | AssertionError;
