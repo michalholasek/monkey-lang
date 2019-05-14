@@ -19,6 +19,7 @@ excellent [Writing An Interpreter In Go](https://interpreterbook.com/) book.
 ## REPL
 ```
 Welcome to monkey-lang REPL!
+Hit RETURN once to enter multiline editing, twice to enter your command.
 > 5
 5
 > let let = 5;

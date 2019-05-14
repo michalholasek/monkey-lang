@@ -10,6 +10,7 @@ import { parse } from './parser';
 export default {
   run() {
     process.stdout.write('Welcome to monkey-lang REPL!\n');
+    process.stdout.write('Hit RETURN once to enter multiline editing, twice to enter your command.\n');
     cli.prompt();
   }
 };
