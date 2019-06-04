@@ -8,7 +8,7 @@ excellent [Writing An Interpreter In Go](https://interpreterbook.com/) book.
 ## How To Install
 0. Download and install [Node](https://nodejs.org/en/download/)
 1. Open Terminal
-2. `$ git clone git@github.com:michalholasek/monkey-lang.git`
+2. `$ git clone https://github.com/michalholasek/monkey-lang.git`
 3. `$ npm i && npm run build`
 
 ## How To Run
