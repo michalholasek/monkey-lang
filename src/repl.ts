@@ -45,18 +45,22 @@ function stringify(result: Object): string {
   }
 }
 
-function print(command: string): void {
-  let program = parse(tokenize(command));
+function run(command: string): void {
+  try {
+    let program = parse(tokenize(command));
 
-  if (program.errors.length) {
-    program.errors.forEach(error => {
-      process.stdout.write(error.message);
-    });
-  }
+    if (program.errors.length) {
+      program.errors.forEach(error => {
+        process.stdout.write(error.message);
+      });
+    }
 
-  let result = evaluate(program, env);
-  if (result) {
-    process.stdout.write(stringify(result));
+    let result = evaluate(program, env);
+    if (result) {
+      process.stdout.write(stringify(result));
+    }
+  } catch {
+    process.stdout.write('Something went wrong with the execution of your command, sorry!\n');
   }
 }
 
@@ -79,7 +83,7 @@ cli.on('line', line => {
       cli.close();
       break;
     default:
-      print(command);
+      run(command);
       input = [];
       cli.setPrompt('> ');
       cli.prompt();
