@@ -235,6 +235,15 @@ export const BuiltIn = {
           value: 3
         }
       ]
+    },
+    'push([], 1);': {
+      kind: ObjectKind.Array,
+      value: [
+        {
+          kind: ObjectKind.Integer,
+          value: 1
+        }
+      ]
     }
   },
   Rest: {

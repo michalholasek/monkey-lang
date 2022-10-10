@@ -220,7 +220,8 @@ describe('Evaluator', () => {
     { name: 'Push', expression: 'push();' },
     { name: 'Push', expression: 'push("", 1);' },
     { name: 'Push', expression: 'push([]);' },
-    { name: 'Push', expression: 'push([1, 2], 3);' }
+    { name: 'Push', expression: 'push([1, 2], 3);' },
+    { name: 'Push', expression: 'push([], 1);' }
   ].forEach(({ name, expression })=> {
     it(`should evaluate given build-in expression correctly - ${expression}`, () => {
       let env = createEnvironment();
