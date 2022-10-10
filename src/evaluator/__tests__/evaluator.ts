@@ -187,7 +187,8 @@ describe('Evaluator', () => {
     'let add = fn(x, y) { x + y; }; add(5, 5);',
     'let add = fn(x, y) { x + y; }; add(5 + 5, add(5, 5));',
     'fn(x) { x; }(5);',
-    'let newAdder = fn(x) { fn(y) { x + y }; }; let addTwo = newAdder(2); addTwo(2);'
+    'let newAdder = fn(x) { fn(y) { x + y }; }; let addTwo = newAdder(2); addTwo(2);',
+    'let x = 1; let add = fn() { let x = 2; x + 2; }; add();'
   ].forEach(expression => {
     it(`should evaluate given function expression correctly - ${expression}`, () => {
       let env = createEnvironment();
@@ -219,7 +220,8 @@ describe('Evaluator', () => {
     { name: 'Push', expression: 'push();' },
     { name: 'Push', expression: 'push("", 1);' },
     { name: 'Push', expression: 'push([]);' },
-    { name: 'Push', expression: 'push([1, 2], 3);' }
+    { name: 'Push', expression: 'push([1, 2], 3);' },
+    { name: 'Push', expression: 'push([], 1);' }
   ].forEach(({ name, expression })=> {
     it(`should evaluate given build-in expression correctly - ${expression}`, () => {
       let env = createEnvironment();

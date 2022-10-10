@@ -235,6 +235,15 @@ export const BuiltIn = {
           value: 3
         }
       ]
+    },
+    'push([], 1);': {
+      kind: ObjectKind.Array,
+      value: [
+        {
+          kind: ObjectKind.Integer,
+          value: 1
+        }
+      ]
     }
   },
   Rest: {
@@ -345,8 +354,11 @@ export const Call = {
   'let newAdder = fn(x) { fn(y) { x + y }; }; let addTwo = newAdder(2); addTwo(2);': {
     kind: ObjectKind.Integer,
     value: 4
+  },
+  'let x = 1; let add = fn() { let x = 2; x + 2; }; add();': {
+    kind: ObjectKind.Integer,
+    value: 4
   }
-
 };
 
 export const Hash = {

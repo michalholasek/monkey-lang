@@ -46,6 +46,7 @@ function getStatementExpressionTokens(tokens: Token[]): Token[] {
     for (let i = 0; i < tokens.length; i++) {
       if (tokens[i].kind === TokenKind.Assign) {
         expressionTokens = tokens.slice(i + 1);
+        break;
       }
     }
   } else {

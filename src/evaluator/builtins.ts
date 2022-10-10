@@ -146,7 +146,6 @@ function len(expression: Expression, args: Object[] | undefined): Object {
 }
 
 function push(expression: Expression, args: Object[] | undefined): Object {
-  let nullObject = createObject(ObjectKind.Null);
   let argumentToken;
 
   if (!args || !args.length || args.length !== 2) {
@@ -179,7 +178,7 @@ function push(expression: Expression, args: Object[] | undefined): Object {
   let newElement = args[1];
   let array = originalArray.value as Object[];
 
-  return array.length ? createObject(ObjectKind.Array, array.concat([newElement])) : nullObject;
+  return createObject(ObjectKind.Array, array.concat([newElement]));
 }
 
 function puts(_: Expression, args: Object[] | undefined): Object {
